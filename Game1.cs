@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Devcade;
+using System.Diagnostics;
 
 namespace DevcadeGame
 {
@@ -9,6 +10,8 @@ namespace DevcadeGame
 	{
 		private GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
+		
+		Texture2D main_menu;
 
 		/// <summary>
 		/// Game constructor
@@ -55,6 +58,8 @@ namespace DevcadeGame
 			// TODO: use this.Content to load your game content here
 			// ex.
 			// texture = Content.Load<Texture2D>("fileNameWithoutExtention");
+
+			main_menu = Content.Load<Texture2D>("Menu_Assets/main_menu1");
 		}
 
 		/// <summary>
@@ -88,11 +93,17 @@ namespace DevcadeGame
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
+			// Sprite Batch Begin
 			_spriteBatch.Begin();
-			// TODO: Add your drawing code here
-			_spriteBatch.End();
 
-			base.Draw(gameTime);
+			// Draw the main menu
+			_spriteBatch.Draw(main_menu, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
+				new Rectangle(0, 0, 1080, 2560), Color.White);
+
+            _spriteBatch.End();
+            // Sprite Batch End
+
+            base.Draw(gameTime);
 		}
 	}
 }

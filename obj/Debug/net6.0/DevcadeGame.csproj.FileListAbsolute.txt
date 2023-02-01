@@ -24,3 +24,8 @@ C:\Users\garre\Desktop\Devcade\DevcadeHero-main\obj\Debug\net6.0\refint\DevcadeG
 C:\Users\garre\Desktop\Devcade\DevcadeHero-main\obj\Debug\net6.0\DevcadeGame.pdb
 C:\Users\garre\Desktop\Devcade\DevcadeHero-main\obj\Debug\net6.0\DevcadeGame.genruntimeconfig.cache
 C:\Users\garre\Desktop\Devcade\DevcadeHero-main\obj\Debug\net6.0\ref\DevcadeGame.dll
+C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Menu_Assets\2 Player Main Menu 2.xnb
+C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Menu_Assets\main_menu1.xnb
+C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Menu_Assets\Single Player Main Menu 2.xnb
+C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Menu_Assets\vertical background.xnb
+C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Menu_Assets\csh.xnb
