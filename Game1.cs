@@ -2,27 +2,37 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Devcade;
-using System.Diagnostics;
 using DevcadeGame.States;
 
 namespace DevcadeGame
 {
-	public class Game1 : Game
+
+    /* 
+    Main Class Game1:
+		ChangeState Constructor
+		Game1 Constructor
+		@ Initialize Function - Initialization setup
+		@ Load Content		  - Loads the content after initialization
+		@ Update Method		  - Updates every frame
+        @ Draw Method		  - Contains the main draw method to draw things on the screen
+		
+    */
+
+    public class Game1 : Game
 	{
+		// Attributes
 		private GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
 
 		private State _currentState;
 		private State _nextState;
-		Texture2D main_menu;
-
-		// To see if sprite batch is currently drawing from other classes
-        public static bool isDrawing;
+        Texture2D main_menu;
 
         public void ChangeState(State state)
 		{
 			_nextState = state;
 		}
+
 
 		/// <summary>
 		/// Game constructor
@@ -34,6 +44,8 @@ namespace DevcadeGame
 			IsMouseVisible = true;
 		}
 
+
+
 		/// <summary>
 		/// Does any setup prior to the first frame that doesn't need loaded content.
 		/// </summary>
@@ -44,9 +56,7 @@ namespace DevcadeGame
             // Set window size if running debug (in release it will be full screen)
             #region
 #if DEBUG
-            //_graphics.PreferredBackBufferWidth = 420;
-            //_graphics.PreferredBackBufferHeight = 980;
-            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferWidth = 420;
             _graphics.PreferredBackBufferHeight = 980;
             _graphics.ApplyChanges();
 #else
@@ -58,6 +68,8 @@ namespace DevcadeGame
 
 			base.Initialize();
 		}
+
+
 
 		/// <summary>
 		/// Does any setup prior to the first frame that needs loaded content.
@@ -71,8 +83,11 @@ namespace DevcadeGame
 			// texture = Content.Load<Texture2D>("fileNameWithoutExtention");
 
 			main_menu = Content.Load<Texture2D>("Menu_Assets/vertical background");
+			// Load the Current Menu State
 			_currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
-		}
+		} // End of LoadContent
+
+
 
 		/// <summary>
 		/// Your main update loop. This runs once every frame, over and over.
@@ -92,6 +107,7 @@ namespace DevcadeGame
 				Exit();
 			}
 
+			// Update the state if it is updated
 			if (_nextState != null) 
 			{
 				_currentState = _nextState;
@@ -101,7 +117,9 @@ namespace DevcadeGame
 			_currentState.PostUpdate(gameTime);
 
 			base.Update(gameTime);
-		}
+		} // End of Update
+
+
 
 		/// <summary>
 		/// Your main draw loop. This runs once every frame, over and over.
@@ -113,22 +131,24 @@ namespace DevcadeGame
 
 			// Sprite Batch Begin
 			_spriteBatch.Begin();
-			isDrawing = true;
-			// Draw the main menu
-			//_spriteBatch.Draw(main_menu, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
-			//	new Rectangle(0, 0, 1080, 2560), Color.White);
 
+			// Draw the main menu background
+			_spriteBatch.Draw(main_menu, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
+				new Rectangle(0, 0, 1080, 2560), Color.White);
+
+			// Draw the menu items
 			_currentState.Draw(gameTime, _spriteBatch);
             foreach (var component in MenuState._components)
             {
                 component.Draw(gameTime, _spriteBatch);
             }
-            _spriteBatch.End();
-            // Sprite Batch End
 
-			isDrawing = false;
+            // Sprite Batch End
+            _spriteBatch.End();
 
             base.Draw(gameTime);
-		}
-	}
-}
+		} // Draw Method
+
+	} // End of Game1
+
+} // End of name space

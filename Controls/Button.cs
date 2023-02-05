@@ -2,37 +2,35 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+// MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
+// https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
+
 
 namespace DevcadeGame.Controls
 {
+    /* 
+    Class Button:
+        Button Constructor
+        Rectangle Constructor
+        @ Button Method
+        @ Draw Method
+        @ Update Method
+    */
+
     public class Button : Component
     {
         #region Fields
-
         private MouseState _currentMouse;
-
-        private SpriteFont _font;
-
-        private bool _isHovering;
-
         private MouseState _previousMouse;
-
+        private SpriteFont _font;
         private Texture2D _texture;
-
+        private bool _isHovering;
         #endregion
 
         #region Properties
-
         public event EventHandler Click;
-
         public bool Clicked { get; private set; }
-
         public Color PenColour { get; set; }
-
         public Vector2 Position { get; set; }
 
         public Rectangle Rectangle
@@ -44,20 +42,17 @@ namespace DevcadeGame.Controls
         }
 
         public string Text { get; set; }
-
         #endregion
 
         #region Methods
-
         public Button(Texture2D texture, SpriteFont font)
         {
             _texture = texture;
-
             _font = font;
-
             PenColour = Color.Black;
         }
 
+        // Draw Method
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             var colour = Color.White;
@@ -76,6 +71,7 @@ namespace DevcadeGame.Controls
             }
         }
 
+        // Update Method
         public override void Update(GameTime gameTime)
         {
             _previousMouse = _currentMouse;
@@ -95,7 +91,7 @@ namespace DevcadeGame.Controls
                 }
             }
         }
-
         #endregion
-    }
-}
+    } // Button class
+
+} // Name space
