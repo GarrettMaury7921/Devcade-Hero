@@ -27,3 +27,5 @@ C:\Users\garre\Desktop\Devcade\DevcadeHero-main\obj\Debug\net6.0\DevcadeGame.pdb
 C:\Users\garre\Desktop\Devcade\DevcadeHero-main\obj\Debug\net6.0\DevcadeGame.genruntimeconfig.cache
 C:\Users\garre\Desktop\Devcade\DevcadeHero-main\obj\Debug\net6.0\ref\DevcadeGame.dll
 C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Menu_Assets\button.xnb
+C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Songs\welcome_to_the_jungle_PCM.ogg
+C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Songs\welcome_to_the_jungle_PCM.xnb

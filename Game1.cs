@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Devcade;
 using DevcadeGame.States;
+using Microsoft.Xna.Framework.Media;
+using System;
 
 namespace DevcadeGame
 {
@@ -27,6 +29,8 @@ namespace DevcadeGame
 		private State _currentState;
 		private State _nextState;
         Texture2D main_menu;
+
+		Song welcome_to_the_jungle;
 
         public void ChangeState(State state)
 		{
@@ -78,11 +82,16 @@ namespace DevcadeGame
 		{
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			// TODO: use this.Content to load your game content here
-			// ex.
-			// texture = Content.Load<Texture2D>("fileNameWithoutExtention");
+            // Load and Play Songs
+            welcome_to_the_jungle = Content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
+            MediaPlayer.Play(welcome_to_the_jungle);
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
 
-			main_menu = Content.Load<Texture2D>("Menu_Assets/vertical background");
+            // TODO: use this.Content to load your game content here
+            // ex.
+            // texture = Content.Load<Texture2D>("fileNameWithoutExtention");
+
+            main_menu = Content.Load<Texture2D>("Menu_Assets/vertical background");
 			// Load the Current Menu State
 			_currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
 		} // End of LoadContent
@@ -119,13 +128,19 @@ namespace DevcadeGame
 			base.Update(gameTime);
 		} // End of Update
 
+        // When a song ends event handler
+		private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
+        {
+			MediaPlayer.Play(welcome_to_the_jungle);
+        }
 
 
-		/// <summary>
-		/// Your main draw loop. This runs once every frame, over and over.
-		/// </summary>
-		/// <param name="gameTime">This is the gameTime object you can use to get the time since last frame.</param>
-		protected override void Draw(GameTime gameTime)
+
+        /// <summary>
+        /// Your main draw loop. This runs once every frame, over and over.
+        /// </summary>
+        /// <param name="gameTime">This is the gameTime object you can use to get the time since last frame.</param>
+        protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 

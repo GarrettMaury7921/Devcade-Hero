@@ -34,17 +34,17 @@ namespace DevcadeGame.States
             var newGameButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(70, 700),
-                Text = "          New Game",
+                Text = "           Single Player",
             };
-            newGameButton.Click += NewGameButton_Click;
+            newGameButton.Click += SinglePlayerButton_Click;
 
 
             var loadGameButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(70, 780),
-                Text = "           Load Game",
+                Text = "           Multi Player",
             };
-            loadGameButton.Click += LoadGameButton_Click;
+            loadGameButton.Click += MultiPlayerButton_Click;
 
 
             var quitGameButton = new Button(buttonTexture, buttonFont)
@@ -84,13 +84,13 @@ namespace DevcadeGame.States
         }
 
         // Methods for when you click on each button
-        private void NewGameButton_Click(object sender, EventArgs e)
+        private void SinglePlayerButton_Click(object sender, EventArgs e)
         {
             //_game.ChangeState(new GameState(_game, _graphicsDevice, _content));
             Debug.WriteLine("New Game");
         }
 
-        private void LoadGameButton_Click(object sender, EventArgs e)
+        private void MultiPlayerButton_Click(object sender, EventArgs e)
         {
             Debug.WriteLine("Load Game!");
         }
