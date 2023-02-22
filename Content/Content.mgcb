@@ -50,3 +50,9 @@
 /processorParam:Quality=Best
 /build:Songs/welcome_to_the_jungle_PCM.wav
 
+#begin Sound_Effects/UIConfirm.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/UIConfirm.wav
+

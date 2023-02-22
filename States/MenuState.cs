@@ -1,5 +1,6 @@
 ﻿using DevcadeGame.Controls;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -23,16 +24,21 @@ namespace DevcadeGame.States
     public class MenuState : State
     {
         public static List<Component> _components;
-        public static List<Component> _main_menu_components;
-        public static List<Component> _settings_components;
+        public List<Component> _main_menu_components;
+        public List<Component> _settings_components;
+        SoundEffect selectSound;
 
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) : 
             base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content)
         {
 
+            // Load the Sound effects for the menu
+            selectSound = _content.Load<SoundEffect>("Sound_Effects/UIConfirm");
+
             // Load the assets for the buttons for the menu
             var buttonTexture = _content.Load<Texture2D>("Menu_Assets/button");
             var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
+
 
             // ***** ALL STARTING BUTTONS ARE DEFINED BELOW *****
             var careerGameButton = new Button(buttonTexture, buttonFont)
@@ -70,6 +76,7 @@ namespace DevcadeGame.States
             };
             BackButton.Click += BackButton_Click;
 
+
             // ***** TYPES OF COMPONENTS *****
             _main_menu_components = new List<Component>()
             {
@@ -89,10 +96,10 @@ namespace DevcadeGame.States
 
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D background)
         {
             // Draw the main menu background
-            spriteBatch.Draw(main_menu, new Rectangle(0, 0, _preferredBackBufferWidth, _preferredBackBufferHeight),
+            spriteBatch.Draw(background, new Rectangle(0, 0, _preferredBackBufferWidth, _preferredBackBufferHeight),
                 new Rectangle(0, 0, 1080, 2560), Color.White);
         }
 
@@ -115,16 +122,19 @@ namespace DevcadeGame.States
         {
             //_game.ChangeState(new GameState(_game, _graphicsDevice, _content));
             Debug.WriteLine("Career");
+            selectSound.Play();
         }
 
         private void CasualButton_Click(object sender, EventArgs e)
         {
             Debug.WriteLine("Casual");
+            selectSound.Play();
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)
         {
             _components = _settings_components;
+            selectSound.Play();
         }
 
         private void QuitGameButton_Click(object sender, EventArgs e)
@@ -135,6 +145,7 @@ namespace DevcadeGame.States
         private void BackButton_Click(object sender, EventArgs e)
         {
             _components = _main_menu_components;
+            selectSound.Play();
         }
     }
 }

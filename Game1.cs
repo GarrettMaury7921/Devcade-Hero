@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Devcade;
-using DevcadeGame.States;
 using Microsoft.Xna.Framework.Media;
+using DevcadeGame.States;
+using DevcadeGame.Sounds;
+using Devcade;
 using System;
 
 namespace DevcadeGame
@@ -70,9 +71,7 @@ namespace DevcadeGame
 		protected override void Initialize()
 		{
 			Input.Initialize(); // Sets up the input library
-
-			// Starting Volume
-			MediaPlayer.Volume= 1.0f;
+			MenuSounds menuSounds = new MenuSounds(); // Sets up the starting sound volume
 
             // Set window size if running debug (in release it will be full screen)
             #region

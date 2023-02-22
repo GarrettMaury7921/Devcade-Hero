@@ -60,3 +60,4 @@ C:\Users\garre\Desktop\Devcade\Devcade-Hero\obj\Debug\net6.0\refint\DevcadeGame.
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\obj\Debug\net6.0\DevcadeGame.pdb
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\obj\Debug\net6.0\DevcadeGame.genruntimeconfig.cache
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\obj\Debug\net6.0\ref\DevcadeGame.dll
+C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Sound_Effects\UIConfirm.xnb
