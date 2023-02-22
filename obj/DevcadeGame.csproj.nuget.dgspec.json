@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\garre\\Desktop\\Devcade\\DevcadeHero-main\\DevcadeGame.csproj": {}
+    "C:\\Users\\garre\\Desktop\\Devcade\\Devcade-Hero\\DevcadeGame.csproj": {}
   },
   "projects": {
-    "C:\\Users\\garre\\Desktop\\Devcade\\DevcadeHero-main\\DevcadeGame.csproj": {
+    "C:\\Users\\garre\\Desktop\\Devcade\\Devcade-Hero\\DevcadeGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\garre\\Desktop\\Devcade\\DevcadeHero-main\\DevcadeGame.csproj",
+        "projectUniqueName": "C:\\Users\\garre\\Desktop\\Devcade\\Devcade-Hero\\DevcadeGame.csproj",
         "projectName": "DevcadeGame",
-        "projectPath": "C:\\Users\\garre\\Desktop\\Devcade\\DevcadeHero-main\\DevcadeGame.csproj",
+        "projectPath": "C:\\Users\\garre\\Desktop\\Devcade\\Devcade-Hero\\DevcadeGame.csproj",
         "packagesPath": "C:\\Users\\garre\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\garre\\Desktop\\Devcade\\DevcadeHero-main\\obj\\",
+        "outputPath": "C:\\Users\\garre\\Desktop\\Devcade\\Devcade-Hero\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\garre\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -69,7 +69,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -23,21 +23,24 @@ namespace DevcadeGame.States
     public class MenuState : State
     {
         public static List<Component> _components;
+        public static List<Component> _main_menu_components;
+        public static List<Component> _settings_components;
 
-        public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
+        public MenuState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) : 
+            base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content)
         {
+
             // Load the assets for the buttons for the menu
             var buttonTexture = _content.Load<Texture2D>("Menu_Assets/button");
             var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
 
-            // ***** ALL BUTTONS ARE DEFINED BELOW *****
+            // ***** ALL STARTING BUTTONS ARE DEFINED BELOW *****
             var careerGameButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(70, 720),
                 Text = "           Career Mode",
             };
             careerGameButton.Click += CareerButton_Click;
-
 
             var casualGameButton = new Button(buttonTexture, buttonFont)
             {
@@ -60,20 +63,37 @@ namespace DevcadeGame.States
             };
             quitGameButton.Click += QuitGameButton_Click;
 
-            // Put them in _components
-            _components = new List<Component>()
+            var BackButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(70, 900),
+                Text = "         Back",
+            };
+            BackButton.Click += BackButton_Click;
+
+            // ***** TYPES OF COMPONENTS *****
+            _main_menu_components = new List<Component>()
             {
                 careerGameButton,
                 casualGameButton,
                 settingsButton,
                 quitGameButton,
             };
+            _settings_components = new List<Component>()
+            {
+
+                BackButton,
+            };
+
+            // Put them in _components
+            _components = _main_menu_components;
 
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)
         {
-
+            // Draw the main menu background
+            spriteBatch.Draw(main_menu, new Rectangle(0, 0, _preferredBackBufferWidth, _preferredBackBufferHeight),
+                new Rectangle(0, 0, 1080, 2560), Color.White);
         }
 
         public override void Update(GameTime gameTime)
@@ -104,14 +124,17 @@ namespace DevcadeGame.States
 
         private void SettingsButton_Click(object sender, EventArgs e)
         {
-            _game.ChangeState(new GameState(_game, _graphicsDevice, _content));
-            _components = new List<Component>(){};
+            _components = _settings_components;
         }
 
         private void QuitGameButton_Click(object sender, EventArgs e)
         {
             Debug.WriteLine("Exit Game!");
             _game.Exit();
+        }
+        private void BackButton_Click(object sender, EventArgs e)
+        {
+            _components = _main_menu_components;
         }
     }
 }

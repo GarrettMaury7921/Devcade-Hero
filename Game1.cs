@@ -28,20 +28,34 @@ namespace DevcadeGame
 
 		private State _currentState;
 		private State _nextState;
-        Texture2D main_menu;
 
-		Song welcome_to_the_jungle;
+		Texture2D main_menu;
 
+        Song welcome_to_the_jungle;
+
+		/// <summary>
+		/// Changes State
+		/// </summary>
+		/// <param name="state"></param>
         public void ChangeState(State state)
 		{
 			_nextState = state;
 		}
 
-
-		/// <summary>
-		/// Game constructor
+        /// <summary>
+		/// Event handler from when a song ends
 		/// </summary>
-		public Game1()
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+        private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
+        {
+            MediaPlayer.Play(welcome_to_the_jungle);
+        }
+
+        /// <summary>
+        /// Game constructor
+        /// </summary>
+        public Game1()
 		{
 			_graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
@@ -95,8 +109,9 @@ namespace DevcadeGame
             // texture = Content.Load<Texture2D>("fileNameWithoutExtention");
 
             main_menu = Content.Load<Texture2D>("Menu_Assets/vertical background");
-			// Load the Current Menu State
-			_currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
+
+            // Load the Current Menu State
+            _currentState = new MenuState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content);
 		} // End of LoadContent
 
 
@@ -119,24 +134,17 @@ namespace DevcadeGame
 				Exit();
 			}
 
-			// Update the state if it is updated
-			if (_nextState != null) 
-			{
-				_currentState = _nextState;
-				_nextState = null;
-			}
-			_currentState.Update(gameTime);
-			_currentState.PostUpdate(gameTime);
+            // Update the state if it is updated
+            if (_nextState != null)
+            {
+                _currentState = _nextState;
+                _nextState = null;
+            }
+            _currentState.Update(gameTime);
+            _currentState.PostUpdate(gameTime);
 
-			base.Update(gameTime);
+            base.Update(gameTime);
 		} // End of Update
-
-        // When a song ends event handler
-		private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
-        {
-			MediaPlayer.Play(welcome_to_the_jungle);
-        }
-
 
 
         /// <summary>
@@ -150,12 +158,8 @@ namespace DevcadeGame
 			// Sprite Batch Begin
 			_spriteBatch.Begin(SpriteSortMode.FrontToBack);
 
-            // Draw the main menu background
-            _spriteBatch.Draw(main_menu, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
-                new Rectangle(0, 0, 1080, 2560), Color.White);
-
             // Draw the menu items and each state
-            _currentState.Draw(gameTime, _spriteBatch);
+            _currentState.Draw(gameTime, _spriteBatch, main_menu);
             foreach (var component in MenuState._components)
             {
                 component.Draw(gameTime, _spriteBatch);

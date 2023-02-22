@@ -20,17 +20,21 @@ namespace DevcadeGame.States
         protected ContentManager _content;
         protected GraphicsDevice _graphicsDevice;
         protected Game1 _game;
+        protected int _preferredBackBufferWidth;
+        protected int _preferredBackBufferHeight;
         #endregion
 
-        public State(Game1 game, GraphicsDevice graphicsDevice, ContentManager content)
+        public State(Game1 game, GraphicsDevice graphicsDevice, int preferredBackBufferWidth, int preferredBackBufferHeight, ContentManager content)
         {
             _game = game;
             _graphicsDevice = graphicsDevice;
+            _preferredBackBufferWidth = preferredBackBufferWidth;
+            _preferredBackBufferHeight = preferredBackBufferHeight;
             _content = content;
         }
 
         #region Methods
-        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu);
         public abstract void Update(GameTime gameTime);
         public abstract void PostUpdate(GameTime gameTime);
         #endregion

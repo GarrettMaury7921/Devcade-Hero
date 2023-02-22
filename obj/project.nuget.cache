@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pzis4Edf6DJR0h3rFwJadxFrdP8SVR/i7IGsYJzd/ASzQD06cDBwcwWZqXkBUSzdIG/IO+tP9VQvFvKLWc7Aaw==",
+  "dgSpecHash": "dSsa7pJMbWcrKwt7kx27SVPvQKrg0HrbiilWdjYCdisLDHOSVmkx9Byedy7XdGdEsJ34RMkaZHY1xJWaNw9mog==",
   "success": true,
-  "projectFilePath": "C:\\Users\\garre\\Desktop\\Devcade\\DevcadeHero-main\\DevcadeGame.csproj",
+  "projectFilePath": "C:\\Users\\garre\\Desktop\\Devcade\\Devcade-Hero\\DevcadeGame.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\garre\\.nuget\\packages\\devcade-library\\1.1.0\\devcade-library.1.1.0.nupkg.sha512",
     "C:\\Users\\garre\\.nuget\\packages\\monogame.content.builder.task\\3.8.1.303\\monogame.content.builder.task.3.8.1.303.nupkg.sha512",

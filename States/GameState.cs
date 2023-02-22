@@ -16,11 +16,12 @@ namespace DevcadeGame.States
     */
     public class GameState : State
     {
-        public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
+        public GameState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) : 
+            base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content)
         {
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)
         {
 
         }
