@@ -57,6 +57,9 @@ namespace DevcadeGame
 		{
 			Input.Initialize(); // Sets up the input library
 
+			// Starting Volume
+			MediaPlayer.Volume= 1.0f;
+
             // Set window size if running debug (in release it will be full screen)
             #region
 #if DEBUG
@@ -145,14 +148,14 @@ namespace DevcadeGame
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			// Sprite Batch Begin
-			_spriteBatch.Begin();
+			_spriteBatch.Begin(SpriteSortMode.FrontToBack);
 
-			// Draw the main menu background
-			_spriteBatch.Draw(main_menu, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
-				new Rectangle(0, 0, 1080, 2560), Color.White);
+            // Draw the main menu background
+            _spriteBatch.Draw(main_menu, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
+                new Rectangle(0, 0, 1080, 2560), Color.White);
 
-			// Draw the menu items
-			_currentState.Draw(gameTime, _spriteBatch);
+            // Draw the menu items and each state
+            _currentState.Draw(gameTime, _spriteBatch);
             foreach (var component in MenuState._components)
             {
                 component.Draw(gameTime, _spriteBatch);

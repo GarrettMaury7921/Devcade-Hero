@@ -31,25 +31,31 @@ namespace DevcadeGame.States
             var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
 
             // ***** ALL BUTTONS ARE DEFINED BELOW *****
-            var newGameButton = new Button(buttonTexture, buttonFont)
+            var careerGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 700),
-                Text = "           Single Player",
+                Position = new Vector2(70, 720),
+                Text = "           Career Mode",
             };
-            newGameButton.Click += SinglePlayerButton_Click;
+            careerGameButton.Click += CareerButton_Click;
 
 
-            var loadGameButton = new Button(buttonTexture, buttonFont)
+            var casualGameButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(70, 780),
-                Text = "           Multi Player",
+                Text = "           Casual Mode",
             };
-            loadGameButton.Click += MultiPlayerButton_Click;
+            casualGameButton.Click += CasualButton_Click;
 
+            var settingsButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(70, 840),
+                Text = "         Settings",
+            };
+            settingsButton.Click += SettingsButton_Click;
 
             var quitGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 860),
+                Position = new Vector2(70, 900),
                 Text = "         Quit",
             };
             quitGameButton.Click += QuitGameButton_Click;
@@ -57,8 +63,9 @@ namespace DevcadeGame.States
             // Put them in _components
             _components = new List<Component>()
             {
-                newGameButton,
-                loadGameButton,
+                careerGameButton,
+                casualGameButton,
+                settingsButton,
                 quitGameButton,
             };
 
@@ -80,19 +87,25 @@ namespace DevcadeGame.States
 
         public override void PostUpdate(GameTime gameTime)
         {
-
+            // remove the sprites if no longer needed
         }
 
         // Methods for when you click on each button
-        private void SinglePlayerButton_Click(object sender, EventArgs e)
+        private void CareerButton_Click(object sender, EventArgs e)
         {
             //_game.ChangeState(new GameState(_game, _graphicsDevice, _content));
-            Debug.WriteLine("New Game");
+            Debug.WriteLine("Career");
         }
 
-        private void MultiPlayerButton_Click(object sender, EventArgs e)
+        private void CasualButton_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("Load Game!");
+            Debug.WriteLine("Casual");
+        }
+
+        private void SettingsButton_Click(object sender, EventArgs e)
+        {
+            _game.ChangeState(new GameState(_game, _graphicsDevice, _content));
+            _components = new List<Component>(){};
         }
 
         private void QuitGameButton_Click(object sender, EventArgs e)
