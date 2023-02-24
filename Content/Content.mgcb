@@ -32,6 +32,30 @@
 /processorParam:TextureFormat=Color
 /build:Menu_Assets/button.png
 
+#begin Menu_Assets/slider_ball.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu_Assets/slider_ball.png
+
+#begin Menu_Assets/slider.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu_Assets/slider.png
+
 #begin Menu_Assets/vertical background.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -49,6 +73,12 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Songs/welcome_to_the_jungle_PCM.wav
+
+#begin Sound_Effects/UICancel.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/UICancel.wav
 
 #begin Sound_Effects/UIConfirm.wav
 /importer:WavImporter

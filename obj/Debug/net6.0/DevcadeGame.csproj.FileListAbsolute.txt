@@ -61,3 +61,6 @@ C:\Users\garre\Desktop\Devcade\Devcade-Hero\obj\Debug\net6.0\DevcadeGame.pdb
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\obj\Debug\net6.0\DevcadeGame.genruntimeconfig.cache
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\obj\Debug\net6.0\ref\DevcadeGame.dll
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Sound_Effects\UIConfirm.xnb
+C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Sound_Effects\UICancel.xnb
+C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Menu_Assets\slider.xnb
+C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Menu_Assets\slider_ball.xnb

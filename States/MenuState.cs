@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-// MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
+// HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
 
@@ -23,24 +23,34 @@ namespace DevcadeGame.States
     */
     public class MenuState : State
     {
+        // Attributes
         public static List<Component> _components;
         public List<Component> _main_menu_components;
         public List<Component> _settings_components;
         SoundEffect selectSound;
+        SoundEffect backSound;
 
+        // MenuState Constructor
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) : 
             base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content)
         {
-
+            // ***** LOAD ASSETS *****
             // Load the Sound effects for the menu
             selectSound = _content.Load<SoundEffect>("Sound_Effects/UIConfirm");
+            backSound = _content.Load<SoundEffect>("Sound_Effects/UICancel");
 
-            // Load the assets for the buttons for the menu
+            // Load the buttons for the menu
             var buttonTexture = _content.Load<Texture2D>("Menu_Assets/button");
             var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
 
+            // Load the sliders for the menu
+            var sliderTexture = _content.Load<Texture2D>("Menu_Assets/slider");
+            var sliderThumbTexture = _content.Load<Texture2D>("Menu_Assets/slider_ball");
+
 
             // ***** ALL STARTING BUTTONS ARE DEFINED BELOW *****
+            // These are all the things that the user can select in the menu
+            // Each button has an on-click event
             var careerGameButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(70, 720),
@@ -76,8 +86,15 @@ namespace DevcadeGame.States
             };
             BackButton.Click += BackButton_Click;
 
+            // ***** ALL SLIDERS DEFINED BELOW *****
+            var VolumeSlider = new Slider(sliderTexture, sliderThumbTexture)
+            {
+                Position = new Vector2(70, 800),
+                BarColor = Color.White,
+            };
 
             // ***** TYPES OF COMPONENTS *****
+            // Change to these components to change the menu
             _main_menu_components = new List<Component>()
             {
                 careerGameButton,
@@ -87,7 +104,7 @@ namespace DevcadeGame.States
             };
             _settings_components = new List<Component>()
             {
-
+                VolumeSlider,
                 BackButton,
             };
 
@@ -96,6 +113,7 @@ namespace DevcadeGame.States
 
         }
 
+        // Game1.cs Override Methods
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D background)
         {
             // Draw the main menu background
@@ -117,7 +135,9 @@ namespace DevcadeGame.States
             // remove the sprites if no longer needed
         }
 
-        // Methods for when you click on each button
+
+
+        // ***** BUTTON ON-CLICK EVENTS *****
         private void CareerButton_Click(object sender, EventArgs e)
         {
             //_game.ChangeState(new GameState(_game, _graphicsDevice, _content));
@@ -139,13 +159,14 @@ namespace DevcadeGame.States
 
         private void QuitGameButton_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("Exit Game!");
             _game.Exit();
         }
+
         private void BackButton_Click(object sender, EventArgs e)
         {
             _components = _main_menu_components;
-            selectSound.Play();
+            backSound.Play();
         }
-    }
-}
+
+    } // Public class MenuState end
+} // Name space end
