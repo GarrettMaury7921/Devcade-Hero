@@ -11,12 +11,11 @@ namespace DevcadeGame.Controls
     /* 
     Class Button:
         Button Constructor
-        Rectangle Constructor
+        Rectangle getter
         @ Button Method
         @ Draw Method
         @ Update Method
     */
-
     public class Button : Component
     {
         #region Fields
@@ -32,6 +31,8 @@ namespace DevcadeGame.Controls
         public bool Clicked { get; private set; }
         public Color PenColour { get; set; }
         public Vector2 Position { get; set; }
+        // Set the default text offset to zero
+        public Vector2 textOffset { get; set; } = Vector2.Zero;
 
         public Rectangle Rectangle
         {
@@ -64,11 +65,12 @@ namespace DevcadeGame.Controls
 
             if (!string.IsNullOrEmpty(Text))
             {
-                var x = (Rectangle.X + (Rectangle.Width / 2)) - (_font.MeasureString(Text).X / 2);
-                var y = (Rectangle.Y + (Rectangle.Height / 2)) - (_font.MeasureString(Text).Y / 2);
+                var x = (Rectangle.X + (Rectangle.Width / 2)) - (_font.MeasureString(Text).X / 2) + textOffset.X;
+                var y = (Rectangle.Y + (Rectangle.Height / 2)) - (_font.MeasureString(Text).Y / 2) + textOffset.Y;
 
                 spriteBatch.DrawString(_font, Text, new Vector2(x, y), Color.White);
             }
+
         }
 
         // Update Method

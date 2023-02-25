@@ -5,6 +5,14 @@ using System;
 
 namespace DevcadeGame.Controls
 {
+    /* 
+    Class Slider:
+        Slider Constructor
+        Rectangle getter
+        @ Slider Method
+        @ Draw Method
+        @ Update Method
+    */
     internal class Slider : Component
     {
 

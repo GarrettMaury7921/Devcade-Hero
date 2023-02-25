@@ -87,9 +87,19 @@ namespace DevcadeGame.States
             BackButton.Click += BackButton_Click;
 
             // ***** ALL SLIDERS DEFINED BELOW *****
+            // VOLUME SLIDER IMAGE
+            var VolumeSliderButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(70, 840),
+                // Setting the text to the correct place above the slider
+                textOffset = new Vector2(40, -40),
+                Text = "Music Volume",
+                //Text = "        Volume Slider",
+            };
+            VolumeSliderButton.Click += VolumeSliderButton_Click;
             var VolumeSlider = new Slider(sliderTexture, sliderThumbTexture)
             {
-                Position = new Vector2(70, 800),
+                Position = new Vector2(135, 865),
                 BarColor = Color.White,
             };
 
@@ -104,6 +114,7 @@ namespace DevcadeGame.States
             };
             _settings_components = new List<Component>()
             {
+                VolumeSliderButton,
                 VolumeSlider,
                 BackButton,
             };
@@ -166,6 +177,10 @@ namespace DevcadeGame.States
         {
             _components = _main_menu_components;
             backSound.Play();
+        }
+        private void VolumeSliderButton_Click(object sender, EventArgs e)
+        {
+
         }
 
     } // Public class MenuState end
