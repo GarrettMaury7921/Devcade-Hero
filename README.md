@@ -6,9 +6,13 @@ This was created using C# and Monogame.
 
 ### Dependencies
 Accord.Video.FFMPEG
+
 devcade-library
+
 MonoGame.Content.Builder.Task
+
 MonoGame.Framework.DesktopGL
+
 
 ### Making Songs (.wav)
 OBS: System Audio with wav (Audio) container format
