@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
+using System.Diagnostics;
 
 namespace DevcadeGame.Controls
 {
@@ -23,6 +25,7 @@ namespace DevcadeGame.Controls
         private Texture2D _thumbTexture;
         private float _value;
         private bool _isDragging;
+        private string _type;
         #endregion
 
         #region Properties
@@ -40,12 +43,13 @@ namespace DevcadeGame.Controls
         #endregion
 
         #region Methods
-        public Slider(Texture2D texture, Texture2D thumbTexture)
+        public Slider(Texture2D texture, Texture2D thumbTexture, string type)
         {
+            PenColour = Color.Black;
             _texture = texture;
             _thumbTexture = thumbTexture;
-            PenColour = Color.Black;
             _value = 0.5f;
+            this._type = type;
         }
 
         // Draw Method
@@ -62,9 +66,9 @@ namespace DevcadeGame.Controls
         {
             _previousMouse = _currentMouse;
             _currentMouse = Mouse.GetState();
-
             var mouseRectangle = new Rectangle(_currentMouse.X, _currentMouse.Y, 1, 1);
 
+            // If the mouse goes over the slider
             if (mouseRectangle.Intersects(Rectangle))
             {
                 if (_currentMouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Released)
@@ -73,17 +77,33 @@ namespace DevcadeGame.Controls
                 }
             }
 
+            // If you're dragging with the mouse
             if (_isDragging)
             {
                 _value = (_currentMouse.X - Position.X - _thumbTexture.Width / 2) / (_texture.Width - _thumbTexture.Width);
+                Debug.WriteLine(_value);
                 _value = MathHelper.Clamp(_value, 0f, 1f);
 
+                // When you release the button
                 if (_currentMouse.LeftButton == ButtonState.Released)
                 {
                     _isDragging = false;
                 }
-            }
-        }
+
+                // Change the sound
+                if (_type == "music")
+                {
+                    MediaPlayer.Volume = _value;
+                }
+                else
+                {
+                    SoundEffect.MasterVolume = _value;
+                }
+
+            } // _isDragging 
+        } // Update method
+
         #endregion
-    }
-}
+
+    } // Slider.cs
+} // name space

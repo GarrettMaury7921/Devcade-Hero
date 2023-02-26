@@ -27,17 +27,28 @@ namespace DevcadeGame.States
         public static List<Component> _components;
         public List<Component> _main_menu_components;
         public List<Component> _settings_components;
-        SoundEffect selectSound;
-        SoundEffect backSound;
+        private SoundEffect selectSound;
+        private SoundEffect backSound;
+        private SoundEffect sliderUpSound;
+        private SoundEffect sliderDownSound;
+        private string musicType;
+        private string soundEffectType;
+
 
         // MenuState Constructor
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) : 
             base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content)
         {
+            // Attributes
+            musicType = "music";
+            soundEffectType = "effect";
+
             // ***** LOAD ASSETS *****
             // Load the Sound effects for the menu
             selectSound = _content.Load<SoundEffect>("Sound_Effects/UIConfirm");
             backSound = _content.Load<SoundEffect>("Sound_Effects/UICancel");
+            sliderUpSound = _content.Load<SoundEffect>("Sound_Effects/VolumeUp");
+            sliderDownSound = _content.Load<SoundEffect>("Sound_Effects/VolumeDown");
 
             // Load the buttons for the menu
             var buttonTexture = _content.Load<Texture2D>("Menu_Assets/button");
@@ -87,17 +98,31 @@ namespace DevcadeGame.States
             BackButton.Click += BackButton_Click;
 
             // ***** ALL SLIDERS DEFINED BELOW *****
-            // VOLUME SLIDER IMAGE
-            var VolumeSliderButton = new Button(buttonTexture, buttonFont)
+            // MUSIC VOLUME SLIDER
+            var MusicVolumeSliderButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(70, 760),
+                // Setting the text to the correct place above the slider
+                textOffset = new Vector2(40, -40),
+                Text = "Music",
+            };
+            MusicVolumeSliderButton.Click += MusicVolumeSliderButton_Click;
+            var MusicVolumeSlider = new Slider(sliderTexture, sliderThumbTexture, musicType)
+            {
+                Position = new Vector2(135, 785),
+                BarColor = Color.White,
+            };
+
+            // SOUND EFFECT SLIDER
+            var EffectVolumeSliderButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(70, 840),
                 // Setting the text to the correct place above the slider
-                textOffset = new Vector2(40, -40),
-                Text = "Music Volume",
-                //Text = "        Volume Slider",
+                textOffset = new Vector2(44, -40),
+                Text = "Effects",
             };
-            VolumeSliderButton.Click += VolumeSliderButton_Click;
-            var VolumeSlider = new Slider(sliderTexture, sliderThumbTexture)
+            EffectVolumeSliderButton.Click += EffectVolumeSliderButton_Click;
+            var EffectVolumeSlider = new Slider(sliderTexture, sliderThumbTexture, soundEffectType)
             {
                 Position = new Vector2(135, 865),
                 BarColor = Color.White,
@@ -114,12 +139,14 @@ namespace DevcadeGame.States
             };
             _settings_components = new List<Component>()
             {
-                VolumeSliderButton,
-                VolumeSlider,
+                MusicVolumeSliderButton,
+                MusicVolumeSlider,
+                EffectVolumeSliderButton,
+                EffectVolumeSlider,
                 BackButton,
             };
 
-            // Put them in _components
+            // Using starting main menu component
             _components = _main_menu_components;
 
         }
@@ -178,9 +205,13 @@ namespace DevcadeGame.States
             _components = _main_menu_components;
             backSound.Play();
         }
-        private void VolumeSliderButton_Click(object sender, EventArgs e)
+        private void MusicVolumeSliderButton_Click(object sender, EventArgs e)
         {
 
+        }
+        private void EffectVolumeSliderButton_Click(object sender, EventArgs e)
+        {
+            sliderUpSound.Play();
         }
 
     } // Public class MenuState end

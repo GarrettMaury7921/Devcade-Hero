@@ -64,3 +64,5 @@ C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Sound_Effec
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Sound_Effects\UICancel.xnb
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Menu_Assets\slider.xnb
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Menu_Assets\slider_ball.xnb
+C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Sound_Effects\VolumeDown.xnb
+C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Sound_Effects\VolumeUp.xnb

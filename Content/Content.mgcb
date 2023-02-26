@@ -86,3 +86,15 @@
 /processorParam:Quality=Best
 /build:Sound_Effects/UIConfirm.wav
 
+#begin Sound_Effects/VolumeDown.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/VolumeDown.wav
+
+#begin Sound_Effects/VolumeUp.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/VolumeUp.wav
+
