@@ -4,9 +4,9 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # User-specific files
-# *.wav
-# *.mp3
-# *.mp4
+*.wav
+*.mp3
+*.mp4
 *.rsuser
 *.suo
 *.user

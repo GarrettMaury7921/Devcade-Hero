@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using DevcadeGame.States;
 using DevcadeGame.Sounds;
+using Devcade;
 using System;
 
 namespace DevcadeGame
@@ -129,8 +130,8 @@ namespace DevcadeGame
 			// You can change this but it is suggested to keep the key bind of both menu
 			// buttons at once for graceful exit.
 			if (Keyboard.GetState().IsKeyDown(Keys.Escape) ||
-				(Devcade.Input.GetButton(1, Devcade.Input.ArcadeButtons.Menu) &&
-				Devcade.Input.GetButton(2, Devcade.Input.ArcadeButtons.Menu)))
+				(Input.GetButton(1, Input.ArcadeButtons.Menu) &&
+				Input.GetButton(2, Input.ArcadeButtons.Menu)))
 			{
 				Exit();
 			}
