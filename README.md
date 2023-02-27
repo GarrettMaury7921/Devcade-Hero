@@ -4,6 +4,16 @@ Devcade Hero is a rhythm game where you use arcade controls to hit notes and pla
 
 This was created using C# and Monogame.
 
+### Dependencies
+SharpDX.MediaFoundation
+
+devcade-library
+
+MonoGame.Content.Builder.Task
+
+MonoGame.Framework.DesktopGL
+
+
 ### Making Songs (.wav)
 OBS: System Audio with wav (Audio) container format
 Audio Bitrate: 320 kbps
