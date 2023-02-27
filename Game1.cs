@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using DevcadeGame.States;
 using DevcadeGame.Sounds;
-using Devcade;
 using System;
 
 namespace DevcadeGame
@@ -34,10 +33,10 @@ namespace DevcadeGame
 
         Song welcome_to_the_jungle;
 
-		/// <summary>
-		/// Changes State
-		/// </summary>
-		/// <param name="state"></param>
+        /// <summary>
+        /// Changes State
+        /// </summary>
+        /// <param name="state"></param>
         public void ChangeState(State state)
 		{
 			_nextState = state;
@@ -70,7 +69,7 @@ namespace DevcadeGame
 		/// </summary>
 		protected override void Initialize()
 		{
-			Input.Initialize(); // Sets up the input library
+			Devcade.Input.Initialize(); // Sets up the input library
 			MenuSounds menuSounds = new MenuSounds(); // Sets up the starting sound volume
 
             // Set window size if running debug (in release it will be full screen)
@@ -98,20 +97,23 @@ namespace DevcadeGame
 		{
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Load and Play Songs
-            welcome_to_the_jungle = Content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
-            MediaPlayer.Play(welcome_to_the_jungle);
-            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
-
             // TODO: use this.Content to load your game content here
             // ex.
             // texture = Content.Load<Texture2D>("fileNameWithoutExtention");
 
             main_menu = Content.Load<Texture2D>("Menu_Assets/vertical background");
 
+
             // Load the Current Menu State
+            //_currentState = new IntroState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content);
+
+            // MENU STATE
             _currentState = new MenuState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content);
-		} // End of LoadContent
+            // Load and Play Songs
+            welcome_to_the_jungle = Content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
+            MediaPlayer.Play(welcome_to_the_jungle);
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
+        } // End of LoadContent
 
 
 
@@ -121,14 +123,14 @@ namespace DevcadeGame
 		/// <param name="gameTime">This is the gameTime object you can use to get the time since last frame.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			Input.Update(); // Updates the state of the input library
+            Devcade.Input.Update(); // Updates the state of the input library
 
 			// Exit when both menu buttons are pressed (or escape for keyboard debugging)
 			// You can change this but it is suggested to keep the key bind of both menu
 			// buttons at once for graceful exit.
 			if (Keyboard.GetState().IsKeyDown(Keys.Escape) ||
-				(Input.GetButton(1, Input.ArcadeButtons.Menu) &&
-				Input.GetButton(2, Input.ArcadeButtons.Menu)))
+				(Devcade.Input.GetButton(1, Devcade.Input.ArcadeButtons.Menu) &&
+				Devcade.Input.GetButton(2, Devcade.Input.ArcadeButtons.Menu)))
 			{
 				Exit();
 			}
@@ -159,6 +161,10 @@ namespace DevcadeGame
 
             // Draw the menu items and each state
             _currentState.Draw(gameTime, _spriteBatch, main_menu);
+            /*foreach (var component in IntroState._components)
+            {
+                component.Draw(gameTime, _spriteBatch);
+            }*/
             foreach (var component in MenuState._components)
             {
                 component.Draw(gameTime, _spriteBatch);

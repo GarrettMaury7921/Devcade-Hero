@@ -48,7 +48,7 @@ namespace DevcadeGame.Controls
             PenColour = Color.Black;
             _texture = texture;
             _thumbTexture = thumbTexture;
-            _value = 0.5f;
+            _value = MediaPlayer.Volume;
             this._type = type;
         }
 
@@ -81,7 +81,6 @@ namespace DevcadeGame.Controls
             if (_isDragging)
             {
                 _value = (_currentMouse.X - Position.X - _thumbTexture.Width / 2) / (_texture.Width - _thumbTexture.Width);
-                Debug.WriteLine(_value);
                 _value = MathHelper.Clamp(_value, 0f, 1f);
 
                 // When you release the button

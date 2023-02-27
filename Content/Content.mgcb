@@ -20,6 +20,11 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Font.spritefont
 
+#begin Intro_Videos/main_intro.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:Intro_Videos/main_intro.mp4
+
 #begin Menu_Assets/button.png
 /importer:TextureImporter
 /processor:TextureProcessor

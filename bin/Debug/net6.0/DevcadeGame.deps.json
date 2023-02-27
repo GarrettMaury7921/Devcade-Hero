@@ -10,17 +10,20 @@
         "dependencies": {
           "MonoGame.Content.Builder.Task": "3.8.1.303",
           "MonoGame.Framework.DesktopGL": "3.8.1.303",
-          "devcade-library": "1.1.0"
+          "devcade-library": "1.2.0"
         },
         "runtime": {
           "DevcadeGame.dll": {}
         }
       },
-      "devcade-library/1.1.0": {
+      "devcade-library/1.2.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2"
+        },
         "runtime": {
           "lib/netstandard2.0/devcade-library.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "1.2.0.0",
+            "fileVersion": "1.2.0.0"
           }
         }
       },
@@ -74,6 +77,14 @@
             "fileVersion": "0.0.0.0"
           }
         }
+      },
+      "Newtonsoft.Json/13.0.2": {
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.2.27524"
+          }
+        }
       }
     }
   },
@@ -83,12 +94,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "devcade-library/1.1.0": {
+    "devcade-library/1.2.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-C0IzPL3PqNJVf5SrtrtPMFZkMdbTb4eaVGaZDKuFNrVbhb1Jh62deI+PURKSRTSeOkNVbHgONJ/wnhf3j3B0Tg==",
-      "path": "devcade-library/1.1.0",
-      "hashPath": "devcade-library.1.1.0.nupkg.sha512"
+      "sha512": "sha512-cQXIQT9Hgg2zS4Vje93sXL52t/gGiqM4Lx/1+OvjOMyfOMCe80A0RkDD3HBJFKY9aBSuIMoz7RJpMNzwLHvMOA==",
+      "path": "devcade-library/1.2.0",
+      "hashPath": "devcade-library.1.2.0.nupkg.sha512"
     },
     "MonoGame.Content.Builder.Task/3.8.1.303": {
       "type": "package",
@@ -103,6 +114,13 @@
       "sha512": "sha512-eGYhqn0n1olk8MNYeE9EuBmoNNECN1T18rPMaQpkzsEQ0H3nVyFPXC+uCo78v5pi5juQpJ3PSFnSkjzZJ1U58A==",
       "path": "monogame.framework.desktopgl/3.8.1.303",
       "hashPath": "monogame.framework.desktopgl.3.8.1.303.nupkg.sha512"
+    },
+    "Newtonsoft.Json/13.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg==",
+      "path": "newtonsoft.json/13.0.2",
+      "hashPath": "newtonsoft.json.13.0.2.nupkg.sha512"
     }
   }
 }

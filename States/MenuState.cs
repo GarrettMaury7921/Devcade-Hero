@@ -3,9 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -27,13 +26,26 @@ namespace DevcadeGame.States
         public static List<Component> _components;
         public List<Component> _main_menu_components;
         public List<Component> _settings_components;
-        private SoundEffect selectSound;
-        private SoundEffect backSound;
-        private SoundEffect sliderUpSound;
-        private SoundEffect sliderDownSound;
-        private string musicType;
-        private string soundEffectType;
+        public List<Component> _empty_components;
+        public List<Component> _difficulty_components;
+        public List<Component> _player_select_components;
+        private readonly SoundEffect selectSound;
+        private readonly SoundEffect backSound;
+        private readonly SoundEffect sliderUpSound;
+        private readonly SoundEffect sliderDownSound;
+        private readonly string musicType;
+        private readonly string soundEffectType;
+        private int gameID;
 
+        // Variable Methods for Game ID
+        public void setGameID(int gameID)
+        {
+            this.gameID = gameID;
+        }
+        public int getGameID()
+        {
+            return gameID;
+        }
 
         // MenuState Constructor
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) : 
@@ -97,6 +109,47 @@ namespace DevcadeGame.States
             };
             BackButton.Click += BackButton_Click;
 
+            // Player Buttons
+            var SinglePlayerButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(70, 780),
+                Text = "         Single Player",
+            };
+            SinglePlayerButton.Click += SinglePlayerButton_Click;
+
+            var MultiPlayerButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(70, 840),
+                Text = "         Multi Player",
+            };
+            MultiPlayerButton.Click += MultiPlayerButton_Click;
+
+            // Difficulty Buttons
+            var ExpertButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(70, 840),
+                Text = "         Expert",
+            };
+            ExpertButton.Click += ExpertButton_Click;
+            var HardButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(70, 780),
+                Text = "         Hard",
+            };
+            HardButton.Click += HardButton_Click;
+            var MediumButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(70, 720),
+                Text = "         Medium",
+            };
+            MediumButton.Click += MediumButton_Click;
+            var EasyButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(70, 660),
+                Text = "         Easy",
+            };
+            EasyButton.Click += EasyButton_Click;
+
             // ***** ALL SLIDERS DEFINED BELOW *****
             // MUSIC VOLUME SLIDER
             var MusicVolumeSliderButton = new Button(buttonTexture, buttonFont)
@@ -128,8 +181,13 @@ namespace DevcadeGame.States
                 BarColor = Color.White,
             };
 
+
             // ***** TYPES OF COMPONENTS *****
             // Change to these components to change the menu
+            _empty_components = new List<Component>()
+            {
+
+            };
             _main_menu_components = new List<Component>()
             {
                 careerGameButton,
@@ -145,11 +203,26 @@ namespace DevcadeGame.States
                 EffectVolumeSlider,
                 BackButton,
             };
+            _player_select_components = new List<Component>()
+            {
+                SinglePlayerButton,
+                MultiPlayerButton,
+                BackButton,
+            };
+            _difficulty_components = new List<Component>()
+            {
+                EasyButton,
+                MediumButton,
+                HardButton,
+                ExpertButton,
+                BackButton,
+            };
 
             // Using starting main menu component
             _components = _main_menu_components;
 
-        }
+        } // MenuState Constructor
+
 
         // Game1.cs Override Methods
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D background)
@@ -178,14 +251,18 @@ namespace DevcadeGame.States
         // ***** BUTTON ON-CLICK EVENTS *****
         private void CareerButton_Click(object sender, EventArgs e)
         {
-            //_game.ChangeState(new GameState(_game, _graphicsDevice, _content));
-            Debug.WriteLine("Career");
+            // Career Mode ID = 0
+            setGameID(0);
+            _components = _player_select_components;
             selectSound.Play();
+            //_game.ChangeState(new GameState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content));
         }
 
         private void CasualButton_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("Casual");
+            // Casual Mode ID = 1
+            setGameID(1);
+            _components = _player_select_components;
             selectSound.Play();
         }
 
@@ -205,6 +282,51 @@ namespace DevcadeGame.States
             _components = _main_menu_components;
             backSound.Play();
         }
+
+        private void SinglePlayerButton_Click(object sender, EventArgs e)
+        {
+            // Enter the game differently depending on what game mode they chose before
+            switch(gameID)
+            {
+                // Career Mode
+                case 0: 
+                    break;
+
+                // Casual Mode
+                case 1: 
+                    _components = _difficulty_components;
+                    break;
+
+                default: break;
+
+            }
+            selectSound.Play();
+        }
+        private void MultiPlayerButton_Click(object sender, EventArgs e)
+        {
+            selectSound.Play();
+        }
+
+        private void ExpertButton_Click(object sender, EventArgs e)
+        {
+            selectSound.Play();
+        }
+
+        private void HardButton_Click(object sender, EventArgs e)
+        {
+            selectSound.Play();
+        }
+
+        private void MediumButton_Click(object sender, EventArgs e)
+        {
+            selectSound.Play();
+        }
+
+        private void EasyButton_Click(object sender, EventArgs e)
+        {
+            selectSound.Play();
+        }
+
         private void MusicVolumeSliderButton_Click(object sender, EventArgs e)
         {
 
