@@ -20,4 +20,5 @@ namespace DevcadeGame
 		public abstract void Update(GameTime gameTime);
 
 	}
+
 }
