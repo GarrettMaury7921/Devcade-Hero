@@ -35,6 +35,7 @@ namespace DevcadeGame.States
         private readonly SoundEffect sliderDownSound;
         private readonly string musicType;
         private readonly string soundEffectType;
+        private readonly string state_name;
         private int gameID;
 
         // Variable Methods for Game ID
@@ -48,12 +49,13 @@ namespace DevcadeGame.States
         }
 
         // MenuState Constructor
-        public MenuState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) :
-            base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content)
+        public MenuState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) :
+            base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content, _state_name)
         {
             // Attributes
             musicType = "music";
             soundEffectType = "effect";
+            state_name = _state_name;
 
             // ***** LOAD ASSETS *****
             // Load the Sound effects for the menu
@@ -329,7 +331,7 @@ namespace DevcadeGame.States
 
         private void MusicVolumeSliderButton_Click(object sender, EventArgs e)
         {
-
+            // Plays no sound since music is playing in the background
         }
         private void EffectVolumeSliderButton_Click(object sender, EventArgs e)
         {

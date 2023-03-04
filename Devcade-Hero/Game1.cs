@@ -7,6 +7,7 @@ using DevcadeGame.Sounds;
 using Devcade;
 using System;
 using Kettu;
+using System.Diagnostics;
 
 namespace DevcadeGame
 {
@@ -24,14 +25,11 @@ namespace DevcadeGame
     public class Game1 : Game
 	{
 		// Attributes
-		private GraphicsDeviceManager _graphics;
+		public static GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
-
 		private State _currentState;
 		private State _nextState;
-
 		Texture2D main_menu;
-
         Song welcome_to_the_jungle;
 
         /// <summary>
@@ -51,6 +49,22 @@ namespace DevcadeGame
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
             MediaPlayer.Play(welcome_to_the_jungle);
+        }
+        
+        /// <summary>
+        /// When you exit the video part of the IntroState
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            if (_currentState._state_name.Equals("IntroState"))
+            {
+                base.OnExiting(sender, args);
+                // Dispose of the video decoder since a video should be playing
+                IntroState.VideoDecoder.Dispose();
+                Logger.StopLogging();
+            }
         }
 
         /// <summary>
@@ -108,16 +122,17 @@ namespace DevcadeGame
 
             main_menu = Content.Load<Texture2D>("Menu_Assets/vertical background");
 
+            // Load and Play Songs
+            welcome_to_the_jungle = Content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
+            MediaPlayer.Play(welcome_to_the_jungle);
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
 
             // Load the Current Menu State
-            _currentState = new IntroState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content);
+            _currentState = new IntroState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content, "IntroState");
 
             // MENU STATE
-            //_currentState = new MenuState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content);
-            // Load and Play Songs
-            //welcome_to_the_jungle = Content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
-            //MediaPlayer.Play(welcome_to_the_jungle);
-            //MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
+            //_currentState = new MenuState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content, "MenuState");
+
         } // End of LoadContent
 
 
@@ -166,10 +181,6 @@ namespace DevcadeGame
 
             // Draw the menu items and each state
             _currentState.Draw(gameTime, _spriteBatch, main_menu);
-            foreach (var component in IntroState._components)
-            {
-                component.Draw(gameTime, _spriteBatch);
-            }
             /*foreach (var component in MenuState._components)
             {
                 component.Draw(gameTime, _spriteBatch);

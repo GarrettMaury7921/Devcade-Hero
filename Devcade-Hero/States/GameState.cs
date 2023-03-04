@@ -16,8 +16,8 @@ namespace DevcadeGame.States
     */
     public class GameState : State
     {
-        public GameState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) : 
-            base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content)
+        public GameState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) : 
+            base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content, _state_name)
         {
         }
 

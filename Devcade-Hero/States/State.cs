@@ -22,15 +22,17 @@ namespace DevcadeGame.States
         protected Game1 _game;
         protected int _preferredBackBufferWidth;
         protected int _preferredBackBufferHeight;
+        public string _state_name;
         #endregion
 
-        public State(Game1 game, GraphicsDevice graphicsDevice, int preferredBackBufferWidth, int preferredBackBufferHeight, ContentManager content)
+        public State(Game1 game, GraphicsDevice graphicsDevice, int preferredBackBufferWidth, int preferredBackBufferHeight, ContentManager content, string state_name)
         {
             _game = game;
             _graphicsDevice = graphicsDevice;
             _preferredBackBufferWidth = preferredBackBufferWidth;
             _preferredBackBufferHeight = preferredBackBufferHeight;
             _content = content;
+            _state_name = state_name;
         }
 
         #region Methods
