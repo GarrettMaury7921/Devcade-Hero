@@ -30,8 +30,6 @@ C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Menu_As
 C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Songs\welcome_to_the_jungle_PCM.ogg
 C:\Users\garre\Desktop\Devcade\DevcadeHero-main\bin\Debug\net6.0\Content\Songs\welcome_to_the_jungle_PCM.xnb
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Fonts\Font.xnb
-C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Intro_Videos\main_intro.mp4
-C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Intro_Videos\main_intro.xnb
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Menu_Assets\button.xnb
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Menu_Assets\slider.xnb
 C:\Users\garre\Desktop\Devcade\Devcade-Hero\bin\Debug\net6.0\Content\Menu_Assets\slider_ball.xnb

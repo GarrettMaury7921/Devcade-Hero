@@ -105,14 +105,14 @@ namespace DevcadeGame
 
 
             // Load the Current Menu State
-            _currentState = new IntroState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content);
+            //_currentState = new IntroState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content);
 
             // MENU STATE
-            //_currentState = new MenuState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content);
+            _currentState = new MenuState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content);
             // Load and Play Songs
-            //welcome_to_the_jungle = Content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
-            //MediaPlayer.Play(welcome_to_the_jungle);
-            //MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
+            welcome_to_the_jungle = Content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
+            MediaPlayer.Play(welcome_to_the_jungle);
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
         } // End of LoadContent
 
 
@@ -161,14 +161,14 @@ namespace DevcadeGame
 
             // Draw the menu items and each state
             _currentState.Draw(gameTime, _spriteBatch, main_menu);
-            foreach (var component in IntroState._components)
-            {
-                component.Draw(gameTime, _spriteBatch);
-            }
-            /*foreach (var component in MenuState._components)
+            /*foreach (var component in IntroState._components)
             {
                 component.Draw(gameTime, _spriteBatch);
             }*/
+            foreach (var component in MenuState._components)
+            {
+                component.Draw(gameTime, _spriteBatch);
+            }
 
             // Sprite Batch End
             _spriteBatch.End();

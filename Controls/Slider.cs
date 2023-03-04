@@ -21,11 +21,11 @@ namespace DevcadeGame.Controls
         #region Fields
         private MouseState _currentMouse;
         private MouseState _previousMouse;
-        private Texture2D _texture;
-        private Texture2D _thumbTexture;
+        private readonly Texture2D _texture;
+        private readonly Texture2D _thumbTexture;
         private float _value;
         private bool _isDragging;
-        private string _type;
+        private readonly string _type;
         #endregion
 
         #region Properties
@@ -56,9 +56,9 @@ namespace DevcadeGame.Controls
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             var thumbRectangle = new Rectangle((int)(Position.X + _value * (_texture.Width - _thumbTexture.Width)), (int)Position.Y, _thumbTexture.Width, _texture.Height);
-            spriteBatch.Draw(_thumbTexture, thumbRectangle, Color.White);
-
+            // Draw thumb texture last
             spriteBatch.Draw(_texture, Rectangle, Color.White);
+            spriteBatch.Draw(_thumbTexture, thumbRectangle, Color.White);
         }
 
         // Update Method

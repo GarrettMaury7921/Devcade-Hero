@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using System.Collections.Generic;
 
 namespace DevcadeGame.States
 {
@@ -16,6 +16,8 @@ namespace DevcadeGame.States
     {
         // Attributes
         public static List<Component> _components;
+        //public VideoDecoder VideoDecoder;
+        public Texture2D VideoTexture;
 
         public IntroState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) :
             base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content)

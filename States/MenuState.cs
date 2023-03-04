@@ -48,7 +48,7 @@ namespace DevcadeGame.States
         }
 
         // MenuState Constructor
-        public MenuState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) : 
+        public MenuState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content) :
             base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content)
         {
             // Attributes
@@ -157,7 +157,7 @@ namespace DevcadeGame.States
                 Position = new Vector2(70, 760),
                 // Setting the text to the correct place above the slider
                 textOffset = new Vector2(40, -40),
-                Text = "Music",
+                Text = "  Music",
             };
             MusicVolumeSliderButton.Click += MusicVolumeSliderButton_Click;
             var MusicVolumeSlider = new Slider(sliderTexture, sliderThumbTexture, musicType)
@@ -172,7 +172,7 @@ namespace DevcadeGame.States
                 Position = new Vector2(70, 840),
                 // Setting the text to the correct place above the slider
                 textOffset = new Vector2(44, -40),
-                Text = "Effects",
+                Text = "Sound Effects",
             };
             EffectVolumeSliderButton.Click += EffectVolumeSliderButton_Click;
             var EffectVolumeSlider = new Slider(sliderTexture, sliderThumbTexture, soundEffectType)
@@ -286,14 +286,14 @@ namespace DevcadeGame.States
         private void SinglePlayerButton_Click(object sender, EventArgs e)
         {
             // Enter the game differently depending on what game mode they chose before
-            switch(gameID)
+            switch (gameID)
             {
                 // Career Mode
-                case 0: 
+                case 0:
                     break;
 
                 // Casual Mode
-                case 1: 
+                case 1:
                     _components = _difficulty_components;
                     break;
 
