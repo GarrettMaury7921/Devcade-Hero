@@ -39,10 +39,26 @@ namespace DevcadeGame.States
         private readonly string state_name;
         private int gameID;
         private Song welcome_to_the_jungle;
+        // Song that plays after mega mind intro (Welcome to the Jungle)
+        private Song megamind_after_jungle;
+        private bool playWelcomeToTheJungle;
 
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
-            MediaPlayer.Play(welcome_to_the_jungle);
+            // First play mega mind 'welcome to the jungle'
+            if (MediaPlayer.State == MediaState.Stopped)
+            {
+                if (!playWelcomeToTheJungle)
+                {
+                    MediaPlayer.Play(megamind_after_jungle);
+                    playWelcomeToTheJungle = true;
+                }
+            }
+            // Then after that play the regular one
+            if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
+            {
+                MediaPlayer.Play(welcome_to_the_jungle);
+            }
         }
 
         // Variable Methods for Game ID
@@ -63,16 +79,21 @@ namespace DevcadeGame.States
             musicType = "music";
             soundEffectType = "effect";
             state_name = _state_name;
+            playWelcomeToTheJungle = false;
 
             // ***** LOAD ASSETS *****
             // Load Music for the menu
             welcome_to_the_jungle = _content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
+            megamind_after_jungle = _content.Load<Song>("Songs/megamind_after_jungle");
 
             // Load the Sound effects for the menu
             selectSound = _content.Load<SoundEffect>("Sound_Effects/UIConfirm");
             backSound = _content.Load<SoundEffect>("Sound_Effects/UICancel");
             sliderUpSound = _content.Load<SoundEffect>("Sound_Effects/VolumeUp");
             sliderDownSound = _content.Load<SoundEffect>("Sound_Effects/VolumeDown");
+
+            // Subscribe to MediaStateChange Event, so things can happen when the song ends
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
 
             // Load the buttons for the menu
             var buttonTexture = _content.Load<Texture2D>("Menu_Assets/button");
@@ -229,10 +250,6 @@ namespace DevcadeGame.States
                 ExpertButton,
                 BackButton,
             };
-
-            // Play the Menu song
-            MediaPlayer.Play(welcome_to_the_jungle);
-            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
 
             // Using starting main menu component
             _components = _main_menu_components;

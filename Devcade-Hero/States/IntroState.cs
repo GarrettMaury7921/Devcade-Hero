@@ -83,7 +83,7 @@ namespace DevcadeGame.States
             PlayPresentation();
 
             // Get the duration of the video
-            videoDuration = TimeSpan.FromSeconds(VideoDecoder.Length-1);
+            videoDuration = TimeSpan.FromSeconds(VideoDecoder.Length-1.25);
 
             Console.WriteLine($"Using hardware codec type of {VideoDecoder.HwCodecType.ToHardwareDecoderType()}!");
 
@@ -119,10 +119,10 @@ namespace DevcadeGame.States
             // If the time is longer than the video duration go to the menu!
             if(elapsedVideoTime >= videoDuration)
             {
-                // Close the video
-                OnExiting();
                 // Go to the Menu State
                 Game1.ChangeState(menu_state);
+                // Close the video
+                OnExiting();
             }
         }
 
