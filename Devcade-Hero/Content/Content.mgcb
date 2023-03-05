@@ -68,6 +68,12 @@
 /processorParam:TextureFormat=Color
 /build:Menu_Assets/vertical background.png
 
+#begin Songs/presentation_intro_music.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Songs/presentation_intro_music.wav
+
 #begin Songs/welcome_to_the_jungle_PCM.wav
 /importer:WavImporter
 /processor:SongProcessor

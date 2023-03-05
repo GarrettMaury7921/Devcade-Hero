@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System;
+using Microsoft.Xna.Framework.Media;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -37,6 +38,12 @@ namespace DevcadeGame.States
         private readonly string soundEffectType;
         private readonly string state_name;
         private int gameID;
+        private Song welcome_to_the_jungle;
+
+        private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
+        {
+            MediaPlayer.Play(welcome_to_the_jungle);
+        }
 
         // Variable Methods for Game ID
         public void setGameID(int gameID)
@@ -58,6 +65,9 @@ namespace DevcadeGame.States
             state_name = _state_name;
 
             // ***** LOAD ASSETS *****
+            // Load Music for the menu
+            welcome_to_the_jungle = _content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
+
             // Load the Sound effects for the menu
             selectSound = _content.Load<SoundEffect>("Sound_Effects/UIConfirm");
             backSound = _content.Load<SoundEffect>("Sound_Effects/UICancel");
@@ -220,6 +230,10 @@ namespace DevcadeGame.States
                 BackButton,
             };
 
+            // Play the Menu song
+            MediaPlayer.Play(welcome_to_the_jungle);
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
+
             // Using starting main menu component
             _components = _main_menu_components;
 
@@ -257,7 +271,8 @@ namespace DevcadeGame.States
             setGameID(0);
             _components = _player_select_components;
             selectSound.Play();
-            //_game.ChangeState(new GameState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content));
+            //Game1.ChangeState(new GameState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "MenuState"));
+        
         }
 
         private void CasualButton_Click(object sender, EventArgs e)

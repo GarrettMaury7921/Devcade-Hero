@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using DevcadeGame.States;
 using DevcadeGame.Sounds;
 using Devcade;
@@ -27,62 +26,34 @@ namespace DevcadeGame
 		// Attributes
 		public static GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
-		private State _currentState;
-		private State _nextState;
-		Texture2D main_menu;
-        Song welcome_to_the_jungle;
-
-        /// <summary>
-        /// Changes State
-        /// </summary>
-        /// <param name="state"></param>
-        public void ChangeState(State state)
-		{
-			_nextState = state;
-		}
-
-        /// <summary>
-		/// Event handler from when a song ends
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-        private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
-        {
-            MediaPlayer.Play(welcome_to_the_jungle);
-        }
-        
-        /// <summary>
-        /// When you exit the video part of the IntroState
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        protected override void OnExiting(object sender, EventArgs args)
-        {
-            if (_currentState._state_name.Equals("IntroState"))
-            {
-                base.OnExiting(sender, args);
-                // Dispose of the video decoder since a video should be playing
-                IntroState.VideoDecoder.Dispose();
-                Logger.StopLogging();
-            }
-        }
+		private static State _currentState;
+		private static State _nextState;
+        Texture2D main_menu;
 
         /// <summary>
         /// Game constructor
         /// </summary>
         public Game1()
-		{
-			_graphics = new GraphicsDeviceManager(this);
-			Content.RootDirectory = "Content";
-			IsMouseVisible = true;
-		}
+        {
+            _graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            IsMouseVisible = true;
+        }
+
+        /// <summary>
+        /// Changes State
+        /// </summary>
+        /// <param name="state"></param>
+        public static void ChangeState(State state)
+        {
+            _nextState = state;
+        }
 
 
-
-		/// <summary>
-		/// Does any setup prior to the first frame that doesn't need loaded content.
-		/// </summary>
-		protected override void Initialize()
+        /// <summary>
+        /// Does any setup prior to the first frame that doesn't need loaded content.
+        /// </summary>
+        protected override void Initialize()
 		{
             // Start the Logger
             Logger.AddLogger(new ConsoleLogger());
@@ -122,28 +93,20 @@ namespace DevcadeGame
 
             main_menu = Content.Load<Texture2D>("Menu_Assets/vertical background");
 
-            // Load and Play Songs
-            welcome_to_the_jungle = Content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
-            MediaPlayer.Play(welcome_to_the_jungle);
-            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
-
-            // Load the Current Menu State
+            // Load the IntroState
             _currentState = new IntroState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content, "IntroState");
-
-            // MENU STATE
-            //_currentState = new MenuState(this, _graphics.GraphicsDevice, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight, Content, "MenuState");
 
         } // End of LoadContent
 
 
 
-		/// <summary>
-		/// Your main update loop. This runs once every frame, over and over.
-		/// </summary>
-		/// <param name="gameTime">This is the gameTime object you can use to get the time since last frame.</param>
-		protected override void Update(GameTime gameTime)
+        /// <summary>
+        /// Your main update loop. This runs once every frame, over and over.
+        /// </summary>
+        /// <param name="gameTime">This is the gameTime object you can use to get the time since last frame.</param>
+        protected override void Update(GameTime gameTime)
 		{
-            Devcade.Input.Update(); // Updates the state of the input library
+            Input.Update(); // Updates the state of the input library
 
 			// Exit when both menu buttons are pressed (or escape for keyboard debugging)
 			// You can change this but it is suggested to keep the key bind of both menu
@@ -181,10 +144,15 @@ namespace DevcadeGame
 
             // Draw the menu items and each state
             _currentState.Draw(gameTime, _spriteBatch, main_menu);
-            /*foreach (var component in MenuState._components)
+
+            // Draw menu state items
+            if (_currentState._state_name.Equals("MenuState"))
             {
-                component.Draw(gameTime, _spriteBatch);
-            }*/
+                foreach (var component in MenuState._components)
+                {
+                    component.Draw(gameTime, _spriteBatch);
+                }
+            }
 
             // Sprite Batch End
             _spriteBatch.End();
