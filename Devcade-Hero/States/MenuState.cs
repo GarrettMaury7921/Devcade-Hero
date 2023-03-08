@@ -36,30 +36,43 @@ namespace DevcadeGame.States
         private readonly SoundEffect sliderDownSound;
         private readonly string musicType;
         private readonly string soundEffectType;
-        private readonly string state_name;
-        private int gameID;
+        private readonly string state_name; // Could be MenuState or MenuState1 (skipped cut-scene)
         private Song welcome_to_the_jungle;
-        // Song that plays after mega mind intro (Welcome to the Jungle)
-        private Song megamind_after_jungle;
+        private Song megamind_after_jungle; // Song that plays after mega mind intro (Welcome to the Jungle)
         private bool playWelcomeToTheJungle;
+        private int gameID;
 
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
-            // First play mega mind 'welcome to the jungle'
-            if (MediaPlayer.State == MediaState.Stopped)
-            {
-                if (!playWelcomeToTheJungle)
-                {
-                    MediaPlayer.Play(megamind_after_jungle);
-                    playWelcomeToTheJungle = true;
-                }
-            }
-            // Then after that play the regular one
-            if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
+            // If the person skipped the cut-scene
+            if (state_name.Equals("MenuState1"))
             {
                 MediaPlayer.Play(welcome_to_the_jungle);
+                playWelcomeToTheJungle = true;
             }
-        }
+
+            // If they watched the entire cut-scene
+            else
+            {
+                // ALL NEEDS TO BE CHANGED
+                // First play mega mind 'welcome to the jungle'
+                if (MediaPlayer.State == MediaState.Stopped)
+                {
+                    if (!playWelcomeToTheJungle)
+                    {
+                        MediaPlayer.Play(megamind_after_jungle);
+                        playWelcomeToTheJungle = true;
+                    }
+                }
+                // Then after that play the regular one
+                if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
+                {
+                    MediaPlayer.Play(welcome_to_the_jungle);
+                }
+
+            } // Else statement
+
+        } // MediaPlayer_MediaStateChanged method
 
         // Variable Methods for Game ID
         public void setGameID(int gameID)

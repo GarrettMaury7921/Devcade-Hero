@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System;
 using Furball.Engine.Engine.Graphics.Video;
 using Microsoft.Xna.Framework.Media;
-using System.Reflection.Metadata;
 using Kettu;
+using Microsoft.Xna.Framework.Input;
 
 namespace DevcadeGame.States
 {
@@ -20,18 +20,26 @@ namespace DevcadeGame.States
     public class IntroState : State
     {
         // Attributes
+        private new GraphicsDevice _graphicsDevice;
         public static List<Component> _components;
-        private SpriteBatch _spriteBatch;
         public static VideoDecoder VideoDecoder;
         public Texture2D VideoTexture;
-        private string State_name;
-        private new GraphicsDevice _graphicsDevice;
-        private TimeSpan videoDuration;
+        private readonly SpriteBatch _spriteBatch;
+        private readonly TimeSpan videoDuration;
         private TimeSpan elapsedVideoTime;
-        private double increase_scale;
-        private Game1 game;
         private Song presentation_intro_music;
+        private Song welcome_to_the_jungle;
+        private Song objection_intro;
         private State menu_state;
+        private double increase_scale;
+        private string State_name;
+        private double cutoff_seconds;
+
+        // For picking the video and music for the intro
+        private string videoName;
+        private Song songName;
+        private int randomValue;
+        
 
         // Close the video when it ends
         protected void OnExiting()
@@ -52,10 +60,45 @@ namespace DevcadeGame.States
         }
 
         // Play the music for whatever intro video
-        // TODO: SWITCH STATEMENT
-        private void PlayPresentation()
+        private void pickVideoAndMusic()
         {
-            MediaPlayer.Play(presentation_intro_music);
+            // THERE ARE CURRENTLY 3 INTROS
+            Random random = new Random();
+            randomValue = random.Next(2, 3); // generates a random value between 1 and 2 (inclusive)
+            switch (randomValue)
+            {
+                // Main Intro
+                case 1:
+                    videoName = "main_intro.mp4";
+                    songName = welcome_to_the_jungle;
+                    increase_scale = 0.0075;
+                    cutoff_seconds = 0;
+                    break;
+               
+                // Ace Attorney Intro
+                case 2:
+                    videoName = "objection_intro.mp4";
+                    songName = objection_intro;
+                    increase_scale = 0.006;
+                    cutoff_seconds = 0;
+                    break;
+
+                // Mega mind Intro
+                /*case 3:
+                    videoName = "presentation.mp4";
+                    songName = presentation_intro_music;
+                    increase_scale = 0.0065; // Mega mind intro
+                    cutoff_seconds = 1.25;
+                    before_video_time = 0;
+                    break;*/
+
+                // Default Main Intro
+                default:
+                    videoName = "main_intro.mp4";
+                    songName = welcome_to_the_jungle;
+                    break;
+            }
+
         }
 
         public IntroState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) :
@@ -64,10 +107,12 @@ namespace DevcadeGame.States
 
             // Load the intro music for each video
             presentation_intro_music = _content.Load<Song>("Songs/presentation_intro_music");
+            welcome_to_the_jungle = _content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
+            objection_intro = _content.Load<Song>("Songs/objection_intro");
 
             // Attributes
             State_name = _state_name;
-            increase_scale = 0.0065;
+            increase_scale = 0;
             menu_state = new MenuState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "MenuState");
 
             // Set Graphics Device for drawing
@@ -77,18 +122,20 @@ namespace DevcadeGame.States
             VideoDecoder = new VideoDecoder(4);
             _spriteBatch = new SpriteBatch(graphicsDevice);
 
+            // Pick the video and music randomly
             // Load in the video, video is in output directory of the project
             // Have ffmpeg.auto .dll's in this directory as well
-            VideoDecoder.Load("presentation.mp4", HardwareDecoderType.Any);
-            PlayPresentation();
+            pickVideoAndMusic();
+            VideoDecoder.Load(videoName, HardwareDecoderType.Any);
 
-            // Get the duration of the video
-            videoDuration = TimeSpan.FromSeconds(VideoDecoder.Length-1.25);
+            // Play the selected song
+            MediaPlayer.Play(songName);
 
-            Console.WriteLine($"Using hardware codec type of {VideoDecoder.HwCodecType.ToHardwareDecoderType()}!");
+            // Get the duration of the video, end the video early if needed to sync with music
+            videoDuration = TimeSpan.FromSeconds(VideoDecoder.Length-cutoff_seconds);
 
-            PreferredBackBufferWidth = VideoDecoder.Width;
-            PreferredBackBufferHeight = VideoDecoder.Height;
+            // Print hardware codec and set width and height
+            Console.WriteLine($"Using hardware codec type of {VideoDecoder.HwCodecType.ToHardwareDecoderType()}!");;
             Game1._graphics.ApplyChanges();
 
             // Set the video texture
@@ -97,6 +144,7 @@ namespace DevcadeGame.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)
         {
+            // DRAW THE VIDEO frame by frame
             _graphicsDevice.Clear(Color.CornflowerBlue);
 
             byte[] frame = VideoDecoder.GetFrame((int)gameTime.TotalGameTime.TotalMilliseconds);
@@ -116,13 +164,31 @@ namespace DevcadeGame.States
             // Update the time
             elapsedVideoTime += gameTime.ElapsedGameTime;
 
-            // If the time is longer than the video duration go to the menu!
-            if(elapsedVideoTime >= videoDuration)
+            // If the time is longer than the video duration, go to the menu!
+            // OR if any key on the keyboard is being pressed, change to the menu
+            // TODO: OR if any arcade button is being pressed
+            if(elapsedVideoTime >= videoDuration || Keyboard.GetState().GetPressedKeys().Length > 0)
             {
-                // Go to the Menu State
-                Game1.ChangeState(menu_state);
-                // Close the video
-                OnExiting();
+                // If the user pressed a button to skip
+                if (elapsedVideoTime < videoDuration)
+                {
+                    menu_state = new MenuState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "MenuState1");
+                    // Go to the Menu State
+                    Game1.ChangeState(menu_state);
+                    // Close the video
+                    OnExiting();
+                    // Stop the media player
+                    MediaPlayer.Stop();
+                }
+                else
+                {
+                    // Go to the Menu State
+                    Game1.ChangeState(menu_state);
+                    // Close the video
+                    OnExiting();
+                    // Stop the media player
+                    MediaPlayer.Stop();
+                }
             }
         }
 

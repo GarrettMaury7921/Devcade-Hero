@@ -4,9 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using DevcadeGame.States;
 using DevcadeGame.Sounds;
 using Devcade;
-using System;
 using Kettu;
-using System.Diagnostics;
 
 namespace DevcadeGame
 {
@@ -59,8 +57,10 @@ namespace DevcadeGame
             Logger.AddLogger(new ConsoleLogger());
             Logger.StartLogging();
 
-            Input.Initialize(); // Sets up the input library
-			MenuSounds menuSounds = new MenuSounds(); // Sets up the starting sound volume
+            // Sets up the input library
+            Input.Initialize();
+            // Sets up the starting sound volume
+            MenuSounds menuSounds = new();
 
             // Set window size if running debug (in release it will be full screen)
             #region
@@ -146,7 +146,7 @@ namespace DevcadeGame
             _currentState.Draw(gameTime, _spriteBatch, main_menu);
 
             // Draw menu state items
-            if (_currentState._state_name.Equals("MenuState"))
+            if (_currentState._state_name.Contains("MenuState"))
             {
                 foreach (var component in MenuState._components)
                 {

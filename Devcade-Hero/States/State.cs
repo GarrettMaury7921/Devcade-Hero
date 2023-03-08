@@ -17,12 +17,12 @@ namespace DevcadeGame.States
     public abstract class State
     {
         #region fields
-        protected ContentManager _content;
-        protected GraphicsDevice _graphicsDevice;
-        protected Game1 _game;
         protected int _preferredBackBufferWidth;
         protected int _preferredBackBufferHeight;
+        protected GraphicsDevice _graphicsDevice;
+        protected ContentManager _content;
         public string _state_name;
+        protected Game1 _game;
         #endregion
 
         public State(Game1 game, GraphicsDevice graphicsDevice, int preferredBackBufferWidth, int preferredBackBufferHeight, ContentManager content, string state_name)

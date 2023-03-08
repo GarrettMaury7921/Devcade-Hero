@@ -74,6 +74,12 @@
 /processorParam:Quality=Best
 /build:Songs/megamind_after_jungle.wav
 
+#begin Songs/objection_intro.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Songs/objection_intro.wav
+
 #begin Songs/presentation_intro_music.wav
 /importer:WavImporter
 /processor:SongProcessor

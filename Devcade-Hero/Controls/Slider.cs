@@ -18,6 +18,8 @@ namespace DevcadeGame.Controls
     internal class Slider : Component
     {
 
+        // Thanks ChatGPT
+
         #region Fields
         private MouseState _currentMouse;
         private MouseState _previousMouse;
