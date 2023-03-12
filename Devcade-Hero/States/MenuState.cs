@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 using System;
-using Microsoft.Xna.Framework.Media;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -30,6 +30,7 @@ namespace DevcadeGame.States
         public List<Component> _empty_components;
         public List<Component> _difficulty_components;
         public List<Component> _player_select_components;
+        public List<Component> _setlist_components;
         private readonly SoundEffect selectSound;
         private readonly SoundEffect backSound;
         private readonly SoundEffect sliderUpSound;
@@ -37,15 +38,18 @@ namespace DevcadeGame.States
         private readonly string musicType;
         private readonly string soundEffectType;
         private readonly string state_name; // Could be MenuState or MenuState1 (skipped cut-scene)
-        private Song welcome_to_the_jungle;
-        private Song megamind_after_jungle; // Song that plays after mega mind intro (Welcome to the Jungle)
         private bool playWelcomeToTheJungle;
         private int gameID;
+        private int difficultyID;
+        private Texture2D setlist_background;
+        private Texture2D main_menu_background;
+        private Song welcome_to_the_jungle;
+        private Song beat_drop_after_jungle; // Song that plays after mega mind intro (Welcome to the Jungle)
 
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
             // If the person skipped the cut-scene
-            if (state_name.Equals("MenuState1"))
+            if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState1") && playWelcomeToTheJungle == false)
             {
                 MediaPlayer.Play(welcome_to_the_jungle);
                 playWelcomeToTheJungle = true;
@@ -54,15 +58,11 @@ namespace DevcadeGame.States
             // If they watched the entire cut-scene
             else
             {
-                // ALL NEEDS TO BE CHANGED
-                // First play mega mind 'welcome to the jungle'
-                if (MediaPlayer.State == MediaState.Stopped)
+                // First 'welcome to the jungle' when beat drops
+                if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
                 {
-                    if (!playWelcomeToTheJungle)
-                    {
-                        MediaPlayer.Play(megamind_after_jungle);
-                        playWelcomeToTheJungle = true;
-                    }
+                    MediaPlayer.Play(beat_drop_after_jungle);
+                    playWelcomeToTheJungle= true;
                 }
                 // Then after that play the regular one
                 if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
@@ -74,7 +74,7 @@ namespace DevcadeGame.States
 
         } // MediaPlayer_MediaStateChanged method
 
-        // Variable Methods for Game ID
+        // Variable Methods for Game ID and Difficulty ID
         public void setGameID(int gameID)
         {
             this.gameID = gameID;
@@ -82,6 +82,14 @@ namespace DevcadeGame.States
         public int getGameID()
         {
             return gameID;
+        }
+        public void setDifficultyID(int difficultyID)
+        {
+            this.difficultyID = difficultyID;
+        }
+        public int getDifficultyID()
+        {
+            return difficultyID;
         }
 
         // MenuState Constructor
@@ -91,13 +99,17 @@ namespace DevcadeGame.States
             // Attributes
             musicType = "music";
             soundEffectType = "effect";
-            state_name = _state_name;
             playWelcomeToTheJungle = false;
+            state_name = _state_name;
 
             // ***** LOAD ASSETS *****
+            // Load another background for the set list
+            main_menu_background = _content.Load<Texture2D>("Menu_Assets/vertical background");
+            setlist_background = _content.Load<Texture2D>("Menu_Assets/setlist_background");
+
             // Load Music for the menu
             welcome_to_the_jungle = _content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
-            megamind_after_jungle = _content.Load<Song>("Songs/megamind_after_jungle");
+            beat_drop_after_jungle = _content.Load<Song>("Songs/megamind_after_jungle");
 
             // Load the Sound effects for the menu
             selectSound = _content.Load<SoundEffect>("Sound_Effects/UIConfirm");
@@ -196,6 +208,9 @@ namespace DevcadeGame.States
             };
             EasyButton.Click += EasyButton_Click;
 
+            // Set list buttons
+            
+
             // ***** ALL SLIDERS DEFINED BELOW *****
             // MUSIC VOLUME SLIDER
             var MusicVolumeSliderButton = new Button(buttonTexture, buttonFont)
@@ -263,6 +278,10 @@ namespace DevcadeGame.States
                 ExpertButton,
                 BackButton,
             };
+            _setlist_components = new List<Component>()
+            {
+                BackButton,
+            };
 
             // Using starting main menu component
             _components = _main_menu_components;
@@ -326,6 +345,8 @@ namespace DevcadeGame.States
 
         private void BackButton_Click(object sender, EventArgs e)
         {
+            // Set the main menu back to normal
+            Game1.main_menu = main_menu_background;
             _components = _main_menu_components;
             backSound.Play();
         }
@@ -356,21 +377,39 @@ namespace DevcadeGame.States
 
         private void ExpertButton_Click(object sender, EventArgs e)
         {
+            // Set difficulty
+            difficultyID = 3;
+
             selectSound.Play();
         }
 
         private void HardButton_Click(object sender, EventArgs e)
         {
+            // Set difficulty
+            difficultyID = 2;
+
             selectSound.Play();
         }
 
         private void MediumButton_Click(object sender, EventArgs e)
         {
+            // Set difficulty
+            difficultyID = 1;
+
             selectSound.Play();
         }
 
         private void EasyButton_Click(object sender, EventArgs e)
         {
+            // Set difficulty
+            difficultyID = 0;
+
+            // Casual Mode
+            if (gameID == 1)
+            {
+                changeMenuBackground();
+                _components = _setlist_components;
+            }
             selectSound.Play();
         }
 
@@ -381,6 +420,11 @@ namespace DevcadeGame.States
         private void EffectVolumeSliderButton_Click(object sender, EventArgs e)
         {
             sliderUpSound.Play();
+        }
+
+        private void changeMenuBackground()
+        {
+            Game1.main_menu = setlist_background;
         }
 
     } // Public class MenuState end

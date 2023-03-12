@@ -26,7 +26,7 @@ namespace DevcadeGame
 		private SpriteBatch _spriteBatch;
 		private static State _currentState;
 		private static State _nextState;
-        Texture2D main_menu;
+        public static Texture2D main_menu;
 
         /// <summary>
         /// Game constructor

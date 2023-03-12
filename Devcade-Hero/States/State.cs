@@ -19,9 +19,9 @@ namespace DevcadeGame.States
         #region fields
         protected int _preferredBackBufferWidth;
         protected int _preferredBackBufferHeight;
+        public string _state_name;
         protected GraphicsDevice _graphicsDevice;
         protected ContentManager _content;
-        public string _state_name;
         protected Game1 _game;
         #endregion
 

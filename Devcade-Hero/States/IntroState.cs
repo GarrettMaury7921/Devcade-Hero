@@ -1,12 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using System.Collections.Generic;
-using System;
 using Furball.Engine.Engine.Graphics.Video;
 using Microsoft.Xna.Framework.Media;
-using Kettu;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using System;
+using Kettu;
 
 namespace DevcadeGame.States
 {
@@ -22,23 +22,23 @@ namespace DevcadeGame.States
         // Attributes
         private new GraphicsDevice _graphicsDevice;
         public static List<Component> _components;
-        public static VideoDecoder VideoDecoder;
-        public Texture2D VideoTexture;
         private readonly SpriteBatch _spriteBatch;
+        public static VideoDecoder VideoDecoder;
         private readonly TimeSpan videoDuration;
         private TimeSpan elapsedVideoTime;
+        public Texture2D VideoTexture;
+        private State menu_state;
         private Song presentation_intro_music;
         private Song welcome_to_the_jungle;
         private Song objection_intro;
-        private State menu_state;
         private double increase_scale;
         private string State_name;
-        private double cutoff_seconds;
 
         // For picking the video and music for the intro
-        private string videoName;
         private Song songName;
+        private string videoName;
         private int randomValue;
+        private double cutoff_seconds;
         
 
         // Close the video when it ends
@@ -64,14 +64,17 @@ namespace DevcadeGame.States
         {
             // THERE ARE CURRENTLY 3 INTROS
             Random random = new Random();
-            randomValue = random.Next(2, 3); // generates a random value between 1 and 2 (inclusive)
+            randomValue = random.Next(1, 3); // generates a random value between x and y-1 (inclusive)
             switch (randomValue)
             {
+                // SET ALL PARAMETERS FOR EACH INTRO
+
                 // Main Intro
                 case 1:
                     videoName = "main_intro.mp4";
                     songName = welcome_to_the_jungle;
                     increase_scale = 0.0075;
+                    State_name = "MenuState_beat_drop";
                     cutoff_seconds = 0;
                     break;
                
@@ -80,26 +83,30 @@ namespace DevcadeGame.States
                     videoName = "objection_intro.mp4";
                     songName = objection_intro;
                     increase_scale = 0.006;
+                    State_name = "MenuState1";
                     cutoff_seconds = 0;
                     break;
 
                 // Mega mind Intro
-                /*case 3:
+                case 3:
                     videoName = "presentation.mp4";
                     songName = presentation_intro_music;
-                    increase_scale = 0.0065; // Mega mind intro
-                    cutoff_seconds = 1.25;
-                    before_video_time = 0;
-                    break;*/
+                    increase_scale = 0.0065;
+                    State_name = "MenuState_beat_drop";
+                    cutoff_seconds = 0.75; //1.25 works
+                    break;
 
                 // Default Main Intro
                 default:
                     videoName = "main_intro.mp4";
                     songName = welcome_to_the_jungle;
+                    increase_scale = 0.0075;
+                    State_name = "MenuState_beat_drop";
                     break;
-            }
 
-        }
+            } // switch
+
+        } // pick video and music
 
         public IntroState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) :
             base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content, _state_name)
@@ -131,7 +138,7 @@ namespace DevcadeGame.States
             // Play the selected song
             MediaPlayer.Play(songName);
 
-            // Get the duration of the video, end the video early if needed to sync with music
+            // Get the duration of the video, end the video early if needed
             videoDuration = TimeSpan.FromSeconds(VideoDecoder.Length-cutoff_seconds);
 
             // Print hardware codec and set width and height
@@ -182,6 +189,7 @@ namespace DevcadeGame.States
                 }
                 else
                 {
+                    menu_state = new MenuState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, State_name);
                     // Go to the Menu State
                     Game1.ChangeState(menu_state);
                     // Close the video
@@ -189,13 +197,14 @@ namespace DevcadeGame.States
                     // Stop the media player
                     MediaPlayer.Stop();
                 }
-            }
-        }
+            } // if statement
+        } // Update method
 
         public override void PostUpdate(GameTime gameTime)
         {
 
         }
 
-    }
-}
+    } // intro state class
+
+} // name space
