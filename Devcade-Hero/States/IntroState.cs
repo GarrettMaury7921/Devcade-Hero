@@ -25,12 +25,12 @@ namespace DevcadeGame.States
         private readonly SpriteBatch _spriteBatch;
         public static VideoDecoder VideoDecoder;
         private readonly TimeSpan videoDuration;
+        private readonly Song presentation_intro_music;
+        private readonly Song welcome_to_the_jungle;
+        private readonly Song objection_intro;
         private TimeSpan elapsedVideoTime;
         public Texture2D VideoTexture;
         private State menu_state;
-        private Song presentation_intro_music;
-        private Song welcome_to_the_jungle;
-        private Song objection_intro;
         private double increase_scale;
         private string State_name;
 
@@ -50,20 +50,20 @@ namespace DevcadeGame.States
         }
 
         // Getter and Setter for graphicsDevice
-        private void setGraphicsDevice(GraphicsDevice device)
+        private void SetGraphicsDevice(GraphicsDevice device)
         {
             _graphicsDevice = device;
         }
-        private GraphicsDevice getGraphicsDevice()
+        private GraphicsDevice GetGraphicsDevice()
         {
             return _graphicsDevice;
         }
 
         // Play the music for whatever intro video
-        private void pickVideoAndMusic()
+        private void PickVideoAndMusic()
         {
             // THERE ARE CURRENTLY 3 INTROS
-            Random random = new Random();
+            Random random = new();
             randomValue = random.Next(1, 3); // generates a random value between x and y-1 (inclusive)
             switch (randomValue)
             {
@@ -123,7 +123,7 @@ namespace DevcadeGame.States
             menu_state = new MenuState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "MenuState");
 
             // Set Graphics Device for drawing
-            setGraphicsDevice(graphicsDevice);
+            SetGraphicsDevice(graphicsDevice);
 
             // Video Decoder
             VideoDecoder = new VideoDecoder(4);
@@ -132,7 +132,7 @@ namespace DevcadeGame.States
             // Pick the video and music randomly
             // Load in the video, video is in output directory of the project
             // Have ffmpeg.auto .dll's in this directory as well
-            pickVideoAndMusic();
+            PickVideoAndMusic();
             VideoDecoder.Load(videoName, HardwareDecoderType.Any);
 
             // Play the selected song

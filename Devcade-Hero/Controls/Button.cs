@@ -50,7 +50,7 @@ namespace DevcadeGame.Controls
         {
             _texture = texture;
             _font = font;
-            PenColour = Color.Black;
+            PenColour = Color.White;
         }
 
         // Draw Method
@@ -68,7 +68,7 @@ namespace DevcadeGame.Controls
                 var x = (Rectangle.X + (Rectangle.Width / 2)) - (_font.MeasureString(Text).X / 2) + textOffset.X;
                 var y = (Rectangle.Y + (Rectangle.Height / 2)) - (_font.MeasureString(Text).Y / 2) + textOffset.Y;
 
-                spriteBatch.DrawString(_font, Text, new Vector2(x, y), Color.White);
+                spriteBatch.DrawString(_font, Text, new Vector2(x, y), PenColour);
             }
 
         }

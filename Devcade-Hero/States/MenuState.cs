@@ -38,14 +38,15 @@ namespace DevcadeGame.States
         private readonly string musicType;
         private readonly string soundEffectType;
         private readonly string state_name; // Could be MenuState or MenuState1 (skipped cut-scene)
+        private readonly Texture2D setlist_background;
+        private readonly Texture2D main_menu_background;
+        private readonly Song welcome_to_the_jungle;
+        private readonly Song beat_drop_after_jungle; // Song that plays after mega mind intro (Welcome to the Jungle)
         private bool playWelcomeToTheJungle;
         private int gameID;
         private int difficultyID;
-        private Texture2D setlist_background;
-        private Texture2D main_menu_background;
-        private Song welcome_to_the_jungle;
-        private Song beat_drop_after_jungle; // Song that plays after mega mind intro (Welcome to the Jungle)
 
+        // This is called after the intro state
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
             // If the person skipped the cut-scene
@@ -75,19 +76,19 @@ namespace DevcadeGame.States
         } // MediaPlayer_MediaStateChanged method
 
         // Variable Methods for Game ID and Difficulty ID
-        public void setGameID(int gameID)
+        public void SetGameID(int gameID)
         {
             this.gameID = gameID;
         }
-        public int getGameID()
+        public int GetGameID()
         {
             return gameID;
         }
-        public void setDifficultyID(int difficultyID)
+        public void SetDifficultyID(int difficultyID)
         {
             this.difficultyID = difficultyID;
         }
-        public int getDifficultyID()
+        public int GetDifficultyID()
         {
             return difficultyID;
         }
@@ -122,7 +123,9 @@ namespace DevcadeGame.States
 
             // Load the buttons for the menu
             var buttonTexture = _content.Load<Texture2D>("Menu_Assets/button");
+            var devcade_ButtonTexture = _content.Load<Texture2D>("Menu_Assets/devcade_button");
             var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
+            var devcadeButtonFont = _content.Load<SpriteFont>("Fonts/SetList_Font");
 
             // Load the sliders for the menu
             var sliderTexture = _content.Load<Texture2D>("Menu_Assets/slider");
@@ -209,7 +212,24 @@ namespace DevcadeGame.States
             EasyButton.Click += EasyButton_Click;
 
             // Set list buttons
-            
+            var Setlist_test = new Button(devcade_ButtonTexture, devcadeButtonFont)
+            {
+                Position = new Vector2(10, 100),
+                Text = "Test Song",
+                // Make the text go to the left
+                textOffset = new Vector2(-50, 0),
+                PenColour = Color.Yellow,
+            };
+            Setlist_test.Click += Setlist_TestButton_Click;
+            var Setlist_BackButton = new Button(devcade_ButtonTexture, devcadeButtonFont)
+            {
+                Position = new Vector2(10, 900),
+                Text = "Back",
+                // Make the text go to the left
+                textOffset = new Vector2(-50, 0),
+                PenColour = Color.Yellow,
+            };
+            Setlist_BackButton.Click += SetListBackButton_Click;
 
             // ***** ALL SLIDERS DEFINED BELOW *****
             // MUSIC VOLUME SLIDER
@@ -280,7 +300,8 @@ namespace DevcadeGame.States
             };
             _setlist_components = new List<Component>()
             {
-                BackButton,
+                Setlist_test,
+                Setlist_BackButton,
             };
 
             // Using starting main menu component
@@ -317,7 +338,7 @@ namespace DevcadeGame.States
         private void CareerButton_Click(object sender, EventArgs e)
         {
             // Career Mode ID = 0
-            setGameID(0);
+            SetGameID(0);
             _components = _player_select_components;
             selectSound.Play();
             //Game1.ChangeState(new GameState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "MenuState"));
@@ -327,7 +348,7 @@ namespace DevcadeGame.States
         private void CasualButton_Click(object sender, EventArgs e)
         {
             // Casual Mode ID = 1
-            setGameID(1);
+            SetGameID(1);
             _components = _player_select_components;
             selectSound.Play();
         }
@@ -344,6 +365,19 @@ namespace DevcadeGame.States
         }
 
         private void BackButton_Click(object sender, EventArgs e)
+        {
+            _components = _main_menu_components;
+            backSound.Play();
+        }
+
+        private void Setlist_TestButton_Click(object sender, EventArgs e)
+        {
+            selectSound.Play();
+            // Go into the song
+            _components = _empty_components;
+        }
+
+        private void SetListBackButton_Click(object sender, EventArgs e)
         {
             // Set the main menu back to normal
             Game1.main_menu = main_menu_background;
@@ -407,7 +441,7 @@ namespace DevcadeGame.States
             // Casual Mode
             if (gameID == 1)
             {
-                changeMenuBackground();
+                ChangeMenuBackground();
                 _components = _setlist_components;
             }
             selectSound.Play();
@@ -422,7 +456,7 @@ namespace DevcadeGame.States
             sliderUpSound.Play();
         }
 
-        private void changeMenuBackground()
+        private void ChangeMenuBackground()
         {
             Game1.main_menu = setlist_background;
         }
