@@ -42,7 +42,7 @@ namespace DevcadeGame.States
         
 
         // Close the video when it ends
-        protected void OnExiting()
+        protected static void OnExiting()
         {
             // Dispose of the video decoder since a video should be playing
             IntroState.VideoDecoder.Dispose();

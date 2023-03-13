@@ -43,8 +43,9 @@ namespace DevcadeGame.States
         private readonly Song welcome_to_the_jungle;
         private readonly Song beat_drop_after_jungle; // Song that plays after mega mind intro (Welcome to the Jungle)
         private bool playWelcomeToTheJungle;
-        private int gameID;
-        private int difficultyID;
+        public static int _gameID;
+        public static int _difficultyID;
+        private State DevcadeHero_State;
 
         // This is called after the intro state
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
@@ -76,21 +77,21 @@ namespace DevcadeGame.States
         } // MediaPlayer_MediaStateChanged method
 
         // Variable Methods for Game ID and Difficulty ID
-        public void SetGameID(int gameID)
+        public static void SetGameID(int gameID)
         {
-            this.gameID = gameID;
+            _gameID = gameID;
         }
-        public int GetGameID()
+        public static int GetGameID()
         {
-            return gameID;
+            return _gameID;
         }
-        public void SetDifficultyID(int difficultyID)
+        public static void SetDifficultyID(int difficultyID)
         {
-            this.difficultyID = difficultyID;
+            _difficultyID = difficultyID;
         }
-        public int GetDifficultyID()
+        public static int GetDifficultyID()
         {
-            return difficultyID;
+            return _difficultyID;
         }
 
         // MenuState Constructor
@@ -372,9 +373,17 @@ namespace DevcadeGame.States
 
         private void Setlist_TestButton_Click(object sender, EventArgs e)
         {
-            selectSound.Play();
-            // Go into the song
             _components = _empty_components;
+            selectSound.Play();
+
+            // Make the Devcade Hero State, the state name is the name of the song/chart file
+            DevcadeHero_State = new DevcadeHeroState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "tester");
+
+            // Stop the media player
+            MediaPlayer.Stop();
+
+            // Change State 
+            Game1.ChangeState(DevcadeHero_State);
         }
 
         private void SetListBackButton_Click(object sender, EventArgs e)
@@ -388,7 +397,7 @@ namespace DevcadeGame.States
         private void SinglePlayerButton_Click(object sender, EventArgs e)
         {
             // Enter the game differently depending on what game mode they chose before
-            switch (gameID)
+            switch (_gameID)
             {
                 // Career Mode
                 case 0:
@@ -412,7 +421,7 @@ namespace DevcadeGame.States
         private void ExpertButton_Click(object sender, EventArgs e)
         {
             // Set difficulty
-            difficultyID = 3;
+            _difficultyID = 3;
 
             selectSound.Play();
         }
@@ -420,7 +429,7 @@ namespace DevcadeGame.States
         private void HardButton_Click(object sender, EventArgs e)
         {
             // Set difficulty
-            difficultyID = 2;
+            _difficultyID = 2;
 
             selectSound.Play();
         }
@@ -428,7 +437,7 @@ namespace DevcadeGame.States
         private void MediumButton_Click(object sender, EventArgs e)
         {
             // Set difficulty
-            difficultyID = 1;
+            _difficultyID = 1;
 
             selectSound.Play();
         }
@@ -436,10 +445,10 @@ namespace DevcadeGame.States
         private void EasyButton_Click(object sender, EventArgs e)
         {
             // Set difficulty
-            difficultyID = 0;
+            _difficultyID = 0;
 
             // Casual Mode
-            if (gameID == 1)
+            if (_gameID == 1)
             {
                 ChangeMenuBackground();
                 _components = _setlist_components;

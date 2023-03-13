@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DevcadeGame.States
 {
     /* 
-    Class GameState:
+    Skeleton Class GameState:
         GameState Constructor
         @ Draw Method
         @ Update Method
