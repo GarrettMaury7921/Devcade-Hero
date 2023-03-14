@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using DevcadeGame.GameManager;
+using Microsoft.Xna.Framework.Media;
 
 namespace DevcadeGame.States
 {
@@ -16,13 +17,18 @@ namespace DevcadeGame.States
     {
         // Attributes
         ChartReader chartReader;
+        Texture2D originalImage;
+        int newWidth;
+        int newHeight;
 
 
         public DevcadeHeroState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) :
             base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content, _state_name)
         {
-            // Put the name into the ChartReader
+            // Put the chart into the ChartReader
             chartReader = new ChartReader(_state_name);
+            
+
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)

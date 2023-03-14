@@ -46,33 +46,45 @@ namespace DevcadeGame.States
         public static int _gameID;
         public static int _difficultyID;
         private State DevcadeHero_State;
+        private bool mediaPlayerKillSwitch;
 
         // This is called after the intro state
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
-            // If the person skipped the cut-scene
-            if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState1") && playWelcomeToTheJungle == false)
+            
+            // Kill switch for this when we don't want stuff playing anymore
+            if (mediaPlayerKillSwitch)
             {
-                MediaPlayer.Play(welcome_to_the_jungle);
-                playWelcomeToTheJungle = true;
+                MediaPlayer.IsRepeating = false;
+                MediaPlayer.Stop();
             }
-
-            // If they watched the entire cut-scene
             else
             {
-                // First 'welcome to the jungle' when beat drops
-                if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
-                {
-                    MediaPlayer.Play(beat_drop_after_jungle);
-                    playWelcomeToTheJungle= true;
-                }
-                // Then after that play the regular one
-                if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
+                // If the person skipped the cut-scene
+                if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState1") && playWelcomeToTheJungle == false)
                 {
                     MediaPlayer.Play(welcome_to_the_jungle);
+                    playWelcomeToTheJungle = true;
                 }
 
-            } // Else statement
+                // If they watched the entire cut-scene
+                else
+                {
+                    // First 'welcome to the jungle' when beat drops
+                    if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
+                    {
+                        MediaPlayer.Play(beat_drop_after_jungle);
+                        playWelcomeToTheJungle = true;
+                    }
+                    // Then after that play the regular one
+                    if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
+                    {
+                        MediaPlayer.Play(welcome_to_the_jungle);
+                    }
+
+                } // Else statement
+
+            } // Kill switch else statement
 
         } // MediaPlayer_MediaStateChanged method
 
@@ -102,6 +114,7 @@ namespace DevcadeGame.States
             musicType = "music";
             soundEffectType = "effect";
             playWelcomeToTheJungle = false;
+            mediaPlayerKillSwitch = false;
             state_name = _state_name;
 
             // ***** LOAD ASSETS *****
@@ -380,6 +393,7 @@ namespace DevcadeGame.States
             DevcadeHero_State = new DevcadeHeroState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "tester");
 
             // Stop the media player
+            mediaPlayerKillSwitch = true;
             MediaPlayer.Stop();
 
             // Change State 
@@ -421,7 +435,7 @@ namespace DevcadeGame.States
         private void ExpertButton_Click(object sender, EventArgs e)
         {
             // Set difficulty
-            _difficultyID = 3;
+            SetDifficultyID(3);
 
             selectSound.Play();
         }
@@ -429,7 +443,7 @@ namespace DevcadeGame.States
         private void HardButton_Click(object sender, EventArgs e)
         {
             // Set difficulty
-            _difficultyID = 2;
+            SetDifficultyID(2);
 
             selectSound.Play();
         }
@@ -437,7 +451,7 @@ namespace DevcadeGame.States
         private void MediumButton_Click(object sender, EventArgs e)
         {
             // Set difficulty
-            _difficultyID = 1;
+            SetDifficultyID(1);
 
             selectSound.Play();
         }
@@ -445,7 +459,7 @@ namespace DevcadeGame.States
         private void EasyButton_Click(object sender, EventArgs e)
         {
             // Set difficulty
-            _difficultyID = 0;
+            SetDifficultyID(0);
 
             // Casual Mode
             if (_gameID == 1)
