@@ -1,7 +1,6 @@
 ﻿using DevcadeGame.States;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 // CHART FILE SPECIFICATIONS
@@ -13,7 +12,9 @@ namespace DevcadeGame.GameManager
     Class ChartReader:
         ChartReader Constructor: Gets File path and plays the song
             - contains each button by making a new button class
+        @ Initialize Fields Method
         @ GetFilePath Method
+        @ Parse Notes Method
     */
     public class ChartReader
     {
@@ -30,7 +31,7 @@ namespace DevcadeGame.GameManager
         private string fileContents;
         private string[] lines;
         private bool body_field;
-        private String[] fields;
+        private readonly String[] fields;
 
         // Chart Reader Constructor
         public ChartReader(string fileName)
@@ -47,9 +48,41 @@ namespace DevcadeGame.GameManager
             GetFilePath(fileName);
 
             // Read in the file and get the important information from it
-            GetNotes(currentFile);
+            ParseNotes(currentFile);
 
         } // chart reader constructor
+
+        private void Initialize_fields(int difficulty)
+        {
+            // Make the difficulty
+            switch (difficulty)
+            {
+                case 0:
+                    difficultyStr = "[EasyGHLGuitar]";
+                    break;
+                case 1:
+                    difficultyStr = "[MediumGHLGuitar]";
+                    break;
+                case 2:
+                    difficultyStr = "[HardGHLGuitar]";
+                    break;
+                case 3:
+                    difficultyStr = "[ExpertGHLGuitar]";
+                    break;
+                default:
+                    break;
+            }
+
+            fields[0] = "[SyncTrack]";
+            fields[1] = "[Events]";
+            fields[2] = difficultyStr;
+
+        } // Initialize Fields method
+
+        public List<String> GetNotes()
+        {
+            return bpm_events_and_notes;
+        }
 
         private string GetFilePath(string fileName)
         {
@@ -83,7 +116,7 @@ namespace DevcadeGame.GameManager
             return currentFile;
         } // Get File Path Method
 
-        public void GetNotes(string filePath)
+        public void ParseNotes(string filePath)
         {
             // Make the stream reader
             reader = new StreamReader(filePath);
@@ -130,6 +163,7 @@ namespace DevcadeGame.GameManager
                     {
                         body_field = false;
                         j++;
+                        continue;
                     }
                     else
                     {
@@ -141,42 +175,15 @@ namespace DevcadeGame.GameManager
             } // for loop for going through each line in the chart file
 
             // For checking if it's reading in the files correctly
-            /*
-            foreach (string element in bpm_events_and_notes)
+            
+            /*foreach (string element in bpm_events_and_notes)
             {
                 Debug.WriteLine(element);
-            }
-            */
+            }*/
+            
 
 
         } // Get notes method
-
-        private void Initialize_fields(int difficulty)
-        {
-            // Make the difficulty
-            switch(difficulty)
-            {
-                case 0:
-                    difficultyStr = "[EasyGHLGuitar]";
-                    break;
-                case 1:
-                    difficultyStr = "[MediumGHLGuitar]";
-                    break;
-                case 2:
-                    difficultyStr = "[HardGHLGuitar]";
-                    break;
-                case 3:
-                    difficultyStr = "[ExpertGHLGuitar]";
-                    break;
-                default: 
-                    break;
-            }
-
-            fields[0] = "[SyncTrack]";
-            fields[1] = "[Events]";
-            fields[2] = difficultyStr;
-
-        } // Initialize Fields method
 
     } // public class Chart Reader
 

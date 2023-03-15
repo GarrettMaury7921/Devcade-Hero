@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -70,16 +71,16 @@ namespace DevcadeGame.States
                 // If they watched the entire cut-scene
                 else
                 {
+                    // Then after that play the regular one
+                    if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
+                    {
+                        MediaPlayer.Play(welcome_to_the_jungle);
+                    }
                     // First 'welcome to the jungle' when beat drops
                     if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
                     {
                         MediaPlayer.Play(beat_drop_after_jungle);
                         playWelcomeToTheJungle = true;
-                    }
-                    // Then after that play the regular one
-                    if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
-                    {
-                        MediaPlayer.Play(welcome_to_the_jungle);
                     }
 
                 } // Else statement

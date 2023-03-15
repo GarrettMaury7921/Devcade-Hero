@@ -2,7 +2,8 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using DevcadeGame.GameManager;
-using Microsoft.Xna.Framework.Media;
+using System.Collections.Generic;
+using System;
 
 namespace DevcadeGame.States
 {
@@ -16,10 +17,10 @@ namespace DevcadeGame.States
     public class DevcadeHeroState : State
     {
         // Attributes
-        ChartReader chartReader;
-        Texture2D originalImage;
-        int newWidth;
-        int newHeight;
+        private ChartReader chartReader;
+        private GameBackgroundManager backgroundManager;
+        private List<String> notes;
+        private Texture2D background;
 
 
         public DevcadeHeroState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) :
@@ -27,12 +28,18 @@ namespace DevcadeGame.States
         {
             // Put the chart into the ChartReader
             chartReader = new ChartReader(_state_name);
-            
+            notes = chartReader.GetNotes();
 
+            // Get the background/video for the song
+            backgroundManager = new GameBackgroundManager(_state_name);
+            background = backgroundManager.BackgroundChooser(_content, _state_name);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)
         {
+            // Draw the main menu background
+            spriteBatch.Draw(background, new Rectangle(0, 0, _preferredBackBufferWidth, _preferredBackBufferHeight),
+                new Rectangle(0, 0, 1080, 2560), Color.White);
         }
 
         public override void Update(GameTime gameTime)

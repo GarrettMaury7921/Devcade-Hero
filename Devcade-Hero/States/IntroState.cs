@@ -93,7 +93,7 @@ namespace DevcadeGame.States
                     songName = presentation_intro_music;
                     increase_scale = 0.0065;
                     State_name = "MenuState_beat_drop";
-                    cutoff_seconds = 0.75; //1.25 works
+                    cutoff_seconds = 1.25; //1.25 works
                     break;
 
                 // Default Main Intro
