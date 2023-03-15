@@ -52,10 +52,10 @@ namespace DevcadeGame.States
         // This is called after the intro state
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
-            
             // Kill switch for this when we don't want stuff playing anymore
             if (mediaPlayerKillSwitch)
             {
+                playWelcomeToTheJungle = false;
                 MediaPlayer.IsRepeating = false;
                 MediaPlayer.Stop();
             }
@@ -77,10 +77,9 @@ namespace DevcadeGame.States
                         MediaPlayer.Play(welcome_to_the_jungle);
                     }
                     // First 'welcome to the jungle' when beat drops
-                    if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
+                    if (state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
                     {
                         MediaPlayer.Play(beat_drop_after_jungle);
-                        playWelcomeToTheJungle = true;
                     }
 
                 } // Else statement

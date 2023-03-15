@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System;
 using Kettu;
+using System.Diagnostics;
 
 namespace DevcadeGame.States
 {
@@ -39,7 +40,8 @@ namespace DevcadeGame.States
         private string videoName;
         private int randomValue;
         private double cutoff_seconds;
-        
+        private MenuState menu_state2;
+
 
         // Close the video when it ends
         protected static void OnExiting()
@@ -93,7 +95,7 @@ namespace DevcadeGame.States
                     songName = presentation_intro_music;
                     increase_scale = 0.0065;
                     State_name = "MenuState_beat_drop";
-                    cutoff_seconds = 1.25; //1.25 works
+                    cutoff_seconds = 0; //1.25 works
                     break;
 
                 // Default Main Intro
@@ -189,9 +191,9 @@ namespace DevcadeGame.States
                 }
                 else
                 {
-                    menu_state = new MenuState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, State_name);
+                    menu_state2 = new MenuState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, State_name);
                     // Go to the Menu State
-                    Game1.ChangeState(menu_state);
+                    Game1.ChangeState(menu_state2);
                     // Close the video
                     OnExiting();
                     // Stop the media player
