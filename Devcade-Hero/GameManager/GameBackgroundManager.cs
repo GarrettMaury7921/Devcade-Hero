@@ -56,7 +56,7 @@ namespace DevcadeGame.GameManager
             switch (songName)
             {
                 case "tester":
-                    background = content.Load<Texture2D>("Menu_Assets/vertical background");
+                    background = null;
                     break;
                 // default is null
                 default:

@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Devcade;
 using System;
 using Kettu;
-using System.Diagnostics;
 
 namespace DevcadeGame.States
 {
@@ -175,8 +175,7 @@ namespace DevcadeGame.States
 
             // If the time is longer than the video duration, go to the menu!
             // OR if any key on the keyboard is being pressed, change to the menu
-            // TODO: OR if any arcade button is being pressed
-            if(elapsedVideoTime >= videoDuration || Keyboard.GetState().GetPressedKeys().Length > 0)
+            if(elapsedVideoTime >= videoDuration || Keyboard.GetState().GetPressedKeys().Length > 0 || DevcadeButtonCheck() == true)
             {
                 // If the user pressed a button to skip
                 if (elapsedVideoTime < videoDuration)
@@ -205,6 +204,25 @@ namespace DevcadeGame.States
         public override void PostUpdate(GameTime gameTime)
         {
 
+        }
+
+        // OTHER METHODS
+        public static bool DevcadeButtonCheck()
+        {
+            if (Input.GetButtonDown(1, Input.ArcadeButtons.A1) || Input.GetButtonDown(1, Input.ArcadeButtons.A2)
+                || Input.GetButtonDown(1, Input.ArcadeButtons.A3) || Input.GetButtonDown(1, Input.ArcadeButtons.A4)
+                || Input.GetButtonDown(1, Input.ArcadeButtons.B1) || Input.GetButtonDown(1, Input.ArcadeButtons.B2)
+                || Input.GetButtonDown(1, Input.ArcadeButtons.B3) || Input.GetButtonDown(1, Input.ArcadeButtons.B4)
+                || Input.GetButtonDown(1, Input.ArcadeButtons.Menu) || Input.GetButtonDown(2, Input.ArcadeButtons.A1) 
+                || Input.GetButtonDown(2, Input.ArcadeButtons.A2)
+                || Input.GetButtonDown(2, Input.ArcadeButtons.A3) || Input.GetButtonDown(2, Input.ArcadeButtons.A4)
+                || Input.GetButtonDown(2, Input.ArcadeButtons.B1) || Input.GetButtonDown(2, Input.ArcadeButtons.B2)
+                || Input.GetButtonDown(2, Input.ArcadeButtons.B3) || Input.GetButtonDown(2, Input.ArcadeButtons.B4)
+                || Input.GetButtonDown(2, Input.ArcadeButtons.Menu))
+            {
+                return true;
+            }
+            return false;
         }
 
     } // intro state class

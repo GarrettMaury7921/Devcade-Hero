@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 using System;
-using System.Diagnostics;
+using Microsoft.Xna.Framework.Input;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -48,45 +48,12 @@ namespace DevcadeGame.States
         public static int _difficultyID;
         private State DevcadeHero_State;
         private bool mediaPlayerKillSwitch;
+        private KeyboardState keyboardState;
+        private bool keyPressed;
 
-        // This is called after the intro state
-        private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
-        {
-            // Kill switch for this when we don't want stuff playing anymore
-            if (mediaPlayerKillSwitch)
-            {
-                playWelcomeToTheJungle = false;
-                MediaPlayer.IsRepeating = false;
-                MediaPlayer.Stop();
-            }
-            else
-            {
-                // If the person skipped the cut-scene
-                if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState1") && playWelcomeToTheJungle == false)
-                {
-                    MediaPlayer.Play(welcome_to_the_jungle);
-                    playWelcomeToTheJungle = true;
-                }
-
-                // If they watched the entire cut-scene
-                else
-                {
-                    // Then after that play the regular one
-                    if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
-                    {
-                        MediaPlayer.Play(welcome_to_the_jungle);
-                    }
-                    // First 'welcome to the jungle' when beat drops
-                    if (state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
-                    {
-                        MediaPlayer.Play(beat_drop_after_jungle);
-                    }
-
-                } // Else statement
-
-            } // Kill switch else statement
-
-        } // MediaPlayer_MediaStateChanged method
+        // *************************************
+        // ***** SETTER AND GETTER METHODS *****
+        // *************************************
 
         // Variable Methods for Game ID and Difficulty ID
         public static void SetGameID(int gameID)
@@ -144,7 +111,6 @@ namespace DevcadeGame.States
             // Load the sliders for the menu
             var sliderTexture = _content.Load<Texture2D>("Menu_Assets/slider");
             var sliderThumbTexture = _content.Load<Texture2D>("Menu_Assets/slider_ball");
-
 
             // ***** ALL STARTING BUTTONS ARE DEFINED BELOW *****
             // These are all the things that the user can select in the menu
@@ -321,34 +287,14 @@ namespace DevcadeGame.States
             // Using starting main menu component
             _components = _main_menu_components;
 
+            // Put the mouse in the correct spot
+            Mouse.SetPosition((int)careerGameButton.Position.X + 150, (int)careerGameButton.Position.Y + 20);
+
         } // MenuState Constructor
 
-
-        // Game1.cs Override Methods
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D background)
-        {
-            // Draw the main menu background
-            spriteBatch.Draw(background, new Rectangle(0, 0, _preferredBackBufferWidth, _preferredBackBufferHeight),
-                new Rectangle(0, 0, 1080, 2560), Color.White);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-
-            foreach (var component in _components)
-            {
-                component.Update(gameTime);
-            }
-        }
-
-        public override void PostUpdate(GameTime gameTime)
-        {
-            // remove the sprites if no longer needed
-        }
-
-
-
+        // **********************************
         // ***** BUTTON ON-CLICK EVENTS *****
+        // **********************************
         private void CareerButton_Click(object sender, EventArgs e)
         {
             // Career Mode ID = 0
@@ -464,11 +410,15 @@ namespace DevcadeGame.States
             // Casual Mode
             if (_gameID == 1)
             {
-                ChangeMenuBackground();
+                ChangeMenuBackground(setlist_background);
                 _components = _setlist_components;
             }
             selectSound.Play();
         }
+
+        // *******************
+        // ***** SLIDERS *****
+        // *******************
 
         private void MusicVolumeSliderButton_Click(object sender, EventArgs e)
         {
@@ -479,10 +429,106 @@ namespace DevcadeGame.States
             sliderUpSound.Play();
         }
 
-        private void ChangeMenuBackground()
+        // *************************************
+        // ***** Game1.cs Override Methods *****
+        // *************************************
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D background)
         {
-            Game1.main_menu = setlist_background;
+            // Draw the main menu background
+            spriteBatch.Draw(background, new Rectangle(0, 0, _preferredBackBufferWidth, _preferredBackBufferHeight),
+                new Rectangle(0, 0, 1080, 2560), Color.White);
         }
+
+        public override void Update(GameTime gameTime)
+        {
+            // Put the menu items on the screen
+            foreach (var component in _components)
+            {
+                component.Update(gameTime);
+            }
+
+            // Menu Controls
+            CheckMenuControls();
+
+        }
+
+        public override void PostUpdate(GameTime gameTime)
+        {
+            // remove the sprites if no longer needed
+        }
+
+        // OTHER METHODS
+        private static void ChangeMenuBackground(Texture2D background)
+        {
+            Game1.main_menu = background;
+        }
+
+        // This is called after the intro state and when a MenuState object is made
+        private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
+        {
+            // Kill switch for this when we don't want stuff playing anymore
+            if (mediaPlayerKillSwitch)
+            {
+                playWelcomeToTheJungle = false;
+                MediaPlayer.IsRepeating = false;
+                MediaPlayer.Stop();
+            }
+            else
+            {
+                // If the person skipped the cut-scene
+                if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState1") && playWelcomeToTheJungle == false)
+                {
+                    MediaPlayer.Play(welcome_to_the_jungle);
+                    playWelcomeToTheJungle = true;
+                }
+
+                // If they watched the entire cut-scene
+                else
+                {
+                    // Then after that play the regular one
+                    if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
+                    {
+                        MediaPlayer.Play(welcome_to_the_jungle);
+                    }
+                    // First 'welcome to the jungle' when beat drops
+                    if (state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
+                    {
+                        MediaPlayer.Play(beat_drop_after_jungle);
+                    }
+
+                } // Else statement
+
+            } // Kill switch else statement
+
+        } // MediaPlayer_MediaStateChanged method
+
+        // Keyboard and Arcade controls for the menu screen
+        private void CheckMenuControls()
+        {
+            // Make keyboard state so cursor only moves once when pressed
+            KeyboardState currentKeyboardState = Keyboard.GetState();
+
+            if (currentKeyboardState.GetPressedKeys().Length > 0 || IntroState.DevcadeButtonCheck() == true)
+            {
+                // Get number of elements so we can move the cursor up and down and know the limits
+                int numOfElements = _components.Count;
+
+                // For moving the cursor up
+                if (currentKeyboardState.IsKeyDown(Keys.Up) && !keyPressed)
+                {
+                    Mouse.SetPosition(Mouse.GetState().X, Mouse.GetState().Y - 20);
+                    keyPressed = true;
+                }
+
+                keyboardState = currentKeyboardState;
+            }
+            // Set to false if not being pressed
+            else if (keyPressed)
+            {
+                keyPressed = false;
+            }
+
+        } // Check Menu Controls
 
     } // Public class MenuState end
 } // Name space end

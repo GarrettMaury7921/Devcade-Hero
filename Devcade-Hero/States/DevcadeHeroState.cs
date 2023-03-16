@@ -43,8 +43,11 @@ namespace DevcadeGame.States
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)
         {
             // Draw the main menu background
-            spriteBatch.Draw(background, new Rectangle(0, 0, _preferredBackBufferWidth, _preferredBackBufferHeight),
+            if (background != null)
+            {
+                spriteBatch.Draw(background, new Rectangle(0, 0, _preferredBackBufferWidth, _preferredBackBufferHeight),
                 new Rectangle(0, 0, 1080, 2560), Color.White);
+            }
         }
 
         public override void Update(GameTime gameTime)
