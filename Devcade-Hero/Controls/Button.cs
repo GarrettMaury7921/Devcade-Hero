@@ -53,6 +53,11 @@ namespace DevcadeGame.Controls
             PenColour = Color.White;
         }
 
+        public void EnterButtonHit()
+        {
+            Click?.Invoke(this, new EventArgs());
+        }
+
         // Draw Method
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -92,7 +97,9 @@ namespace DevcadeGame.Controls
                     Click?.Invoke(this, new EventArgs());
                 }
             }
-        }
+
+        } // Update class
+
         #endregion
     } // Button class
 

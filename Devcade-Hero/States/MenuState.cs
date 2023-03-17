@@ -5,8 +5,11 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
-using System;
 using Microsoft.Xna.Framework.Input;
+using System;
+using Devcade;
+using System.Diagnostics;
+using System.Linq;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -33,7 +36,10 @@ namespace DevcadeGame.States
         public List<Component> _player_select_components;
         public List<Component> _setlist_components;
         private readonly SoundEffect selectSound;
+        private readonly SoundEffect selectSound2;
+        private readonly SoundEffect selectSound3;
         private readonly SoundEffect backSound;
+        private readonly SoundEffect backSound2;
         private readonly SoundEffect sliderUpSound;
         private readonly SoundEffect sliderDownSound;
         private readonly string musicType;
@@ -48,8 +54,9 @@ namespace DevcadeGame.States
         public static int _difficultyID;
         private State DevcadeHero_State;
         private bool mediaPlayerKillSwitch;
-        private KeyboardState keyboardState;
         private bool keyPressed;
+        private int currentButton;
+        private int randomValue;
 
         // *************************************
         // ***** SETTER AND GETTER METHODS *****
@@ -83,6 +90,7 @@ namespace DevcadeGame.States
             playWelcomeToTheJungle = false;
             mediaPlayerKillSwitch = false;
             state_name = _state_name;
+            currentButton = 1;
 
             // ***** LOAD ASSETS *****
             // Load another background for the set list
@@ -95,7 +103,10 @@ namespace DevcadeGame.States
 
             // Load the Sound effects for the menu
             selectSound = _content.Load<SoundEffect>("Sound_Effects/UIConfirm");
+            selectSound2 = _content.Load<SoundEffect>("Sound_Effects/UIConfirm2");
+            selectSound3 = _content.Load<SoundEffect>("Sound_Effects/UIConfirm3");
             backSound = _content.Load<SoundEffect>("Sound_Effects/UICancel");
+            backSound2 = _content.Load<SoundEffect>("Sound_Effects/UICancel2");
             sliderUpSound = _content.Load<SoundEffect>("Sound_Effects/VolumeUp");
             sliderDownSound = _content.Load<SoundEffect>("Sound_Effects/VolumeDown");
 
@@ -300,7 +311,7 @@ namespace DevcadeGame.States
             // Career Mode ID = 0
             SetGameID(0);
             _components = _player_select_components;
-            selectSound.Play();
+            SelectSound().Play();
             //Game1.ChangeState(new GameState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "MenuState"));
         
         }
@@ -310,13 +321,13 @@ namespace DevcadeGame.States
             // Casual Mode ID = 1
             SetGameID(1);
             _components = _player_select_components;
-            selectSound.Play();
+            SelectSound().Play();
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)
         {
             _components = _settings_components;
-            selectSound.Play();
+            SelectSound().Play();
         }
 
         private void QuitGameButton_Click(object sender, EventArgs e)
@@ -327,13 +338,13 @@ namespace DevcadeGame.States
         private void BackButton_Click(object sender, EventArgs e)
         {
             _components = _main_menu_components;
-            backSound.Play();
+            BackSound().Play();
         }
 
         private void Setlist_TestButton_Click(object sender, EventArgs e)
         {
             _components = _empty_components;
-            selectSound.Play();
+            SelectSound().Play();
 
             // Make the Devcade Hero State, the state name is the name of the song/chart file
             DevcadeHero_State = new DevcadeHeroState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "tester");
@@ -351,7 +362,7 @@ namespace DevcadeGame.States
             // Set the main menu back to normal
             Game1.main_menu = main_menu_background;
             _components = _main_menu_components;
-            backSound.Play();
+            BackSound().Play();
         }
 
         private void SinglePlayerButton_Click(object sender, EventArgs e)
@@ -371,11 +382,11 @@ namespace DevcadeGame.States
                 default: break;
 
             }
-            selectSound.Play();
+            SelectSound().Play();
         }
         private void MultiPlayerButton_Click(object sender, EventArgs e)
         {
-            selectSound.Play();
+            SelectSound().Play();
         }
 
         private void ExpertButton_Click(object sender, EventArgs e)
@@ -383,7 +394,7 @@ namespace DevcadeGame.States
             // Set difficulty
             SetDifficultyID(3);
 
-            selectSound.Play();
+            SelectSound().Play();
         }
 
         private void HardButton_Click(object sender, EventArgs e)
@@ -391,7 +402,7 @@ namespace DevcadeGame.States
             // Set difficulty
             SetDifficultyID(2);
 
-            selectSound.Play();
+            SelectSound().Play();
         }
 
         private void MediumButton_Click(object sender, EventArgs e)
@@ -399,7 +410,7 @@ namespace DevcadeGame.States
             // Set difficulty
             SetDifficultyID(1);
 
-            selectSound.Play();
+            SelectSound().Play();
         }
 
         private void EasyButton_Click(object sender, EventArgs e)
@@ -413,7 +424,7 @@ namespace DevcadeGame.States
                 ChangeMenuBackground(setlist_background);
                 _components = _setlist_components;
             }
-            selectSound.Play();
+            SelectSound().Play();
         }
 
         // *******************
@@ -448,7 +459,7 @@ namespace DevcadeGame.States
             }
 
             // Menu Controls
-            CheckMenuControls();
+            DoMenuControls();
 
         }
 
@@ -458,6 +469,39 @@ namespace DevcadeGame.States
         }
 
         // OTHER METHODS
+
+        private SoundEffect SelectSound()
+        {
+            Random random = new();
+            randomValue = random.Next(1, 4); // generates a random value between x and y-1 (inclusive)
+            switch (randomValue)
+            {
+                case 1:
+                    return selectSound;
+                case 2:
+                    return selectSound2;
+                case 3:
+                    return selectSound3;
+                default: 
+                    return selectSound;
+            }
+        }
+
+        private SoundEffect BackSound()
+        {
+            Random random = new();
+            randomValue = random.Next(1, 3); // generates a random value between x and y-1 (inclusive)
+            switch (randomValue)
+            {
+                case 1:
+                    return backSound;
+                case 2:
+                    return backSound2;
+                default:
+                    return backSound;
+            }
+        }
+        
         private static void ChangeMenuBackground(Texture2D background)
         {
             Game1.main_menu = background;
@@ -503,7 +547,7 @@ namespace DevcadeGame.States
         } // MediaPlayer_MediaStateChanged method
 
         // Keyboard and Arcade controls for the menu screen
-        private void CheckMenuControls()
+        private void DoMenuControls()
         {
             // Make keyboard state so cursor only moves once when pressed
             KeyboardState currentKeyboardState = Keyboard.GetState();
@@ -513,14 +557,48 @@ namespace DevcadeGame.States
                 // Get number of elements so we can move the cursor up and down and know the limits
                 int numOfElements = _components.Count;
 
-                // For moving the cursor up
-                if (currentKeyboardState.IsKeyDown(Keys.Up) && !keyPressed)
+                // For moving the cursor up and down
+                // For current button the highest button is 1, when you move down the screen the number goes up
+                if ((currentKeyboardState.IsKeyDown(Keys.Up) || Input.GetButton(1, Input.ArcadeButtons.StickUp) 
+                    || Input.GetButton(2, Input.ArcadeButtons.StickUp)) && !keyPressed && currentButton > 1)
                 {
-                    Mouse.SetPosition(Mouse.GetState().X, Mouse.GetState().Y - 20);
+                    Mouse.SetPosition(Mouse.GetState().X, Mouse.GetState().Y - 60);
+                    currentButton -= 1;
+                    keyPressed = true;
+                }
+                if ((currentKeyboardState.IsKeyDown(Keys.Down) || Input.GetButton(1, Input.ArcadeButtons.StickDown)
+                    || Input.GetButton(2, Input.ArcadeButtons.StickDown)) && !keyPressed && currentButton < numOfElements)
+                {
+                    Mouse.SetPosition(Mouse.GetState().X, Mouse.GetState().Y + 60);
+                    currentButton += 1;
                     keyPressed = true;
                 }
 
-                keyboardState = currentKeyboardState;
+                // Mouse click implemented in Button.cs
+                if ((currentKeyboardState.IsKeyDown(Keys.Enter) || Input.GetButton(1, Input.ArcadeButtons.A1)
+                    || Input.GetButton(2, Input.ArcadeButtons.A1)) && !keyPressed)
+                {
+                    // Go through each button and click the one we are on
+                    int x = 0;
+                    foreach (Button btn in _components.Cast<Button>())
+                    {
+                        Debug.WriteLine(currentButton);
+                        Debug.WriteLine(x);
+                        Debug.WriteLine(btn.Text);
+                        if (x == currentButton - 1)
+                        {
+                            btn.EnterButtonHit();
+                            break;
+                        }
+                        x++;
+                    }
+
+                    // Find the next button to hover over
+                    keyPressed = true;
+                }
+
+                // For going back to the original menu
+
             }
             // Set to false if not being pressed
             else if (keyPressed)
@@ -528,7 +606,7 @@ namespace DevcadeGame.States
                 keyPressed = false;
             }
 
-        } // Check Menu Controls
+        } // Do Menu Controls
 
     } // Public class MenuState end
 } // Name space end
