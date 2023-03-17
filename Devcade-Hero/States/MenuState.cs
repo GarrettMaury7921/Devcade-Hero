@@ -562,15 +562,48 @@ namespace DevcadeGame.States
                 if ((currentKeyboardState.IsKeyDown(Keys.Up) || Input.GetButton(1, Input.ArcadeButtons.StickUp) 
                     || Input.GetButton(2, Input.ArcadeButtons.StickUp)) && !keyPressed && currentButton > 1)
                 {
-                    Mouse.SetPosition(Mouse.GetState().X, Mouse.GetState().Y - 60);
+                    // Get the next button pos (up) and set mouse to it
                     currentButton -= 1;
+                    int count = 0;
+                    foreach (Button btn in _components.Cast<Button>())
+                    {
+                        if (count == currentButton - 1)
+                        {
+                            string cords = btn.Position.ToString();
+                            string[] parts = cords.Replace("{", "").Replace("}", "").Split(' ');
+
+                            int x = int.Parse(parts[0].Split(':')[1]);
+                            int y = int.Parse(parts[1].Split(':')[1]);
+
+                            Mouse.SetPosition(x, y);
+                            break;
+                        }
+                        count++;
+                    } // foreach loop
+
                     keyPressed = true;
                 }
                 if ((currentKeyboardState.IsKeyDown(Keys.Down) || Input.GetButton(1, Input.ArcadeButtons.StickDown)
                     || Input.GetButton(2, Input.ArcadeButtons.StickDown)) && !keyPressed && currentButton < numOfElements)
                 {
-                    Mouse.SetPosition(Mouse.GetState().X, Mouse.GetState().Y + 60);
+                    // Get the next button pos (below) and set mouse to it
                     currentButton += 1;
+                    int count = 0;
+                    foreach (Button btn in _components.Cast<Button>())
+                    {
+                        if (count == currentButton - 1)
+                        {
+                            string cords = btn.Position.ToString();
+                            string[] parts = cords.Replace("{", "").Replace("}", "").Split(' ');
+
+                            int x = int.Parse(parts[0].Split(':')[1]);
+                            int y = int.Parse(parts[1].Split(':')[1]);
+
+                            Mouse.SetPosition(x, y);
+                            break;
+                        }
+                        count++;
+                    } // foreach loop
                     keyPressed = true;
                 }
 
@@ -579,23 +612,36 @@ namespace DevcadeGame.States
                     || Input.GetButton(2, Input.ArcadeButtons.A1)) && !keyPressed)
                 {
                     // Go through each button and click the one we are on
-                    int x = 0;
+                    int count = 0;
                     foreach (Button btn in _components.Cast<Button>())
                     {
-                        Debug.WriteLine(currentButton);
-                        Debug.WriteLine(x);
-                        Debug.WriteLine(btn.Text);
-                        if (x == currentButton - 1)
+                        if (count == currentButton - 1)
                         {
                             btn.EnterButtonHit();
                             break;
                         }
-                        x++;
+                        count++;
+                    } // foreach loop
+
+                    // Extract the cords from the button position and put the cursor on the first button in the components
+                    if (_components.FirstOrDefault(x => x is Button) is Button btn2)
+                    {
+                        string cords = btn2.Position.ToString();
+
+                        string[] parts = cords.Replace("{", "").Replace("}", "").Split(' ');
+
+                        int x = int.Parse(parts[0].Split(':')[1]);
+                        int y = int.Parse(parts[1].Split(':')[1]);
+
+                        Mouse.SetPosition(x, y);
+
+                        // Reset the button with the new menu components
+                        currentButton = 1;
                     }
 
-                    // Find the next button to hover over
                     keyPressed = true;
-                }
+
+                } // If Statement
 
                 // For going back to the original menu
 
