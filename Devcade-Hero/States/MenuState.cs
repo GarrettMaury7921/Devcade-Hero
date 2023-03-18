@@ -313,7 +313,7 @@ namespace DevcadeGame.States
             _components = _player_select_components;
             SelectSound().Play();
             //Game1.ChangeState(new GameState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "MenuState"));
-        
+
         }
 
         private void CasualButton_Click(object sender, EventArgs e)
@@ -482,7 +482,7 @@ namespace DevcadeGame.States
                     return selectSound2;
                 case 3:
                     return selectSound3;
-                default: 
+                default:
                     return selectSound;
             }
         }
@@ -501,7 +501,7 @@ namespace DevcadeGame.States
                     return backSound;
             }
         }
-        
+
         private static void ChangeMenuBackground(Texture2D background)
         {
             Game1.main_menu = background;
@@ -559,15 +559,15 @@ namespace DevcadeGame.States
 
                 // For moving the cursor up and down
                 // For current button the highest button is 1, when you move down the screen the number goes up
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) || Input.GetButton(1, Input.ArcadeButtons.StickUp) 
+                if ((currentKeyboardState.IsKeyDown(Keys.Up) || Input.GetButton(1, Input.ArcadeButtons.StickUp)
                     || Input.GetButton(2, Input.ArcadeButtons.StickUp)) && !keyPressed && currentButton > 1)
                 {
                     // Get the next button pos (up) and set mouse to it
                     currentButton -= 1;
                     int count = 0;
-                    foreach (Button btn in _components.Cast<Button>())
+                    foreach (var component in _components)
                     {
-                        if (count == currentButton - 1)
+                        if (component is Button btn && count == currentButton - 1)
                         {
                             string cords = btn.Position.ToString();
                             string[] parts = cords.Replace("{", "").Replace("}", "").Split(' ');
@@ -578,8 +578,13 @@ namespace DevcadeGame.States
                             Mouse.SetPosition(x, y);
                             break;
                         }
+                        else if (component is Slider slider && count == currentButton - 1)
+                        {
+                            // We need to skip the slider and go straight to the button
+                            Debug.WriteLine("SLIDER NOT IMPLEMENTED YET");
+                        }
                         count++;
-                    } // foreach loop
+                    } // for each loop
 
                     keyPressed = true;
                 }
@@ -589,9 +594,9 @@ namespace DevcadeGame.States
                     // Get the next button pos (below) and set mouse to it
                     currentButton += 1;
                     int count = 0;
-                    foreach (Button btn in _components.Cast<Button>())
+                    foreach (var component in _components)
                     {
-                        if (count == currentButton - 1)
+                        if (component is Button btn && count == currentButton - 1)
                         {
                             string cords = btn.Position.ToString();
                             string[] parts = cords.Replace("{", "").Replace("}", "").Split(' ');
@@ -601,6 +606,11 @@ namespace DevcadeGame.States
 
                             Mouse.SetPosition(x, y);
                             break;
+                        }
+                        else if (component is Slider slider && count == currentButton - 1)
+                        {
+                            // We need to skip the slider and go straight to the button
+                            Debug.WriteLine("SLIDER NOT IMPLEMENTED YET");
                         }
                         count++;
                     } // foreach loop
@@ -611,14 +621,19 @@ namespace DevcadeGame.States
                 if ((currentKeyboardState.IsKeyDown(Keys.Enter) || Input.GetButton(1, Input.ArcadeButtons.A1)
                     || Input.GetButton(2, Input.ArcadeButtons.A1)) && !keyPressed)
                 {
-                    // Go through each button and click the one we are on
+                    // Go through each component and activate the one we are on
                     int count = 0;
-                    foreach (Button btn in _components.Cast<Button>())
+                    foreach (var component in _components)
                     {
-                        if (count == currentButton - 1)
+                        if (component is Button btn && count == currentButton - 1)
                         {
                             btn.EnterButtonHit();
                             break;
+                        }
+                        else if (component is Slider slider && count == currentButton - 1)
+                        {
+                            // If the current component is a slider, activate it by setting its value
+                            Debug.WriteLine("SLIDER NOT IMPLEMENTED YET");
                         }
                         count++;
                     } // foreach loop
@@ -655,4 +670,5 @@ namespace DevcadeGame.States
         } // Do Menu Controls
 
     } // Public class MenuState end
+
 } // Name space end
