@@ -569,21 +569,38 @@ namespace DevcadeGame.States
                     {
                         if (component is Button btn && count == currentButton - 1)
                         {
+                            // Make sure it's normal color
+                            btn._isSlider = false;
+
                             string cords = btn.Position.ToString();
                             string[] parts = cords.Replace("{", "").Replace("}", "").Split(' ');
 
                             int x = int.Parse(parts[0].Split(':')[1]);
                             int y = int.Parse(parts[1].Split(':')[1]);
 
+
                             Mouse.SetPosition(x, y);
                             break;
                         }
                         else if (component is Slider slider && count == currentButton - 1)
                         {
-                            // We need to skip the slider and go straight to the button
-                            Debug.WriteLine("SLIDER NOT IMPLEMENTED YET");
-                        }
+                            // Make the slider a different color when we are selecting it
+                            int count2 = 0;
+                            foreach(var component2 in _components)
+                            {
+                                if (component2 is Button btn2 && count2 == currentButton - 2)
+                                {
+                                    // Turn the slider a different color when selected and play the sound
+                                    btn2._isSlider = true;
+                                    sliderDownSound.Play();
+                                }
+                                
+                                count2++;
+                            } // for each
+
+                        } // else if
                         count++;
+
                     } // for each loop
 
                     keyPressed = true;
@@ -596,8 +613,17 @@ namespace DevcadeGame.States
                     int count = 0;
                     foreach (var component in _components)
                     {
+                        // Make sure the slider color is not on hover
+                        if (component is Button btn_slider)
+                        {
+                            btn_slider._isSlider = false;
+                        }
+
                         if (component is Button btn && count == currentButton - 1)
                         {
+                            // Make sure it's normal color
+                            btn._isSlider = false;
+
                             string cords = btn.Position.ToString();
                             string[] parts = cords.Replace("{", "").Replace("}", "").Split(' ');
 
@@ -609,11 +635,25 @@ namespace DevcadeGame.States
                         }
                         else if (component is Slider slider && count == currentButton - 1)
                         {
-                            // We need to skip the slider and go straight to the button
-                            Debug.WriteLine("SLIDER NOT IMPLEMENTED YET");
+                            // Make the slider a different color when we are selecting it
+                            int count2 = 0;
+                            foreach (var component2 in _components)
+                            {
+                                if (component2 is Button btn2 && count2 == currentButton - 2)
+                                {
+                                    // Turn the slider a different color when selected and play the sound
+                                    btn2._isSlider = true;
+                                    sliderDownSound.Play();
+                                }
+
+                                count2++;
+                            } // for each
+
                         }
                         count++;
+
                     } // foreach loop
+
                     keyPressed = true;
                 }
 
@@ -628,6 +668,22 @@ namespace DevcadeGame.States
                         if (component is Button btn && count == currentButton - 1)
                         {
                             btn.EnterButtonHit();
+                            // Extract the cords from the button position and put the cursor on the first button in the components
+                            if (_components.FirstOrDefault(x => x is Button) is Button btn2)
+                            {
+                                string cords = btn2.Position.ToString();
+
+                                string[] parts = cords.Replace("{", "").Replace("}", "").Split(' ');
+
+                                int x = int.Parse(parts[0].Split(':')[1]);
+                                int y = int.Parse(parts[1].Split(':')[1]);
+
+                                Mouse.SetPosition(x, y);
+
+                                // Reset the button with the new menu components
+                                currentButton = 1;
+                            }
+                            // Get out of a loop
                             break;
                         }
                         else if (component is Slider slider && count == currentButton - 1)
@@ -638,27 +694,43 @@ namespace DevcadeGame.States
                         count++;
                     } // foreach loop
 
-                    // Extract the cords from the button position and put the cursor on the first button in the components
-                    if (_components.FirstOrDefault(x => x is Button) is Button btn2)
-                    {
-                        string cords = btn2.Position.ToString();
-
-                        string[] parts = cords.Replace("{", "").Replace("}", "").Split(' ');
-
-                        int x = int.Parse(parts[0].Split(':')[1]);
-                        int y = int.Parse(parts[1].Split(':')[1]);
-
-                        Mouse.SetPosition(x, y);
-
-                        // Reset the button with the new menu components
-                        currentButton = 1;
-                    }
 
                     keyPressed = true;
 
                 } // If Statement
 
-                // For going back to the original menu
+                // Changing values of sliders to the left
+                if ((currentKeyboardState.IsKeyDown(Keys.Left) || Input.GetButton(1, Input.ArcadeButtons.A1)
+                    || Input.GetButton(2, Input.ArcadeButtons.A1)) && !keyPressed)
+                {
+                    int count = 0;
+                    foreach (var component in _components)
+                    {
+                        if (component is Slider slider && count == currentButton - 1)
+                        {
+
+                        }
+                        count++;
+                    } // for each statement
+
+                } // If statement
+
+                // Changing values of sliders to the right
+                if ((currentKeyboardState.IsKeyDown(Keys.Right) || Input.GetButton(1, Input.ArcadeButtons.A1)
+                    || Input.GetButton(2, Input.ArcadeButtons.A1)) && !keyPressed)
+                {
+                    int count = 0;
+                    foreach (var component in _components)
+                    {
+                        if (component is Slider slider && count == currentButton - 1)
+                        {
+
+                        }
+                        count++;
+                    } // for each statement
+                }
+
+                // For going back to the original menu button
 
             }
             // Set to false if not being pressed

@@ -31,6 +31,7 @@ namespace DevcadeGame.Controls
         public bool Clicked { get; private set; }
         public Color PenColour { get; set; }
         public Vector2 Position { get; set; }
+        public bool _isSlider { get; set; }
         // Set the default text offset to zero
         public Vector2 textOffset { get; set; } = Vector2.Zero;
 
@@ -63,8 +64,13 @@ namespace DevcadeGame.Controls
         {
             var colour = Color.White;
 
-            if (_isHovering)
+            // When the cursor is hovering
+            if (_isHovering && !_isSlider)
                 colour = Color.Gray;
+
+            // When the cursor is on a slider
+            if (_isSlider)
+                colour = Color.Red;
 
             spriteBatch.Draw(_texture, Rectangle, colour);
 
