@@ -18,15 +18,14 @@ namespace DevcadeGame.Controls
     {
 
         // Thanks ChatGPT
+        // Also Modified by Garrett for legal reasons
 
         #region Fields
         private MouseState _currentMouse;
         private MouseState _previousMouse;
         private readonly Texture2D _texture;
         private readonly Texture2D _thumbTexture;
-        private float _value;
         private bool _isDragging;
-        private readonly string _type;
         #endregion
 
         #region Properties
@@ -34,6 +33,29 @@ namespace DevcadeGame.Controls
         public Color BarColor { get; set; }
         public Color PenColour { get; set; }
         public Vector2 Position { get; set; }
+        public string Type { get; set; }
+        
+        private float _value;
+        public float Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+                _value = MathHelper.Clamp(_value, 0f, 1f);
+
+                // Change the sound
+                if (Type == "music")
+                {
+                    MediaPlayer.Volume = _value;
+                }
+                else
+                {
+                    SoundEffect.MasterVolume = _value;
+                }
+            }
+        }
+
         public Rectangle Rectangle
         {
             get
@@ -49,16 +71,19 @@ namespace DevcadeGame.Controls
             PenColour = Color.Black;
             _texture = texture;
             _thumbTexture = thumbTexture;
-            _value = MediaPlayer.Volume;
-            this._type = type;
+            Value = MediaPlayer.Volume;
+            Type = type;
         }
 
         // Draw Method
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            var thumbRectangle = new Rectangle((int)(Position.X + _value * (_texture.Width - _thumbTexture.Width)), (int)Position.Y, _thumbTexture.Width, _texture.Height);
-            // Draw thumb texture last
+            var thumbRectangle = new Rectangle((int)(Position.X + Value * (_texture.Width - _thumbTexture.Width)), (int)Position.Y, _thumbTexture.Width, _texture.Height);
+
+            // Draw the bar
             spriteBatch.Draw(_texture, Rectangle, Color.White);
+
+            // Draw the thumb texture
             spriteBatch.Draw(_thumbTexture, thumbRectangle, Color.White);
         }
 
@@ -81,8 +106,8 @@ namespace DevcadeGame.Controls
             // If you're dragging with the mouse
             if (_isDragging)
             {
-                _value = (_currentMouse.X - Position.X - _thumbTexture.Width / 2) / (_texture.Width - _thumbTexture.Width);
-                _value = MathHelper.Clamp(_value, 0f, 1f);
+                Value = (_currentMouse.X - Position.X - _thumbTexture.Width / 2) / (_texture.Width - _thumbTexture.Width);
+                Value = MathHelper.Clamp(Value, 0f, 1f);
 
                 // When you release the button
                 if (_currentMouse.LeftButton == ButtonState.Released)
@@ -91,13 +116,13 @@ namespace DevcadeGame.Controls
                 }
 
                 // Change the sound
-                if (_type == "music")
+                if (Type == "music")
                 {
-                    MediaPlayer.Volume = _value;
+                    MediaPlayer.Volume = Value;
                 }
                 else
                 {
-                    SoundEffect.MasterVolume = _value;
+                    SoundEffect.MasterVolume = Value;
                 }
 
             } // _isDragging 

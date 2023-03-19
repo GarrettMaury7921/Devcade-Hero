@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using System;
 using Devcade;
-using System.Diagnostics;
 using System.Linq;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
@@ -229,7 +228,7 @@ namespace DevcadeGame.States
                 Position = new Vector2(70, 760),
                 // Setting the text to the correct place above the slider
                 textOffset = new Vector2(40, -40),
-                Text = "  Music",
+                Text = "Music",
             };
             MusicVolumeSliderButton.Click += MusicVolumeSliderButton_Click;
             var MusicVolumeSlider = new Slider(sliderTexture, sliderThumbTexture, musicType)
@@ -689,7 +688,7 @@ namespace DevcadeGame.States
                         else if (component is Slider slider && count == currentButton - 1)
                         {
                             // If the current component is a slider, activate it by setting its value
-                            Debug.WriteLine("SLIDER NOT IMPLEMENTED YET");
+                            // Debug.WriteLine("SLIDER NOT IMPLEMENTED YET");
                         }
                         count++;
                     } // foreach loop
@@ -700,15 +699,23 @@ namespace DevcadeGame.States
                 } // If Statement
 
                 // Changing values of sliders to the left
-                if ((currentKeyboardState.IsKeyDown(Keys.Left) || Input.GetButton(1, Input.ArcadeButtons.A1)
-                    || Input.GetButton(2, Input.ArcadeButtons.A1)) && !keyPressed)
+                if ((currentKeyboardState.IsKeyDown(Keys.Left) || Input.GetButton(1, Input.ArcadeButtons.StickLeft)
+                    || Input.GetButton(2, Input.ArcadeButtons.StickLeft)) && !keyPressed)
                 {
                     int count = 0;
                     foreach (var component in _components)
                     {
                         if (component is Slider slider && count == currentButton - 1)
                         {
-
+                            if (slider.Type.Equals("music"))
+                            {
+                                slider.Value -= 0.003f;
+                            }
+                            if (slider.Type.Equals("effect"))
+                            {
+                                slider.Value -= 0.003f;
+                                sliderDownSound.Play();
+                            }
                         }
                         count++;
                     } // for each statement
@@ -716,15 +723,23 @@ namespace DevcadeGame.States
                 } // If statement
 
                 // Changing values of sliders to the right
-                if ((currentKeyboardState.IsKeyDown(Keys.Right) || Input.GetButton(1, Input.ArcadeButtons.A1)
-                    || Input.GetButton(2, Input.ArcadeButtons.A1)) && !keyPressed)
+                if ((currentKeyboardState.IsKeyDown(Keys.Right) || Input.GetButton(1, Input.ArcadeButtons.StickRight)
+                    || Input.GetButton(2, Input.ArcadeButtons.StickRight)) && !keyPressed)
                 {
                     int count = 0;
                     foreach (var component in _components)
                     {
                         if (component is Slider slider && count == currentButton - 1)
                         {
-
+                            if (slider.Type.Equals("music"))
+                            {
+                                slider.Value += 0.003f;
+                            }
+                            if (slider.Type.Equals("effect"))
+                            {
+                                slider.Value += 0.003f;
+                                sliderUpSound.Play();
+                            }
                         }
                         count++;
                     } // for each statement
