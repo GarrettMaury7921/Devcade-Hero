@@ -27,6 +27,42 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/SetList_Font.spritefont
 
+#begin Game_Assets/922Highway.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game_Assets/922Highway.png
+
+#begin Game_Assets/fred_board_gap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game_Assets/fred_board_gap.png
+
+#begin Game_Assets/note_line.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game_Assets/note_line.png
+
 #begin Menu_Assets/button.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -98,6 +134,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Menu_Assets/vertical background.png
+
+#begin Songs/gh3_intro.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Songs/gh3_intro.wav
 
 #begin Songs/megamind_after_jungle.wav
 /importer:WavImporter

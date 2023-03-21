@@ -25,8 +25,7 @@ namespace DevcadeGame.GameManager
         private string currentDirectory;
         private string currentFilePath;
         private string[] files;
-        private int gameMode;
-        private int difficulty;
+        private readonly int difficulty;
         private string difficultyStr;
         private string fileContents;
         private string[] lines;
@@ -175,7 +174,6 @@ namespace DevcadeGame.GameManager
             } // for loop for going through each line in the chart file
 
             // For checking if it's reading in the files correctly
-            
             /*foreach (string element in bpm_events_and_notes)
             {
                 Debug.WriteLine(element);

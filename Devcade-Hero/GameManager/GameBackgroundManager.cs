@@ -9,7 +9,7 @@ namespace DevcadeGame.GameManager
 
         // Attributes
         private Texture2D background;
-        private string song_name;
+        private readonly string song_name;
         private string videoName;
         private Song song;
 
@@ -32,7 +32,6 @@ namespace DevcadeGame.GameManager
             }
             return videoName;
         } // VideoChooser Method
-
         public Song SongChooser(ContentManager content, string songName)
         {
             // Find the correct song
@@ -49,7 +48,6 @@ namespace DevcadeGame.GameManager
 
             return song;
         } // Song chooser method
-
         public Texture2D BackgroundChooser(ContentManager content, string songName)
         {
             // Select a background for whatever song there is
