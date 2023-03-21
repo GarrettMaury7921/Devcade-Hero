@@ -4,6 +4,13 @@ using Microsoft.Xna.Framework.Media;
 
 namespace DevcadeGame.GameManager
 {
+    /* 
+    Class GameBackgroundManager:
+        GameBackgroundManager Constructor
+        @ VideoChooser Method
+        @ SongChooser Method
+        @ BackgroundChooser Method
+    */
     public class GameBackgroundManager
     {
 
@@ -54,7 +61,7 @@ namespace DevcadeGame.GameManager
             switch (songName)
             {
                 case "tester":
-                    background = null;
+                    background = content.Load<Texture2D>("Game_Assets/outside");
                     break;
                 // default is null
                 default:

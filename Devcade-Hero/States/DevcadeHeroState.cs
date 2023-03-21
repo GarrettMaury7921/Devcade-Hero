@@ -5,14 +5,13 @@ using DevcadeGame.GameManager;
 using System.Collections.Generic;
 using System;
 using Microsoft.Xna.Framework.Media;
-using System.Diagnostics;
-using System.Reflection.Metadata;
 
 namespace DevcadeGame.States
 {
     /* 
     Class DevcadeHeroState:
         DevcadeHeroState Constructor
+        @ Initialize Method
         @ Draw Method
         @ Update Method
         @ PostUpdate Method
@@ -45,47 +44,51 @@ namespace DevcadeGame.States
         private int fred_lineX;
         private int fred_lineY;
         private int fred_line_offsetX;
-        private int fred_line_offset_note;
 
-
-        public DevcadeHeroState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) :
-            base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content, _state_name)
+        public void Initialize()
         {
             #region
 #if DEBUG
             highway_width = 310;
             highway_height = 735;
             fred_board_height = 21;
-            fred_line_height = 725;
-            fred_line_offset_note = 30;
 #else
 			highway_width = 922;
             highway_height = 2000;
             fred_board_height = 64;
-            fred_line_height = 2000;
-            fred_line_offset_note = 100;
 #endif
             #endregion
 
-            // Attributes
-            highway_offset = 0;
+            // Attributes                                                                       // COMMENTS BELOW
+            highway_offset = 10;
             highwayX = (_preferredBackBufferWidth - highway_width) / 2;
             highwayY = _preferredBackBufferHeight - highway_height - highway_offset;
+            
             // Fred Board parameters
-            fred_board_offset = -20; // adjust as needed
+            fred_board_offset = -55;                                                            // adjust as needed
             fred_board_width = highway_width;
             fred_boardX = highwayX;
             fred_boardY = highwayY + highway_height + fred_board_offset;
+            
             // Fred Board Lines
             fred_line_offsetX = 30;
             fred_line_width = 3;
-            fred_lineX = fred_boardX + fred_line_offsetX; // apply offset to X
+            fred_line_height = highway_height + fred_board_offset + (fred_board_height - 5);    // Make the lines appear in the fred board
+            fred_lineX = fred_boardX + fred_line_offsetX;                                       // apply offset to X
             fred_lineY = highwayY;
 
             // Load Assets
             highway = _content.Load<Texture2D>("Game_Assets/922Highway");
             fred_board = _content.Load<Texture2D>("Game_Assets/fred_board_gap");
             fred_line = _content.Load<Texture2D>("Game_Assets/note_line");
+
+        } // Initialize Method
+
+        public DevcadeHeroState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) :
+            base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content, _state_name)
+        {
+            // Initialize all the variables and import in all the content
+            Initialize();
 
             // Put the chart into the ChartReader
             chartReader = new ChartReader(_state_name);
@@ -117,7 +120,12 @@ namespace DevcadeGame.States
             // Draw Fret Lines
             spriteBatch.Draw(fred_line, new Rectangle(fred_lineX, fred_lineY, fred_line_width, fred_line_height), Color.White);
             spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 34, fred_lineY, fred_line_width, fred_line_height), Color.White);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 67, fred_lineY, fred_line_width, fred_line_height), Color.White);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 68, fred_lineY, fred_line_width, fred_line_height), Color.White);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 103, fred_lineY, fred_line_width, fred_line_height), Color.White);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 145, fred_lineY, fred_line_width, fred_line_height), Color.White);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 179, fred_lineY, fred_line_width, fred_line_height), Color.White);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 213, fred_lineY, fred_line_width, fred_line_height), Color.White);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 247, fred_lineY, fred_line_width, fred_line_height), Color.White);
 
             // Draw the fred board
             spriteBatch.Draw(fred_board, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);

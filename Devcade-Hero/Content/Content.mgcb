@@ -63,6 +63,18 @@
 /processorParam:TextureFormat=Color
 /build:Game_Assets/note_line.png
 
+#begin Game_Assets/outside.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game_Assets/outside.png
+
 #begin Menu_Assets/button.png
 /importer:TextureImporter
 /processor:TextureProcessor
