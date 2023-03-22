@@ -67,7 +67,7 @@ namespace DevcadeGame.States
         {
             // THERE ARE CURRENTLY 3 INTROS
             Random random = new();
-            randomValue = random.Next(1, 4); // generates a random value between x and y-1 (inclusive)
+            randomValue = random.Next(1, 5); // generates a random value between x and y-1 (inclusive)
             switch (randomValue)
             {
                 // SET ALL PARAMETERS FOR EACH INTRO
@@ -80,7 +80,7 @@ namespace DevcadeGame.States
                     State_name = "MenuState_beat_drop";
                     cutoff_seconds = 0;
                     break;
-               
+
                 // Ace Attorney Intro
                 case 2:
                     videoName = "objection_intro.mp4";
@@ -152,10 +152,10 @@ namespace DevcadeGame.States
             MediaPlayer.Play(songName);
 
             // Get the duration of the video, end the video early if needed
-            videoDuration = TimeSpan.FromSeconds(VideoDecoder.Length-cutoff_seconds);
+            videoDuration = TimeSpan.FromSeconds(VideoDecoder.Length - cutoff_seconds);
 
             // Print hardware codec and set width and height
-            Console.WriteLine($"Using hardware codec type of {VideoDecoder.HwCodecType.ToHardwareDecoderType()}!");;
+            Console.WriteLine($"Using hardware codec type of {VideoDecoder.HwCodecType.ToHardwareDecoderType()}!"); ;
             Game1._graphics.ApplyChanges();
 
             // Set the video texture
@@ -175,7 +175,7 @@ namespace DevcadeGame.States
             }
             _spriteBatch.Begin();
             // I increase the scale so it fits in the picture (slight offset to the left)
-            _spriteBatch.Draw(VideoTexture, Vector2.Zero, null, Color.White, 0, Vector2.Zero, new Vector2((float)(((float)_graphicsDevice.Viewport.Height / VideoTexture.Height)+increase_scale)), SpriteEffects.None, 0);
+            _spriteBatch.Draw(VideoTexture, Vector2.Zero, null, Color.White, 0, Vector2.Zero, new Vector2((float)(((float)_graphicsDevice.Viewport.Height / VideoTexture.Height) + increase_scale)), SpriteEffects.None, 0);
             _spriteBatch.End();
         }
 
@@ -186,7 +186,7 @@ namespace DevcadeGame.States
 
             // If the time is longer than the video duration, go to the menu!
             // OR if any key on the keyboard is being pressed, change to the menu
-            if(elapsedVideoTime >= videoDuration || Keyboard.GetState().GetPressedKeys().Length > 0 || DevcadeButtonCheck() == true)
+            if (elapsedVideoTime >= videoDuration || Keyboard.GetState().GetPressedKeys().Length > 0 || DevcadeButtonCheck() == true)
             {
                 // If the user pressed a button to skip
                 if (elapsedVideoTime < videoDuration)
@@ -224,7 +224,7 @@ namespace DevcadeGame.States
                 || Input.GetButtonDown(1, Input.ArcadeButtons.A3) || Input.GetButtonDown(1, Input.ArcadeButtons.A4)
                 || Input.GetButtonDown(1, Input.ArcadeButtons.B1) || Input.GetButtonDown(1, Input.ArcadeButtons.B2)
                 || Input.GetButtonDown(1, Input.ArcadeButtons.B3) || Input.GetButtonDown(1, Input.ArcadeButtons.B4)
-                || Input.GetButtonDown(1, Input.ArcadeButtons.Menu) || Input.GetButtonDown(2, Input.ArcadeButtons.A1) 
+                || Input.GetButtonDown(1, Input.ArcadeButtons.Menu) || Input.GetButtonDown(2, Input.ArcadeButtons.A1)
                 || Input.GetButtonDown(2, Input.ArcadeButtons.A2)
                 || Input.GetButtonDown(2, Input.ArcadeButtons.A3) || Input.GetButtonDown(2, Input.ArcadeButtons.A4)
                 || Input.GetButtonDown(2, Input.ArcadeButtons.B1) || Input.GetButtonDown(2, Input.ArcadeButtons.B2)

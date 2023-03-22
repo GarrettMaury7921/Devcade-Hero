@@ -62,7 +62,8 @@ namespace DevcadeGame
             // Sets up the starting sound volume
             MenuSounds menuSounds = new();
 
-            // Set window size if running debug (in release it will be full screen)
+            // Set window size if running debug (in release it will be full screen) 
+            // Debug 420x980
             #region
 #if DEBUG
             _graphics.PreferredBackBufferWidth = 420;

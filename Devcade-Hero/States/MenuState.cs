@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using Devcade;
 using System.Linq;
+using System.Diagnostics;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -22,7 +23,8 @@ namespace DevcadeGame.States
         @ Draw Method
         @ Update Method
         @ PostUpdate Method
-        ********** IMPLEMENT NEW BUTTON METHODS HERE ********
+        @ Button On Click Methods
+        @ Slider Methods
     */
     public class MenuState : State
     {
@@ -56,6 +58,10 @@ namespace DevcadeGame.States
         private bool keyPressed;
         private int currentButton;
         private int randomValue;
+        private float centerX;
+        private float centerY;
+        private int buttonWidth;
+        private int buttonHeight;
 
         // *************************************
         // ***** SETTER AND GETTER METHODS *****
@@ -90,6 +96,11 @@ namespace DevcadeGame.States
             mediaPlayerKillSwitch = false;
             state_name = _state_name;
             currentButton = 1;
+            buttonWidth = 500;
+            buttonHeight = 60;
+            centerX = (_preferredBackBufferWidth - buttonWidth) / 2;
+            centerY = (_preferredBackBufferHeight - buttonHeight) / 2;
+
 
             // ***** LOAD ASSETS *****
             // Load another background for the set list
@@ -127,35 +138,35 @@ namespace DevcadeGame.States
             // Each button has an on-click event
             var careerGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 720),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.25f))),
                 Text = "           Career Mode",
             };
             careerGameButton.Click += CareerButton_Click;
 
             var casualGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 780),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.32f))),
                 Text = "           Casual Mode",
             };
             casualGameButton.Click += CasualButton_Click;
 
             var settingsButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 840),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
                 Text = "         Settings",
             };
             settingsButton.Click += SettingsButton_Click;
 
             var quitGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 900),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.46f))),
                 Text = "         Quit",
             };
             quitGameButton.Click += QuitGameButton_Click;
 
             var BackButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 900),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.46f))),
                 Text = "         Back",
             };
             BackButton.Click += BackButton_Click;
@@ -163,14 +174,14 @@ namespace DevcadeGame.States
             // Player Buttons
             var SinglePlayerButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 780),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.32f))),
                 Text = "         Single Player",
             };
             SinglePlayerButton.Click += SinglePlayerButton_Click;
 
             var MultiPlayerButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 840),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
                 Text = "         Multi Player",
             };
             MultiPlayerButton.Click += MultiPlayerButton_Click;
@@ -178,25 +189,25 @@ namespace DevcadeGame.States
             // Difficulty Buttons
             var ExpertButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 840),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
                 Text = "         Expert",
             };
             ExpertButton.Click += ExpertButton_Click;
             var HardButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 780),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.32f))),
                 Text = "         Hard",
             };
             HardButton.Click += HardButton_Click;
             var MediumButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 720),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.25f))),
                 Text = "         Medium",
             };
             MediumButton.Click += MediumButton_Click;
             var EasyButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 660),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.18f))),
                 Text = "         Easy",
             };
             EasyButton.Click += EasyButton_Click;
@@ -204,7 +215,7 @@ namespace DevcadeGame.States
             // Set list buttons
             var Setlist_test = new Button(devcade_ButtonTexture, devcadeButtonFont)
             {
-                Position = new Vector2(10, 100),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.14f)), (int)(centerY + (PreferredBackBufferHeight * -0.35f))),
                 Text = "Test Song",
                 // Make the text go to the left
                 textOffset = new Vector2(-50, 0),
@@ -213,7 +224,7 @@ namespace DevcadeGame.States
             Setlist_test.Click += Setlist_TestButton_Click;
             var Setlist_BackButton = new Button(devcade_ButtonTexture, devcadeButtonFont)
             {
-                Position = new Vector2(10, 900),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.14f)), (int)(centerY + (PreferredBackBufferHeight * 0.46f))),
                 Text = "Back",
                 // Make the text go to the left
                 textOffset = new Vector2(-50, 0),
@@ -225,7 +236,7 @@ namespace DevcadeGame.States
             // MUSIC VOLUME SLIDER
             var MusicVolumeSliderButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 760),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.27f))),
                 // Setting the text to the correct place above the slider
                 textOffset = new Vector2(40, -40),
                 Text = "Music",
@@ -233,14 +244,14 @@ namespace DevcadeGame.States
             MusicVolumeSliderButton.Click += MusicVolumeSliderButton_Click;
             var MusicVolumeSlider = new Slider(sliderTexture, sliderThumbTexture, musicType)
             {
-                Position = new Vector2(135, 785),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.44f)), (int)(centerY + (PreferredBackBufferHeight * 0.295f))),
                 BarColor = Color.White,
             };
 
             // SOUND EFFECT SLIDER
             var EffectVolumeSliderButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(70, 840),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.34f))),
                 // Setting the text to the correct place above the slider
                 textOffset = new Vector2(44, -40),
                 Text = "Sound Effects",
@@ -248,7 +259,7 @@ namespace DevcadeGame.States
             EffectVolumeSliderButton.Click += EffectVolumeSliderButton_Click;
             var EffectVolumeSlider = new Slider(sliderTexture, sliderThumbTexture, soundEffectType)
             {
-                Position = new Vector2(135, 865),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.44f)), (int)(centerY + (PreferredBackBufferHeight * 0.365f))),
                 BarColor = Color.White,
             };
 
