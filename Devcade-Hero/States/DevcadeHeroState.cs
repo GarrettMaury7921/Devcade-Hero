@@ -76,6 +76,15 @@ namespace DevcadeGame.States
         private Texture2D whitedown_pic;
         private bool whitedown;
 
+        private Texture2D note_blue;
+        private Texture2D note_green;
+        private Texture2D note_red;
+        private Texture2D note_white;
+        private int note_width;
+        private int note_height;
+        private int note_y;
+
+
         public void Initialize()
         {
             #region
@@ -139,6 +148,14 @@ namespace DevcadeGame.States
             greendown_pic = _content.Load<Texture2D>("Game_Assets/greendown");
             whitedown_pic = _content.Load<Texture2D>("Game_Assets/whitedown");
 
+            note_blue = _content.Load<Texture2D>("Game_Assets/note_blue");
+            note_green = _content.Load<Texture2D>("Game_Assets/note_green");
+            note_red = _content.Load<Texture2D>("Game_Assets/note_red");
+            note_white = _content.Load<Texture2D>("Game_Assets/note_white");
+            note_width = 34;
+            note_height = 17;
+            note_y = 170;
+
         } // Initialize Method
 
         public DevcadeHeroState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) :
@@ -160,10 +177,13 @@ namespace DevcadeGame.States
             background = backgroundManager.BackgroundChooser(_content, _state_name);
             song = backgroundManager.SongChooser(_content, _state_name);
             videoName = backgroundManager.VideoChooser(_state_name);
+
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)
         {
+            _graphicsDevice.Clear(Color.Black);
+
             // Draw the main menu background
             if (background != null)
             {
@@ -179,6 +199,7 @@ namespace DevcadeGame.States
 
             // Draw the fred board
             spriteBatch.Draw(fred_board, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+
 
             // Draw held freds when pressed down
             if (blue1down)
@@ -214,6 +235,14 @@ namespace DevcadeGame.States
             {
                 spriteBatch.Draw(whitedown_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
             }
+
+            // DRAW NOTES
+            for (int i = 0; i < 3; i++)
+            {
+                spriteBatch.Draw(note_blue, new Rectangle(fred_lineX - 17, note_y, note_width, note_height), Color.White);
+                note_y += 1;
+            }
+
         } // Draw Method
 
         // GAME CONTROLS:

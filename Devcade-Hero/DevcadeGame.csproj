@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
@@ -13,16 +13,20 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="bin2\**" />
     <Compile Remove="Libraries\**" />
     <Compile Remove="Media_Players\**" />
+    <EmbeddedResource Remove="bin2\**" />
     <EmbeddedResource Remove="Libraries\**" />
     <EmbeddedResource Remove="Media_Players\**" />
+    <None Remove="bin2\**" />
     <None Remove="Libraries\**" />
     <None Remove="Media_Players\**" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
+    <None Remove="tester.chart" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />

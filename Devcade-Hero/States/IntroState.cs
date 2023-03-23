@@ -43,7 +43,6 @@ namespace DevcadeGame.States
         private double cutoff_seconds;
         private MenuState menu_state2;
 
-
         // Close the video when it ends
         protected static void OnExiting()
         {
@@ -129,6 +128,8 @@ namespace DevcadeGame.States
             welcome_to_the_jungle = _content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
             objection_intro = _content.Load<Song>("Songs/objection_intro");
             gh3_intro = _content.Load<Song>("Songs/gh3_intro");
+
+
 
             // Attributes
             State_name = _state_name;
