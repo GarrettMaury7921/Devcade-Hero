@@ -7,10 +7,7 @@ using System;
 using Microsoft.Xna.Framework.Media;
 using Devcade;
 using Microsoft.Xna.Framework.Input;
-using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Reflection;
-using System.Security.Cryptography;
+using System.Threading;
 
 namespace DevcadeGame.States
 {
@@ -96,6 +93,8 @@ namespace DevcadeGame.States
         private Matrix view;
         private Matrix projection;
         private Matrix world;
+        private ModelMesh mesh;
+        private float timer;
 
 
         public void Initialize()
@@ -172,10 +171,17 @@ namespace DevcadeGame.States
             // 3D Highway
             highway3D = _content.Load<Model>("Models/highway_obj");
             highway_3Dtexture = _content.Load<Texture2D>("Models/highway");
-            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _graphicsDevice.Viewport.AspectRatio, 0.1f, 100000.0f);
+            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _graphicsDevice.Viewport.AspectRatio, 0.0001f, 100000.0f);
             
-            view = Matrix.CreateLookAt(new Vector3(0, 2, 10), Vector3.Zero, Vector3.Up);
+            view = Matrix.CreateLookAt(new Vector3(0, -10, 10), Vector3.Zero, Vector3.Up);
             world = Matrix.CreateTranslation(Vector3.Zero);
+
+            // Flip the object along the X-axis
+            Matrix flipX = Matrix.CreateScale(-1, 1, 1);
+            world *= flipX;
+            _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            
+            world = Matrix.CreateRotationX(20) * Matrix.CreateTranslation(Vector3.Zero);
 
         } // Initialize Method
 
@@ -262,6 +268,9 @@ namespace DevcadeGame.States
         //       BOTTOM ROW: H J K L
         public override void Update(GameTime gameTime)
         {
+            timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
+            //world = Matrix.CreateRotationX(timer) * Matrix.CreateTranslation(Vector3.Zero);
+
             // Make keyboard state
             KeyboardState currentKeyboardState = Keyboard.GetState();
 
