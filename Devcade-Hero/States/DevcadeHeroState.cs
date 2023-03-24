@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Media;
 using Devcade;
 using Microsoft.Xna.Framework.Input;
 using System.Threading;
+using System.Diagnostics;
 
 namespace DevcadeGame.States
 {
@@ -88,6 +89,7 @@ namespace DevcadeGame.States
 
         private Model highway3D;
         private Texture2D highway_3Dtexture;
+        private Vector3 highwayPosition;
         
         // Set up camera
         private Matrix view;
@@ -172,16 +174,38 @@ namespace DevcadeGame.States
             highway3D = _content.Load<Model>("Models/highway_obj");
             highway_3Dtexture = _content.Load<Texture2D>("Models/highway");
             projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _graphicsDevice.Viewport.AspectRatio, 0.0001f, 100000.0f);
-            
-            view = Matrix.CreateLookAt(new Vector3(0, -10, 10), Vector3.Zero, Vector3.Up);
+
+            // Get the position of the highway
+            Vector3 minExtents = new Vector3(float.MaxValue);
+            Vector3 maxExtents = new Vector3(float.MinValue);
+
+            foreach (ModelMesh mesh in highway3D.Meshes)
+            {
+                BoundingSphere meshSphere = mesh.BoundingSphere;
+                BoundingBox meshBox = new BoundingBox();
+                BoundingBox.CreateFromSphere(meshSphere);
+
+                minExtents = Vector3.Min(minExtents, meshBox.Min);
+                maxExtents = Vector3.Max(maxExtents, meshBox.Max);
+            }
+
+            highwayPosition = (minExtents + maxExtents) / 2f;
+
+
+            view = Matrix.CreateLookAt(new Vector3(0, 0.6f, 20), 
+                new Vector3(0, 2.4f, 10.6f), new Vector3(0, 1, 0));
+
+
             world = Matrix.CreateTranslation(Vector3.Zero);
 
             // Flip the object along the X-axis
-            Matrix flipX = Matrix.CreateScale(-1, 1, 1);
+            Matrix flipX = Matrix.CreateScale(1, 1, 1);
             world *= flipX;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             
-            world = Matrix.CreateRotationX(20) * Matrix.CreateTranslation(Vector3.Zero);
+            world = Matrix.CreateRotationX(1) * Matrix.CreateTranslation(Vector3.Zero);
+            world = Matrix.CreateRotationY(3.1f) * Matrix.CreateTranslation(Vector3.Zero);
+            //world = Matrix.CreateRotationZ(3.222f) * Matrix.CreateTranslation(Vector3.Zero);
 
         } // Initialize Method
 
@@ -269,7 +293,12 @@ namespace DevcadeGame.States
         public override void Update(GameTime gameTime)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
-            //world = Matrix.CreateRotationX(timer) * Matrix.CreateTranslation(Vector3.Zero);
+            if (timer < 0.5) {
+                world = Matrix.CreateRotationX(timer) * Matrix.CreateTranslation(Vector3.Zero);
+            }
+
+            Debug.WriteLine(timer);
+
 
             // Make keyboard state
             KeyboardState currentKeyboardState = Keyboard.GetState();
