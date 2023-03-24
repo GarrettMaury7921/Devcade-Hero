@@ -7,6 +7,10 @@ using System;
 using Microsoft.Xna.Framework.Media;
 using Devcade;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
+using System.Reflection.Metadata;
+using System.Reflection;
+using System.Security.Cryptography;
 
 namespace DevcadeGame.States
 {
@@ -23,6 +27,7 @@ namespace DevcadeGame.States
     {
         // Attributes
         private ChartReader chartReader;
+        private ChartTranslator chartTranslator;
         private GameBackgroundManager backgroundManager;
         private List<String> notes;
         private Texture2D background;
@@ -84,6 +89,14 @@ namespace DevcadeGame.States
         private int note_height;
         private int note_y;
 
+        private Model highway3D;
+        private Texture2D highway_3Dtexture;
+        
+        // Set up camera
+        private Matrix view;
+        private Matrix projection;
+        private Matrix world;
+
 
         public void Initialize()
         {
@@ -114,13 +127,13 @@ namespace DevcadeGame.States
             highwayY = _preferredBackBufferHeight - highway_height - highway_offset;
 
             previousKeyboardState = Keyboard.GetState();
-            
+
             // Fred Board parameters
             fred_board_offset = -55;                                                            // adjust as needed
             fred_board_width = highway_width;
             fred_boardX = highwayX;
             fred_boardY = highwayY + highway_height + fred_board_offset;
-            
+
             // Fred Board Lines
             fred_line_offsetX = 30;
             fred_line_width = 3;
@@ -156,6 +169,14 @@ namespace DevcadeGame.States
             note_height = 17;
             note_y = 170;
 
+            // 3D Highway
+            highway3D = _content.Load<Model>("Models/highway_obj");
+            highway_3Dtexture = _content.Load<Texture2D>("Models/highway");
+            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _graphicsDevice.Viewport.AspectRatio, 0.1f, 100000.0f);
+            
+            view = Matrix.CreateLookAt(new Vector3(0, 2, 10), Vector3.Zero, Vector3.Up);
+            world = Matrix.CreateTranslation(Vector3.Zero);
+
         } // Initialize Method
 
         public DevcadeHeroState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) :
@@ -164,13 +185,10 @@ namespace DevcadeGame.States
             // Initialize all the variables and import in all the content
             Initialize();
 
-            // Put the chart into the ChartReader
+            // Put the chart into the ChartReader and then the translator
             chartReader = new ChartReader(_state_name);
             notes = chartReader.GetNotes();
-            /*for (int i = 0; i < notes.Count; i++)
-            {
-                Debug.WriteLine(notes[i]);
-            }*/
+            chartTranslator = new ChartTranslator(notes);
 
             // Get the background/video/song for the selected song
             backgroundManager = new GameBackgroundManager(_state_name);
@@ -187,54 +205,42 @@ namespace DevcadeGame.States
             // Draw the main menu background
             if (background != null)
             {
+                spriteBatch.End();
+                spriteBatch.Begin();
                 spriteBatch.Draw(background, new Rectangle(0, 0, _preferredBackBufferWidth, _preferredBackBufferHeight),
                 new Rectangle(0, 0, 1080, 2560), Color.White);
+                spriteBatch.End();
             }
 
-            // Draw the highway
-            spriteBatch.Draw(highway, new Rectangle(highwayX, highwayY, highway_width, highway_height), Color.White);
+            // 3D Highway
+            Matrix[] transforms = new Matrix[highway3D.Bones.Count];
+            highway3D.CopyAbsoluteBoneTransformsTo(transforms);
+            foreach (ModelMesh mesh in highway3D.Meshes)
+            {
+                foreach(BasicEffect effect in mesh.Effects)
+                {
+                    effect.World = world;
+                    effect.View = view;
+                    effect.Projection = projection;
+                    effect.Texture = highway_3Dtexture;
+                    effect.TextureEnabled = true;
+                    effect.EnableDefaultLighting();
+                }
+                mesh.Draw();
+            }
+
+            spriteBatch.Begin();
+            // 2D
+            // spriteBatch.Draw(highway, new Rectangle(highwayX, highwayY, highway_width, highway_height), Color.White);
 
             // Draw Fret Lines
-            DrawFredLines(spriteBatch);
+            //DrawFredLines(spriteBatch);
 
             // Draw the fred board
             spriteBatch.Draw(fred_board, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
 
-
             // Draw held freds when pressed down
-            if (blue1down)
-            {
-                spriteBatch.Draw(blue1down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
-            }
-            if (blue2down)
-            {
-                spriteBatch.Draw(blue2down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
-            }
-            if (blue3down)
-            {
-                spriteBatch.Draw(blue3down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
-            }
-            if (blue4down)
-            {
-                spriteBatch.Draw(blue4down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
-            }
-
-            if (reddown)
-            {
-                spriteBatch.Draw(reddown_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
-            }
-            if (blue5down)
-            {
-                spriteBatch.Draw(blue5down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
-            }
-            if (greendown)
-            {
-                spriteBatch.Draw(greendown_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
-            }
-            if (whitedown)
-            {
-                spriteBatch.Draw(whitedown_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
-            }
+            DrawHeldFredLines(spriteBatch);
 
             // DRAW NOTES
             for (int i = 0; i < 3; i++)
@@ -246,7 +252,7 @@ namespace DevcadeGame.States
         } // Draw Method
 
         // GAME CONTROLS:
-        
+
         // KEYBOARD (Player 1):
         //          TOP ROW: Q W E R
         //       BOTTOM ROW: Z X C V
@@ -282,6 +288,44 @@ namespace DevcadeGame.States
             spriteBatch.Draw(fred_line, new Rectangle(fred_line7, fred_lineY, fred_line_width, fred_line_height), Color.White);
             spriteBatch.Draw(fred_line, new Rectangle(fred_line8, fred_lineY, fred_line_width, fred_line_height), Color.White);
         }
+
+        public void DrawHeldFredLines(SpriteBatch spriteBatch)
+        {
+            // Draw held freds when pressed down
+            if (blue1down)
+            {
+                spriteBatch.Draw(blue1down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+            }
+            if (blue2down)
+            {
+                spriteBatch.Draw(blue2down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+            }
+            if (blue3down)
+            {
+                spriteBatch.Draw(blue3down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+            }
+            if (blue4down)
+            {
+                spriteBatch.Draw(blue4down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+            }
+
+            if (reddown)
+            {
+                spriteBatch.Draw(reddown_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+            }
+            if (blue5down)
+            {
+                spriteBatch.Draw(blue5down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+            }
+            if (greendown)
+            {
+                spriteBatch.Draw(greendown_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+            }
+            if (whitedown)
+            {
+                spriteBatch.Draw(whitedown_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+            }
+        } // DrawHeldSpriteLines Method
 
         public void CheckP1Buttons(KeyboardState currentKeyboardState)
         {
