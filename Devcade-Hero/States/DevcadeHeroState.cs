@@ -7,9 +7,6 @@ using System;
 using Microsoft.Xna.Framework.Media;
 using Devcade;
 using Microsoft.Xna.Framework.Input;
-using System.Threading;
-using System.Diagnostics;
-using System.Reflection;
 
 namespace DevcadeGame.States
 {
@@ -131,24 +128,10 @@ namespace DevcadeGame.States
             previousKeyboardState = Keyboard.GetState();
 
             // Fred Board parameters
-            fred_board_offset = -55;                                                            // adjust as needed
+            fred_board_offset = -35;                                                            // adjust as needed
             fred_board_width = highway_width;
             fred_boardX = highwayX;
             fred_boardY = highwayY + highway_height + fred_board_offset;
-
-            // Fred Board Lines
-            fred_line_offsetX = 30;
-            fred_line_width = 3;
-            fred_line_height = highway_height + fred_board_offset + (fred_board_height - 5);    // Make the lines appear in the fred board
-            fred_lineX = fred_boardX + fred_line_offsetX;                                       // apply offset to X
-            fred_lineY = highwayY;
-            fred_line2 = fred_lineX + 34;
-            fred_line3 = fred_lineX + 68;
-            fred_line4 = fred_lineX + 103;
-            fred_line5 = fred_lineX + 145;
-            fred_line6 = fred_lineX + 179;
-            fred_line7 = fred_lineX + 213;
-            fred_line8 = fred_lineX + 247;
 
             // Load Assets
             highway = _content.Load<Texture2D>("Game_Assets/922Highway");
@@ -169,12 +152,12 @@ namespace DevcadeGame.States
             note_white = _content.Load<Texture2D>("Game_Assets/note_white");
             note_width = 34;
             note_height = 17;
-            note_y = 170;
 
             // 3D Highway
             highway3D = _content.Load<Model>("Models/highway_obj");
             highway_3Dtexture = _content.Load<Texture2D>("Models/highway");
             projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _graphicsDevice.Viewport.AspectRatio, 0.0001f, 100000.0f);
+
 
             // Get the texture data
             Color[] data = new Color[highway_3Dtexture.Width * highway_3Dtexture.Height];
@@ -210,10 +193,9 @@ namespace DevcadeGame.States
 
             highwayPosition = (minExtents + maxExtents) / 2f;
 
-
-            view = Matrix.CreateLookAt(new Vector3(0, 0.6f, 20), 
-                new Vector3(0, 2.4f, 10.6f), new Vector3(0, 1, 0));
-
+            // Change camera positions and targets
+            view = Matrix.CreateLookAt(new Vector3(0, 6.2f, 17),
+                new Vector3(0, 5f, 10.6f), new Vector3(0, 1, 0));
 
             world = Matrix.CreateTranslation(Vector3.Zero);
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
@@ -286,11 +268,7 @@ namespace DevcadeGame.States
             DrawHeldFredLines(spriteBatch);
 
             // DRAW NOTES
-            for (int i = 0; i < 3; i++)
-            {
-                spriteBatch.Draw(note_blue, new Rectangle(fred_lineX - 17, note_y, note_width, note_height), Color.White);
-                note_y += 1;
-            }
+            
         }
 
 
@@ -310,9 +288,6 @@ namespace DevcadeGame.States
             {
                 world = Matrix.CreateRotationX(timer) * Matrix.CreateTranslation(Vector3.Zero);
             }
-
-            Debug.WriteLine(timer);
-
 
             // Make keyboard state
             KeyboardState currentKeyboardState = Keyboard.GetState();
