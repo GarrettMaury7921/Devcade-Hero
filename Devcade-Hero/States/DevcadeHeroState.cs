@@ -9,6 +9,7 @@ using Devcade;
 using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace DevcadeGame.States
 {
@@ -175,6 +176,24 @@ namespace DevcadeGame.States
             highway_3Dtexture = _content.Load<Texture2D>("Models/highway");
             projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _graphicsDevice.Viewport.AspectRatio, 0.0001f, 100000.0f);
 
+            // Get the texture data
+            Color[] data = new Color[highway_3Dtexture.Width * highway_3Dtexture.Height];
+            highway_3Dtexture.GetData(data);
+
+            // Flip the texture vertically
+            Color[] newData = new Color[data.Length];
+            for (int y = 0; y < highway_3Dtexture.Height; y++)
+            {
+                for (int x = 0; x < highway_3Dtexture.Width; x++)
+                {
+                    newData[x + y * highway_3Dtexture.Width] = data[x + (highway_3Dtexture.Height - y - 1)
+                        * highway_3Dtexture.Width];
+                }
+            }
+
+            // Set the new texture data
+            highway_3Dtexture.SetData(newData);
+
             // Get the position of the highway
             Vector3 minExtents = new Vector3(float.MaxValue);
             Vector3 maxExtents = new Vector3(float.MinValue);
@@ -197,15 +216,8 @@ namespace DevcadeGame.States
 
 
             world = Matrix.CreateTranslation(Vector3.Zero);
-
-            // Flip the object along the X-axis
-            Matrix flipX = Matrix.CreateScale(1, 1, 1);
-            world *= flipX;
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-            
-            world = Matrix.CreateRotationX(1) * Matrix.CreateTranslation(Vector3.Zero);
-            world = Matrix.CreateRotationY(3.1f) * Matrix.CreateTranslation(Vector3.Zero);
-            //world = Matrix.CreateRotationZ(3.222f) * Matrix.CreateTranslation(Vector3.Zero);
+
 
         } // Initialize Method
 
@@ -247,7 +259,7 @@ namespace DevcadeGame.States
             highway3D.CopyAbsoluteBoneTransformsTo(transforms);
             foreach (ModelMesh mesh in highway3D.Meshes)
             {
-                foreach(BasicEffect effect in mesh.Effects)
+                foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.World = world;
                     effect.View = view;
@@ -255,6 +267,7 @@ namespace DevcadeGame.States
                     effect.Texture = highway_3Dtexture;
                     effect.TextureEnabled = true;
                     effect.EnableDefaultLighting();
+
                 }
                 mesh.Draw();
             }
@@ -278,8 +291,8 @@ namespace DevcadeGame.States
                 spriteBatch.Draw(note_blue, new Rectangle(fred_lineX - 17, note_y, note_width, note_height), Color.White);
                 note_y += 1;
             }
+        }
 
-        } // Draw Method
 
         // GAME CONTROLS:
 
@@ -293,7 +306,8 @@ namespace DevcadeGame.States
         public override void Update(GameTime gameTime)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
-            if (timer < 0.5) {
+            if (timer < 0.5)
+            {
                 world = Matrix.CreateRotationX(timer) * Matrix.CreateTranslation(Vector3.Zero);
             }
 
