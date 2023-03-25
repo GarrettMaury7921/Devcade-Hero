@@ -88,7 +88,7 @@ namespace DevcadeGame.States
         private Model highway3D;
         private Texture2D highway_3Dtexture;
         private Vector3 highwayPosition;
-        
+
         // Set up camera
         private Matrix view;
         private Matrix projection;
@@ -268,7 +268,7 @@ namespace DevcadeGame.States
             DrawHeldFredLines(spriteBatch);
 
             // DRAW NOTES
-            
+
         }
 
 
