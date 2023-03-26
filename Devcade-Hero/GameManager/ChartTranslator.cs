@@ -1,7 +1,7 @@
-﻿using Devcade;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DevcadeGame.GameManager
 {
@@ -9,7 +9,7 @@ namespace DevcadeGame.GameManager
     {
         // Attributes
         private List<String> _notes;
-        private long default_bpm = 120000; // default BPM value
+        private long default_bpm = 120; // default BPM value
         private int _resolution = 192; // default resolution value
         private int tsValue;
         private List<int> _bpms;
@@ -17,6 +17,9 @@ namespace DevcadeGame.GameManager
         private List<int> _note_ticks;
         private List<int> _note_color;
         private List<int> _note_length;
+
+        private int count;
+        private List<double> _time_between_notes;
 
         public ChartTranslator(List<String> notes)
         {
@@ -27,6 +30,7 @@ namespace DevcadeGame.GameManager
             _note_ticks = new List<int>();
             _note_color = new List<int>();
             _note_length = new List<int>();
+            _time_between_notes = new List<double>();
 
             /*foreach (string _notes in notes)
             {
@@ -138,17 +142,14 @@ namespace DevcadeGame.GameManager
                     _note_color.Add(secondToLastValue);
                     _note_length.Add(lastValue);
 
+                    /* 
+                    DEBUGGING
+                    
                     Debug.WriteLine(firstValue);
                     Debug.WriteLine(secondToLastValue);
                     Debug.WriteLine(lastValue);
-
-                    // DEBUGGING
-                    /*
-                     * Debug.WriteLine(firstValue);
-                    Debug.WriteLine(secondToLastValue);
-                    Debug.WriteLine(lastValue);
-                     * 
-                     * foreach (int num in _note_ticks)
+                    
+                    foreach (int num in _note_ticks)
                     {
                         Debug.WriteLine(num);
                     }
@@ -159,13 +160,53 @@ namespace DevcadeGame.GameManager
                     foreach (int num in _note_length)
                     {
                         Debug.WriteLine(num);
-                    }*/
+                    }
+                    */
 
+                    // Find the time between each note
+                    /* Parse through the Events and get all of the regular note events
+                     *
+                     *   The calculation of time in seconds from one tick position to the next at a constant BPM is 
+                     *   defined as follows-
+                     *
+                     *   (tickEnd - tickStart) / resolution * 60.0 (seconds per minute) / bpm
+                     *
+                     *   Therefore to calculate the time any event takes place requires precalculation 
+                     *   of the times between all the BPM events that come before it. BPM events are defined in the 
+                     *   [SyncTrack] section as defined below.
+                     */
+                    count++;
+                    double note_time = 0;
+                    double last_tick = 0;
+                    if(count == 1)
+                    {
+                        note_time = (_note_ticks.ElementAt(count - 1) - last_tick) / _resolution * 60.0 / default_bpm;
+                        last_tick = _note_ticks.ElementAt(count - 1);
+                    }
+                    else
+                    {
+                        note_time = (_note_ticks.ElementAt(count - 1) - last_tick) / _resolution * 60.0 / default_bpm;
+                        last_tick = _note_ticks.ElementAt(count - 1);
+                    }
+                    _time_between_notes.Add(note_time);
 
                 } // Note if statement
 
             } // for each statement
 
+            /* 
+            DEBUGGING
+                    
+            foreach (double num in _time_between_notes)
+            {
+                Debug.WriteLine(num);
+            }
+            */
+
+            foreach (double num in _time_between_notes)
+            {
+                Debug.WriteLine(num);
+            }
 
         } // Constructor
 
