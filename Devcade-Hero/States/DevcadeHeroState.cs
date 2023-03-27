@@ -7,6 +7,7 @@ using System;
 using Microsoft.Xna.Framework.Media;
 using Devcade;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace DevcadeGame.States
 {
@@ -96,6 +97,13 @@ namespace DevcadeGame.States
         private ModelMesh mesh;
         private float timer;
 
+        // Note information
+        private List<int> bpms;
+        private List<int> bpm_time;
+        private List<int> note_ticks;
+        private List<int> note_color;
+        private List<int> note_length;
+        private List<double> time_between_notes;
 
         public void Initialize()
         {
@@ -213,6 +221,14 @@ namespace DevcadeGame.States
             chartReader = new ChartReader(_state_name);
             notes = chartReader.GetNotes();
             chartTranslator = new ChartTranslator(notes);
+
+            // Get Important Chart information from the translator
+            bpm_time = chartTranslator.GetBPMTickTime();
+            bpms = chartTranslator.GetBPM();
+            note_ticks = chartTranslator.GetNoteTickTime();
+            note_color = chartTranslator.GetNoteColor();
+            note_length = chartTranslator.GetNoteLength();
+            time_between_notes = chartTranslator.TimeBetweenNotes();
 
             // Get the background/video/song for the selected song
             backgroundManager = new GameBackgroundManager(_state_name);

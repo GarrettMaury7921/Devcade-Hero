@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace DevcadeGame.GameManager
 {
+
+    // TODO: BPM, only can do default 120 atm
     public class ChartTranslator
     {
         // Attributes
@@ -201,14 +202,50 @@ namespace DevcadeGame.GameManager
             {
                 Debug.WriteLine(num);
             }
-            */
+            
 
             foreach (double num in _time_between_notes)
             {
                 Debug.WriteLine(num);
             }
+            */
 
         } // Constructor
+
+        // Obtain data on:
+        //  2 BPM Values
+        //  4 Note Information Values:
+        //  
+
+        public List<int> GetBPMTickTime()
+        {
+            return _bpm_time;
+        }
+
+        public List<int> GetBPM()
+        {
+            return _bpms;
+        }
+
+        public List<int> GetNoteTickTime() 
+        {
+            return _note_ticks;
+        }
+
+        public List<int> GetNoteColor()
+        {
+            return _note_color;
+        }
+
+        public List<int> GetNoteLength()
+        {
+            return _note_length;
+        }
+
+        public List<double> TimeBetweenNotes()
+        {
+            return _time_between_notes;
+        }
 
     } // public class
 
