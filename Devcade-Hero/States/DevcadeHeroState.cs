@@ -7,7 +7,7 @@ using System;
 using Microsoft.Xna.Framework.Media;
 using Devcade;
 using Microsoft.Xna.Framework.Input;
-using System.Diagnostics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace DevcadeGame.States
 {
@@ -53,6 +53,7 @@ namespace DevcadeGame.States
         private int fred_lineX;
         private int fred_lineY;
         private int fred_line_offsetX;
+        private int fred_line_offsetY;
         private int fred_line2;
         private int fred_line3;
         private int fred_line4;
@@ -60,6 +61,16 @@ namespace DevcadeGame.States
         private int fred_line6;
         private int fred_line7;
         private int fred_line8;
+        private float fred_line_left_rotationAngle;
+        private float fred_line_left_rotationAngle2;
+        private float fred_line_left_rotationAngle3;
+        private float fred_line_left_rotationAngle4;
+        private float fred_line_right_rotationAngle;
+        private float fred_line_right_rotationAngle2;
+        private float fred_line_right_rotationAngle3;
+        private float fred_line_right_rotationAngle4;
+        private Vector2 fred_line_rotationOrigin;
+
         // Keys
         private Texture2D blue1down_pic;
         private bool blue1down;
@@ -105,6 +116,14 @@ namespace DevcadeGame.States
         private List<int> note_length;
         private List<double> time_between_notes;
 
+        // Timing of Notes
+        private GameTime songTime;
+
+        // Song and Sounds
+        private int drum_stick_counter;
+        private SoundEffect notes_ripple;
+        private SoundEffect drum_sticks;
+
         public void Initialize()
         {
             #region
@@ -128,6 +147,8 @@ namespace DevcadeGame.States
             blue5down = false;
             greendown = false;
             whitedown = false;
+            timer = 0;
+            drum_stick_counter = 0;
 
             highway_offset = 10;
             highwayX = (_preferredBackBufferWidth - highway_width) / 2;
@@ -137,8 +158,8 @@ namespace DevcadeGame.States
 
             // Fred Board parameters
             fred_board_offset = -35;                                                            // adjust as needed
-            fred_board_width = highway_width;
-            fred_boardX = highwayX;
+            fred_board_width = highway_width + 45;
+            fred_boardX = highwayX - 22;
             fred_boardY = highwayY + highway_height + fred_board_offset;
 
             // Load Assets
@@ -153,6 +174,28 @@ namespace DevcadeGame.States
             blue5down_pic = _content.Load<Texture2D>("Game_Assets/blue5down");
             greendown_pic = _content.Load<Texture2D>("Game_Assets/greendown");
             whitedown_pic = _content.Load<Texture2D>("Game_Assets/whitedown");
+            // Sound Assets
+            notes_ripple = _content.Load<SoundEffect>("Sound_Effects/notes_ripple_up");
+            drum_sticks = _content.Load<SoundEffect>("Sound_Effects/drum_sticks");
+
+            // Fred Lines
+            fred_line_width = 1;
+            fred_line_height = 350;
+            fred_line_offsetX = 54;
+            fred_line_offsetY = 11;
+
+            // FRED LINE LEFT (X, Y, Rotations)
+            fred_lineX = fred_boardX + fred_line_offsetX;
+            fred_lineY = fred_boardY - (fred_line_height / 2) + fred_line_offsetY;
+            fred_line_left_rotationAngle = MathHelper.ToRadians(6); // rotate x degrees
+            fred_line_left_rotationAngle2 = MathHelper.ToRadians(5); // rotate x degrees
+            fred_line_left_rotationAngle3 = MathHelper.ToRadians(4); // rotate x degrees
+            fred_line_left_rotationAngle4 = MathHelper.ToRadians(2); // rotate x degrees
+            fred_line_right_rotationAngle = MathHelper.ToRadians(-1.5f); // rotate x degrees
+            fred_line_right_rotationAngle2 = MathHelper.ToRadians(-4); // rotate x degrees
+            fred_line_right_rotationAngle3 = MathHelper.ToRadians(-5); // rotate x degrees
+            fred_line_right_rotationAngle4 = MathHelper.ToRadians(-6); // rotate x degrees
+            fred_line_rotationOrigin = new Vector2(fred_line.Width / 2, fred_line.Height / 2); // center of the texture
 
             note_blue = _content.Load<Texture2D>("Game_Assets/note_blue");
             note_green = _content.Load<Texture2D>("Game_Assets/note_green");
@@ -236,6 +279,8 @@ namespace DevcadeGame.States
             song = backgroundManager.SongChooser(_content, _state_name);
             videoName = backgroundManager.VideoChooser(_state_name);
 
+            // Play the sound effect
+            notes_ripple.Play();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)
@@ -271,11 +316,9 @@ namespace DevcadeGame.States
             }
 
             spriteBatch.Begin();
-            // 2D
-            // spriteBatch.Draw(highway, new Rectangle(highwayX, highwayY, highway_width, highway_height), Color.White);
 
             // Draw Fret Lines
-            //DrawFredLines(spriteBatch);
+            DrawFredLines(spriteBatch);
 
             // Draw the fred board
             spriteBatch.Draw(fred_board, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
@@ -299,10 +342,28 @@ namespace DevcadeGame.States
         //       BOTTOM ROW: H J K L
         public override void Update(GameTime gameTime)
         {
-            timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
             if (timer < 0.5)
             {
+                timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
                 world = Matrix.CreateRotationX(timer) * Matrix.CreateTranslation(Vector3.Zero);
+            }
+            else
+            {
+                if(timer > 0.5 && timer < 1.5)
+                {
+                    timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
+                    if (drum_stick_counter == 0)
+                    {
+                        drum_sticks.Play();
+                        drum_stick_counter++;
+                    }
+                    
+                }
+                else
+                {
+                    songTime = gameTime;
+                }
+                
             }
 
             // Make keyboard state
@@ -322,14 +383,33 @@ namespace DevcadeGame.States
         // OTHER METHODS
         public void DrawFredLines(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX, fred_lineY, fred_line_width, fred_line_height), Color.White);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_line2, fred_lineY, fred_line_width, fred_line_height), Color.White);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_line3, fred_lineY, fred_line_width, fred_line_height), Color.White);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_line4, fred_lineY, fred_line_width, fred_line_height), Color.White);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_line5, fred_lineY, fred_line_width, fred_line_height), Color.White);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_line6, fred_lineY, fred_line_width, fred_line_height), Color.White);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_line7, fred_lineY, fred_line_width, fred_line_height), Color.White);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_line8, fred_lineY, fred_line_width, fred_line_height), Color.White);
+            // Left
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX, fred_lineY, fred_line_width, fred_line_height), 
+                null, Color.White, fred_line_left_rotationAngle, fred_line_rotationOrigin, SpriteEffects.None,
+                0f);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 35, fred_lineY, fred_line_width, fred_line_height),
+                null, Color.White, fred_line_left_rotationAngle2, fred_line_rotationOrigin, SpriteEffects.None,
+                0f);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 72, fred_lineY, fred_line_width, fred_line_height),
+                null, Color.White, fred_line_left_rotationAngle3, fred_line_rotationOrigin, SpriteEffects.None,
+                0f);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 105, fred_lineY, fred_line_width, fred_line_height),
+                null, Color.White, fred_line_left_rotationAngle4, fred_line_rotationOrigin, SpriteEffects.None,
+                0f);
+
+            // Right
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 143, fred_lineY, fred_line_width, fred_line_height),
+                null, Color.White, fred_line_right_rotationAngle, fred_line_rotationOrigin, SpriteEffects.None,
+                0f);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 174, fred_lineY, fred_line_width, fred_line_height),
+                null, Color.White, fred_line_right_rotationAngle2, fred_line_rotationOrigin, SpriteEffects.None,
+                0f);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 209, fred_lineY, fred_line_width, fred_line_height),
+                null, Color.White, fred_line_right_rotationAngle3, fred_line_rotationOrigin, SpriteEffects.None,
+                0f);
+            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 243, fred_lineY, fred_line_width, fred_line_height),
+                null, Color.White, fred_line_right_rotationAngle4, fred_line_rotationOrigin, SpriteEffects.None,
+                0f);
         }
 
         public void DrawHeldFredLines(SpriteBatch spriteBatch)

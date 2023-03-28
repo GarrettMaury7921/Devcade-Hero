@@ -21,10 +21,8 @@ namespace DevcadeGame.Sounds
         public void InitializeSound()
         {
             // Starting Volume
-            //MediaPlayer.Volume = 0.40f;
-            //SoundEffect.MasterVolume = 0.09f;
-            MediaPlayer.Volume = 0.0f;
-            SoundEffect.MasterVolume = 0.0f;
+            MediaPlayer.Volume = 0.40f;
+            SoundEffect.MasterVolume = 0.09f;
 
         }
 

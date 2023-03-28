@@ -394,6 +394,18 @@
 /processorParam:Quality=Best
 /build:Songs/welcome_to_the_jungle_PCM.wav
 
+#begin Sound_Effects/drum_sticks.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/drum_sticks.wav
+
+#begin Sound_Effects/notes_ripple_up.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/notes_ripple_up.wav
+
 #begin Sound_Effects/UICancel.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

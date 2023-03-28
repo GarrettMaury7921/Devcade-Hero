@@ -1,9 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace DevcadeGame.GameManager
 {
+    // .chart file format for Devcade Scraper
+    //  N 4 = blue1
+    //  N 5 = blue2
+    //  N 6 = blue3
+    //  N 7 = blue4
+    //  N 0 = red
+    //  N 1 = blue5
+    //  N 2 = green
+    //  N 3 = white
 
     // TODO: BPM, only can do default 120 atm
     public class ChartTranslator
@@ -195,15 +205,13 @@ namespace DevcadeGame.GameManager
 
             } // for each statement
 
-            /* 
-            DEBUGGING
-                    
             foreach (double num in _time_between_notes)
             {
                 Debug.WriteLine(num);
             }
-            
 
+            /* 
+            DEBUGGING     
             foreach (double num in _time_between_notes)
             {
                 Debug.WriteLine(num);
