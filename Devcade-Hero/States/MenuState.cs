@@ -10,6 +10,8 @@ using System;
 using Devcade;
 using System.Linq;
 using System.Diagnostics;
+using Silk.NET.Core;
+using System.Reflection.Metadata.Ecma335;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -62,6 +64,7 @@ namespace DevcadeGame.States
         private float centerY;
         private int buttonWidth;
         private int buttonHeight;
+        public static bool inGame;
 
         // *************************************
         // ***** SETTER AND GETTER METHODS *****
@@ -94,6 +97,7 @@ namespace DevcadeGame.States
             soundEffectType = "effect";
             playWelcomeToTheJungle = false;
             mediaPlayerKillSwitch = false;
+            inGame = false;
             state_name = _state_name;
             currentButton = 1;
             buttonWidth = 500;
@@ -520,39 +524,48 @@ namespace DevcadeGame.States
         // This is called after the intro state and when a MenuState object is made
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
-            // Kill switch for this when we don't want stuff playing anymore
-            if (mediaPlayerKillSwitch)
+            // Do Nothing switch for when we are gaming and we don't want this method to break the player
+            if (inGame)
             {
-                playWelcomeToTheJungle = false;
-                MediaPlayer.IsRepeating = false;
-                MediaPlayer.Stop();
+                // Do Nothing
             }
             else
             {
-                // If the person skipped the cut-scene
-                if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState1") && playWelcomeToTheJungle == false)
+                // Kill switch for this when we don't want stuff playing anymore
+                if (mediaPlayerKillSwitch)
                 {
-                    MediaPlayer.Play(welcome_to_the_jungle);
-                    playWelcomeToTheJungle = true;
+                    playWelcomeToTheJungle = false;
+                    MediaPlayer.IsRepeating = false;
+                    MediaPlayer.Stop();
                 }
-
-                // If they watched the entire cut-scene
                 else
                 {
-                    // Then after that play the regular one
-                    if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
+                    // If the person skipped the cut-scene
+                    if ((MediaPlayer.State == MediaState.Stopped) && state_name.Equals("MenuState1") && playWelcomeToTheJungle == false)
                     {
                         MediaPlayer.Play(welcome_to_the_jungle);
+                        playWelcomeToTheJungle = true;
                     }
-                    // First 'welcome to the jungle' when beat drops
-                    if (state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
+
+                    // If they watched the entire cut-scene
+                    else
                     {
-                        MediaPlayer.Play(beat_drop_after_jungle);
-                    }
+                        // Then after that play the regular one
+                        if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
+                        {
+                            MediaPlayer.Play(welcome_to_the_jungle);
+                        }
+                        // First 'welcome to the jungle' when beat drops
+                        if (state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
+                        {
+                            MediaPlayer.Play(beat_drop_after_jungle);
+                        }
 
-                } // Else statement
+                    } // Else statement
 
-            } // Kill switch else statement
+                } // Kill switch else statement
+
+            } // The in game else statement
 
         } // MediaPlayer_MediaStateChanged method
 

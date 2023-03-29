@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Media;
 using Devcade;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using System.Diagnostics;
 
 namespace DevcadeGame.States
 {
@@ -31,7 +32,6 @@ namespace DevcadeGame.States
         private Song song;
         private String videoName;
         private KeyboardState previousKeyboardState;
-        private int count;
 
         private int highway_width;
         private int highway_height;
@@ -54,13 +54,6 @@ namespace DevcadeGame.States
         private int fred_lineY;
         private int fred_line_offsetX;
         private int fred_line_offsetY;
-        private int fred_line2;
-        private int fred_line3;
-        private int fred_line4;
-        private int fred_line5;
-        private int fred_line6;
-        private int fred_line7;
-        private int fred_line8;
         private float fred_line_left_rotationAngle;
         private float fred_line_left_rotationAngle2;
         private float fred_line_left_rotationAngle3;
@@ -117,7 +110,7 @@ namespace DevcadeGame.States
         private List<double> time_between_notes;
 
         // Timing of Notes
-        private GameTime songTime;
+        private float songTime;
 
         // Song and Sounds
         private int drum_stick_counter;
@@ -175,6 +168,7 @@ namespace DevcadeGame.States
             greendown_pic = _content.Load<Texture2D>("Game_Assets/greendown");
             whitedown_pic = _content.Load<Texture2D>("Game_Assets/whitedown");
             // Sound Assets
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged; // subscribe so no bug?
             notes_ripple = _content.Load<SoundEffect>("Sound_Effects/notes_ripple_up");
             drum_sticks = _content.Load<SoundEffect>("Sound_Effects/drum_sticks");
 
@@ -342,6 +336,13 @@ namespace DevcadeGame.States
         //       BOTTOM ROW: H J K L
         public override void Update(GameTime gameTime)
         {
+            // Make keyboard state
+            KeyboardState currentKeyboardState = Keyboard.GetState();
+
+            CheckP1Buttons(currentKeyboardState);
+
+            previousKeyboardState = currentKeyboardState;
+
             if (timer < 0.5)
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
@@ -349,29 +350,26 @@ namespace DevcadeGame.States
             }
             else
             {
-                if(timer > 0.5 && timer < 1.5)
+                if (timer > 0.5 && timer < 1.5 && drum_stick_counter == 0)
                 {
                     timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
-                    if (drum_stick_counter == 0)
-                    {
-                        drum_sticks.Play();
-                        drum_stick_counter++;
-                    }
-                    
+                    drum_sticks.Play();
+                    drum_stick_counter++;
+
                 }
                 else
                 {
-                    songTime = gameTime;
+                    songTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    // Debug.WriteLine(songTime);
+                    if (songTime >= 4.6f && drum_stick_counter == 1)
+                    {
+                        songTime -= 4.6f;
+                        drum_stick_counter++;
+                        MediaPlayer.Play(song);
+                    }
                 }
-                
+
             }
-
-            // Make keyboard state
-            KeyboardState currentKeyboardState = Keyboard.GetState();
-
-            CheckP1Buttons(currentKeyboardState);
-
-            previousKeyboardState = currentKeyboardState;
 
         } // Update method
 
@@ -381,6 +379,10 @@ namespace DevcadeGame.States
         }
 
         // OTHER METHODS
+        private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
+        {
+            MenuState.inGame = true;
+        } // MediaPlayer_MediaStateChanged method
         public void DrawFredLines(SpriteBatch spriteBatch)
         {
             // Left

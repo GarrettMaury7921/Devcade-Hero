@@ -205,11 +205,6 @@ namespace DevcadeGame.GameManager
 
             } // for each statement
 
-            foreach (double num in _time_between_notes)
-            {
-                Debug.WriteLine(num);
-            }
-
             /* 
             DEBUGGING     
             foreach (double num in _time_between_notes)
