@@ -364,6 +364,18 @@
 /processorParam:Quality=Best
 /build:Songs/gh3_intro.wav
 
+#begin Songs/guitar_solo_intro.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Songs/guitar_solo_intro.wav
+
+#begin Songs/Kalimba (Ninja Tuna).wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Songs/Kalimba (Ninja Tuna).wav
+
 #begin Songs/megamind_after_jungle.wav
 /importer:WavImporter
 /processor:SongProcessor

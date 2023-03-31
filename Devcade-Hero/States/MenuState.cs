@@ -10,8 +10,6 @@ using System;
 using Devcade;
 using System.Linq;
 using System.Diagnostics;
-using Silk.NET.Core;
-using System.Reflection.Metadata.Ecma335;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -531,6 +529,9 @@ namespace DevcadeGame.States
             }
             else
             {
+                // DEBUG IF IT'S PLAYING
+                // Debug.WriteLine(MediaPlayer.State.ToString());
+
                 // Kill switch for this when we don't want stuff playing anymore
                 if (mediaPlayerKillSwitch)
                 {
@@ -550,15 +551,16 @@ namespace DevcadeGame.States
                     // If they watched the entire cut-scene
                     else
                     {
-                        // Then after that play the regular one
-                        if ((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true)
-                        {
-                            MediaPlayer.Play(welcome_to_the_jungle);
-                        }
                         // First 'welcome to the jungle' when beat drops
                         if (state_name.Equals("MenuState_beat_drop") && playWelcomeToTheJungle == false)
                         {
                             MediaPlayer.Play(beat_drop_after_jungle);
+                        }
+                        // Then after that play the regular one
+                        if (((MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == true) ||
+                            (MediaPlayer.State == MediaState.Stopped) && playWelcomeToTheJungle == false)
+                        {
+                            MediaPlayer.Play(welcome_to_the_jungle);
                         }
 
                     } // Else statement

@@ -30,6 +30,7 @@ namespace DevcadeGame.States
         private readonly Song welcome_to_the_jungle;
         private readonly Song objection_intro;
         private readonly Song gh3_intro;
+        private readonly Song guitar_solo_intro;
         private TimeSpan elapsedVideoTime;
         public Texture2D VideoTexture;
         private State menu_state;
@@ -66,7 +67,7 @@ namespace DevcadeGame.States
         {
             // THERE ARE CURRENTLY 3 INTROS
             Random random = new();
-            randomValue = random.Next(1, 4); // generates a random value between x and y-1 (inclusive)
+            randomValue = random.Next(1, 5); // generates a random value between x and y-1 (inclusive)
             switch (randomValue)
             {
                 // SET ALL PARAMETERS FOR EACH INTRO
@@ -98,8 +99,17 @@ namespace DevcadeGame.States
                     cutoff_seconds = 0;
                     break;
 
-                // Mega mind Intro
+                // Guitar Solo Intro
                 case 4:
+                    videoName = "guitar_solo.mp4";
+                    songName = guitar_solo_intro;
+                    increase_scale = 0.006;
+                    State_name = "MenuState1";
+                    cutoff_seconds = 0; //1.25 works
+                    break;
+
+                // Mega mind Intro
+                case 5:
                     videoName = "presentation.mp4";
                     songName = presentation_intro_music;
                     increase_scale = 0.0065;
@@ -128,7 +138,7 @@ namespace DevcadeGame.States
             welcome_to_the_jungle = _content.Load<Song>("Songs/welcome_to_the_jungle_PCM");
             objection_intro = _content.Load<Song>("Songs/objection_intro");
             gh3_intro = _content.Load<Song>("Songs/gh3_intro");
-
+            guitar_solo_intro = _content.Load<Song>("Songs/guitar_solo_intro");
 
 
             // Attributes

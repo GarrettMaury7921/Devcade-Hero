@@ -142,6 +142,7 @@ namespace DevcadeGame.States
             whitedown = false;
             timer = 0;
             drum_stick_counter = 0;
+            MenuState.inGame = true;
 
             highway_offset = 10;
             highwayX = (_preferredBackBufferWidth - highway_width) / 2;
@@ -150,7 +151,7 @@ namespace DevcadeGame.States
             previousKeyboardState = Keyboard.GetState();
 
             // Fred Board parameters
-            fred_board_offset = -35;                                                            // adjust as needed
+            fred_board_offset = -35;
             fred_board_width = highway_width + 45;
             fred_boardX = highwayX - 22;
             fred_boardY = highwayY + highway_height + fred_board_offset;
@@ -181,14 +182,14 @@ namespace DevcadeGame.States
             // FRED LINE LEFT (X, Y, Rotations)
             fred_lineX = fred_boardX + fred_line_offsetX;
             fred_lineY = fred_boardY - (fred_line_height / 2) + fred_line_offsetY;
-            fred_line_left_rotationAngle = MathHelper.ToRadians(6); // rotate x degrees
-            fred_line_left_rotationAngle2 = MathHelper.ToRadians(5); // rotate x degrees
-            fred_line_left_rotationAngle3 = MathHelper.ToRadians(4); // rotate x degrees
-            fred_line_left_rotationAngle4 = MathHelper.ToRadians(2); // rotate x degrees
-            fred_line_right_rotationAngle = MathHelper.ToRadians(-1.5f); // rotate x degrees
-            fred_line_right_rotationAngle2 = MathHelper.ToRadians(-4); // rotate x degrees
-            fred_line_right_rotationAngle3 = MathHelper.ToRadians(-5); // rotate x degrees
-            fred_line_right_rotationAngle4 = MathHelper.ToRadians(-6); // rotate x degrees
+            fred_line_left_rotationAngle = MathHelper.ToRadians(6);                     // rotate x degrees
+            fred_line_left_rotationAngle2 = MathHelper.ToRadians(5);                    // rotate x degrees
+            fred_line_left_rotationAngle3 = MathHelper.ToRadians(4);                    // rotate x degrees
+            fred_line_left_rotationAngle4 = MathHelper.ToRadians(2);                    // rotate x degrees
+            fred_line_right_rotationAngle = MathHelper.ToRadians(-1.5f);                // rotate x degrees
+            fred_line_right_rotationAngle2 = MathHelper.ToRadians(-4);                  // rotate x degrees
+            fred_line_right_rotationAngle3 = MathHelper.ToRadians(-5);                  // rotate x degrees
+            fred_line_right_rotationAngle4 = MathHelper.ToRadians(-6);                  // rotate x degrees
             fred_line_rotationOrigin = new Vector2(fred_line.Width / 2, fred_line.Height / 2); // center of the texture
 
             note_blue = _content.Load<Texture2D>("Game_Assets/note_blue");
@@ -240,7 +241,7 @@ namespace DevcadeGame.States
 
             // Change camera positions and targets
             view = Matrix.CreateLookAt(new Vector3(0, 6.2f, 17),
-                new Vector3(0, 5f, 10.6f), new Vector3(0, 1, 0));
+                new Vector3(0, 5.2f, 10.6f), new Vector3(0, 1, 0));
 
             world = Matrix.CreateTranslation(Vector3.Zero);
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
@@ -268,6 +269,7 @@ namespace DevcadeGame.States
             time_between_notes = chartTranslator.TimeBetweenNotes();
 
             // Get the background/video/song for the selected song
+            // _state_name is the song name
             backgroundManager = new GameBackgroundManager(_state_name);
             background = backgroundManager.BackgroundChooser(_content, _state_name);
             song = backgroundManager.SongChooser(_content, _state_name);
@@ -310,6 +312,8 @@ namespace DevcadeGame.States
             }
 
             spriteBatch.Begin();
+
+            // DRAW NOTES
 
             // Draw Fret Lines
             DrawFredLines(spriteBatch);
