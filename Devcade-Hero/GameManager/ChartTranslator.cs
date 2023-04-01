@@ -205,13 +205,13 @@ namespace DevcadeGame.GameManager
 
             } // for each statement
 
-            /* 
-            DEBUGGING     
+            
+            // DEBUGGING     
             foreach (double num in _time_between_notes)
             {
                 Debug.WriteLine(num);
             }
-            */
+            
 
         } // Constructor
 
@@ -248,6 +248,11 @@ namespace DevcadeGame.GameManager
         public List<double> TimeBetweenNotes()
         {
             return _time_between_notes;
+        }
+
+        public int GetNoteCount()
+        {
+            return GetNoteColor().Count;
         }
 
     } // public class

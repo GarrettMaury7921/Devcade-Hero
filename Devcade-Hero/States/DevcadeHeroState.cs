@@ -9,6 +9,7 @@ using Devcade;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DevcadeGame.States
 {
@@ -24,12 +25,12 @@ namespace DevcadeGame.States
     public class DevcadeHeroState : State
     {
         // Attributes
-        private ChartReader chartReader;
-        private ChartTranslator chartTranslator;
-        private GameBackgroundManager backgroundManager;
-        private List<String> notes;
-        private Texture2D background;
-        private Song song;
+        private readonly ChartReader chartReader;
+        private readonly ChartTranslator chartTranslator;
+        private readonly GameBackgroundManager backgroundManager;
+        private readonly List<String> chart_lines;
+        private readonly Texture2D background;
+        private readonly Song song;
         private String videoName;
         private KeyboardState previousKeyboardState;
 
@@ -38,7 +39,6 @@ namespace DevcadeGame.States
         private int highwayX;
         private int highwayY;
         private int highway_offset;
-        private Texture2D highway;
 
         private Texture2D fred_board;
         private int fred_board_width;
@@ -63,6 +63,14 @@ namespace DevcadeGame.States
         private float fred_line_right_rotationAngle3;
         private float fred_line_right_rotationAngle4;
         private Vector2 fred_line_rotationOrigin;
+        private Rectangle fred_line_left_rectangle;
+        private Rectangle fred_line_left_rectangle2;
+        private Rectangle fred_line_left_rectangle3;
+        private Rectangle fred_line_left_rectangle4;
+        private Rectangle fred_line_right_rectangle;
+        private Rectangle fred_line_right_rectangle2;
+        private Rectangle fred_line_right_rectangle3;
+        private Rectangle fred_line_right_rectangle4;
 
         // Keys
         private Texture2D blue1down_pic;
@@ -89,16 +97,16 @@ namespace DevcadeGame.States
         private int note_width;
         private int note_height;
         private int note_y;
+        private int note_x;
+        private readonly int note_count;
 
         private Model highway3D;
         private Texture2D highway_3Dtexture;
-        private Vector3 highwayPosition;
 
         // Set up camera
         private Matrix view;
         private Matrix projection;
         private Matrix world;
-        private ModelMesh mesh;
         private float timer;
 
         // Note information
@@ -108,6 +116,8 @@ namespace DevcadeGame.States
         private List<int> note_color;
         private List<int> note_length;
         private List<double> time_between_notes;
+        private List<Note> notes;
+        private bool songPlaying;
 
         // Timing of Notes
         private float songTime;
@@ -143,6 +153,7 @@ namespace DevcadeGame.States
             timer = 0;
             drum_stick_counter = 0;
             MenuState.inGame = true;
+            songPlaying = false;
 
             highway_offset = 10;
             highwayX = (_preferredBackBufferWidth - highway_width) / 2;
@@ -157,7 +168,6 @@ namespace DevcadeGame.States
             fred_boardY = highwayY + highway_height + fred_board_offset;
 
             // Load Assets
-            highway = _content.Load<Texture2D>("Game_Assets/922Highway");
             fred_board = _content.Load<Texture2D>("Game_Assets/fred_board_gap");
             fred_line = _content.Load<Texture2D>("Game_Assets/note_line");
             blue1down_pic = _content.Load<Texture2D>("Game_Assets/blue1down");
@@ -168,8 +178,13 @@ namespace DevcadeGame.States
             blue5down_pic = _content.Load<Texture2D>("Game_Assets/blue5down");
             greendown_pic = _content.Load<Texture2D>("Game_Assets/greendown");
             whitedown_pic = _content.Load<Texture2D>("Game_Assets/whitedown");
+            note_blue = _content.Load<Texture2D>("Game_Assets/note_blue");
+            note_green = _content.Load<Texture2D>("Game_Assets/note_green");
+            note_red = _content.Load<Texture2D>("Game_Assets/note_red");
+            note_white = _content.Load<Texture2D>("Game_Assets/note_white");
+
             // Sound Assets
-            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged; // subscribe so no bug?
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged; // subscribe so no bug
             notes_ripple = _content.Load<SoundEffect>("Sound_Effects/notes_ripple_up");
             drum_sticks = _content.Load<SoundEffect>("Sound_Effects/drum_sticks");
 
@@ -192,12 +207,24 @@ namespace DevcadeGame.States
             fred_line_right_rotationAngle4 = MathHelper.ToRadians(-6);                  // rotate x degrees
             fred_line_rotationOrigin = new Vector2(fred_line.Width / 2, fred_line.Height / 2); // center of the texture
 
+            fred_line_left_rectangle = new Rectangle(fred_lineX, fred_lineY, fred_line_width, fred_line_height);
+            fred_line_left_rectangle2 = new Rectangle(fred_lineX + 35, fred_lineY, fred_line_width, fred_line_height);
+            fred_line_left_rectangle3 = new Rectangle(fred_lineX + 72, fred_lineY, fred_line_width, fred_line_height);
+            fred_line_left_rectangle4 = new Rectangle(fred_lineX + 105, fred_lineY, fred_line_width, fred_line_height);
+            fred_line_right_rectangle = new Rectangle(fred_lineX + 143, fred_lineY, fred_line_width, fred_line_height);
+            fred_line_right_rectangle2 = new Rectangle(fred_lineX + 174, fred_lineY, fred_line_width, fred_line_height);
+            fred_line_right_rectangle3 = new Rectangle(fred_lineX + 209, fred_lineY, fred_line_width, fred_line_height);
+            fred_line_right_rectangle4 = new Rectangle(fred_lineX + 243, fred_lineY, fred_line_width, fred_line_height);
+
             note_blue = _content.Load<Texture2D>("Game_Assets/note_blue");
             note_green = _content.Load<Texture2D>("Game_Assets/note_green");
             note_red = _content.Load<Texture2D>("Game_Assets/note_red");
             note_white = _content.Load<Texture2D>("Game_Assets/note_white");
             note_width = 34;
             note_height = 17;
+            note_x = 100;
+            note_y = 450;
+            notes = new List<Note>();
 
             // 3D Highway
             highway3D = _content.Load<Model>("Models/highway_obj");
@@ -224,20 +251,18 @@ namespace DevcadeGame.States
             highway_3Dtexture.SetData(newData);
 
             // Get the position of the highway
-            Vector3 minExtents = new Vector3(float.MaxValue);
-            Vector3 maxExtents = new Vector3(float.MinValue);
+            Vector3 minExtents = new(float.MaxValue);
+            Vector3 maxExtents = new(float.MinValue);
 
             foreach (ModelMesh mesh in highway3D.Meshes)
             {
                 BoundingSphere meshSphere = mesh.BoundingSphere;
-                BoundingBox meshBox = new BoundingBox();
+                BoundingBox meshBox = new();
                 BoundingBox.CreateFromSphere(meshSphere);
 
                 minExtents = Vector3.Min(minExtents, meshBox.Min);
                 maxExtents = Vector3.Max(maxExtents, meshBox.Max);
             }
-
-            highwayPosition = (minExtents + maxExtents) / 2f;
 
             // Change camera positions and targets
             view = Matrix.CreateLookAt(new Vector3(0, 6.2f, 17),
@@ -257,8 +282,8 @@ namespace DevcadeGame.States
 
             // Put the chart into the ChartReader and then the translator
             chartReader = new ChartReader(_state_name);
-            notes = chartReader.GetNotes();
-            chartTranslator = new ChartTranslator(notes);
+            chart_lines = chartReader.GetNotes();
+            chartTranslator = new ChartTranslator(chart_lines);
 
             // Get Important Chart information from the translator
             bpm_time = chartTranslator.GetBPMTickTime();
@@ -267,6 +292,9 @@ namespace DevcadeGame.States
             note_color = chartTranslator.GetNoteColor();
             note_length = chartTranslator.GetNoteLength();
             time_between_notes = chartTranslator.TimeBetweenNotes();
+            note_count = chartTranslator.GetNoteCount();
+            // Make the notes so we can draw them later
+            MakeNotes(note_ticks, note_color, note_length);
 
             // Get the background/video/song for the selected song
             // _state_name is the song name
@@ -298,8 +326,9 @@ namespace DevcadeGame.States
             highway3D.CopyAbsoluteBoneTransformsTo(transforms);
             foreach (ModelMesh mesh in highway3D.Meshes)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                for (int i = 0; i < mesh.Effects.Count; i++)
                 {
+                    BasicEffect effect = (BasicEffect)mesh.Effects[i];
                     effect.World = world;
                     effect.View = view;
                     effect.Projection = projection;
@@ -313,10 +342,18 @@ namespace DevcadeGame.States
 
             spriteBatch.Begin();
 
-            // DRAW NOTES
-
             // Draw Fret Lines
             DrawFredLines(spriteBatch);
+
+            // DRAW NOTES WHEN READY
+            if (drum_stick_counter >= 1 && songPlaying)
+            {
+                foreach (Note note in notes)
+                {
+                    note.CalculatePosition(note.Position, note.fretLineRotationAngle, note_width, note_height);
+                    spriteBatch.Draw(note.Texture, note.Position, Color.White);
+                }
+            }
 
             // Draw the fred board
             spriteBatch.Draw(fred_board, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
@@ -359,16 +396,18 @@ namespace DevcadeGame.States
                     timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
                     drum_sticks.Play();
                     drum_stick_counter++;
-
                 }
                 else
                 {
                     songTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    // SONG TIME
                     // Debug.WriteLine(songTime);
+
                     if (songTime >= 4.6f && drum_stick_counter == 1)
                     {
                         songTime -= 4.6f;
                         drum_stick_counter++;
+                        songPlaying = true;
                         MediaPlayer.Play(song);
                     }
                 }
@@ -390,30 +429,30 @@ namespace DevcadeGame.States
         public void DrawFredLines(SpriteBatch spriteBatch)
         {
             // Left
-            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX, fred_lineY, fred_line_width, fred_line_height), 
+            spriteBatch.Draw(fred_line, fred_line_left_rectangle,
                 null, Color.White, fred_line_left_rotationAngle, fred_line_rotationOrigin, SpriteEffects.None,
                 0f);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 35, fred_lineY, fred_line_width, fred_line_height),
+            spriteBatch.Draw(fred_line, fred_line_left_rectangle2,
                 null, Color.White, fred_line_left_rotationAngle2, fred_line_rotationOrigin, SpriteEffects.None,
                 0f);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 72, fred_lineY, fred_line_width, fred_line_height),
+            spriteBatch.Draw(fred_line, fred_line_left_rectangle3,
                 null, Color.White, fred_line_left_rotationAngle3, fred_line_rotationOrigin, SpriteEffects.None,
                 0f);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 105, fred_lineY, fred_line_width, fred_line_height),
+            spriteBatch.Draw(fred_line, fred_line_left_rectangle4,
                 null, Color.White, fred_line_left_rotationAngle4, fred_line_rotationOrigin, SpriteEffects.None,
                 0f);
 
             // Right
-            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 143, fred_lineY, fred_line_width, fred_line_height),
+            spriteBatch.Draw(fred_line, fred_line_right_rectangle,
                 null, Color.White, fred_line_right_rotationAngle, fred_line_rotationOrigin, SpriteEffects.None,
                 0f);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 174, fred_lineY, fred_line_width, fred_line_height),
+            spriteBatch.Draw(fred_line, fred_line_right_rectangle2,
                 null, Color.White, fred_line_right_rotationAngle2, fred_line_rotationOrigin, SpriteEffects.None,
                 0f);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 209, fred_lineY, fred_line_width, fred_line_height),
+            spriteBatch.Draw(fred_line, fred_line_right_rectangle3,
                 null, Color.White, fred_line_right_rotationAngle3, fred_line_rotationOrigin, SpriteEffects.None,
                 0f);
-            spriteBatch.Draw(fred_line, new Rectangle(fred_lineX + 243, fred_lineY, fred_line_width, fred_line_height),
+            spriteBatch.Draw(fred_line, fred_line_right_rectangle4,
                 null, Color.White, fred_line_right_rotationAngle4, fred_line_rotationOrigin, SpriteEffects.None,
                 0f);
         }
@@ -530,6 +569,90 @@ namespace DevcadeGame.States
                 whitedown = false;
             }
         } // CheckP1Buttons Method
+
+        public void MakeNotes(List<int> ticks, List<int> color, List<int> length)
+        {
+            // Go through each note
+            for (int i = 0; i < note_count; i++)
+            {
+                // Attributes
+                Texture2D texture = null;
+                int lane = color[i];
+                float angle = 0f;
+                Rectangle fredline_rect = new Rectangle();
+
+                // Associate a texture with the color
+                // AND FRET LINE, ROTATION ANGLE
+                //  N 4 = blue1
+                //  N 5 = blue2
+                //  N 6 = blue3
+                //  N 7 = blue4
+                //  N 0 = red
+                //  N 1 = blue5
+                //  N 2 = green
+                //  N 3 = white
+
+                switch (color[i])
+                {
+                    case 0:
+                        texture = note_red;
+                        angle = fred_line_right_rotationAngle;
+                        fredline_rect = fred_line_right_rectangle;
+                        break;
+                    case 1:
+                        texture = note_blue;
+                        angle = fred_line_right_rotationAngle2;
+                        fredline_rect = fred_line_right_rectangle2;
+                        break;
+                    case 2:
+                        texture = note_green;
+                        angle = fred_line_right_rotationAngle3;
+                        fredline_rect = fred_line_right_rectangle3;
+                        break;
+                    case 3:
+                        texture = note_white;
+                        angle = fred_line_right_rotationAngle4;
+                        fredline_rect = fred_line_right_rectangle4;
+                        break;
+                    case 4:
+                        texture = note_blue;
+                        angle = fred_line_left_rotationAngle;
+                        fredline_rect = fred_line_left_rectangle;
+                        break;
+                    case 5:
+                        texture = note_blue;
+                        angle = fred_line_left_rotationAngle2;
+                        fredline_rect = fred_line_left_rectangle2;
+                        break;
+                    case 6:
+                        texture = note_blue;
+                        angle = fred_line_left_rotationAngle3;
+                        fredline_rect = fred_line_left_rectangle3;
+                        break;
+                    case 7:
+                        texture = note_blue;
+                        angle = fred_line_left_rotationAngle4;
+                        fredline_rect = fred_line_left_rectangle4;
+                        break;
+                    default: 
+                        break;
+                } // switch statement
+
+                // Fix position
+                fredline_rect.Y -= 500;
+
+                // Make a note for each note and add it to the note list
+                Note note = new(texture, ticks[i], length[i], lane, _preferredBackBufferWidth, _preferredBackBufferHeight,
+                    note_width, note_height)
+                {
+                    Position = fredline_rect,
+                    fretLineRotationAngle = angle
+                };
+                notes.Add(note);
+
+            } // for loop
+
+        } // Make Notes method
 
     } // Devcade Hero state class
 
