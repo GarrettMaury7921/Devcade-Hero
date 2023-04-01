@@ -44,47 +44,65 @@ namespace DevcadeGame.GameManager
             Height = PreferredBackBufferHeight;
         }
 
-        public void CalculatePosition(Rectangle fretLineRect, float fretLineRotationAngle, int note_width, int note_height)
+        int count = 0;
+        public void CalculatePosition(Rectangle noteRect, float fretLineRotationAngle, int note_width, int note_height)
         {
             // Calculate the position of the note, taking into account the fret line's position and rotation
-            Vector2 notePos = new Vector2(_position.X + (note_width / 2), fretLineRect.Center.Y);
+            Vector2 notePos = new Vector2(_position.X + (note_width / 2), noteRect.Center.Y);
             Matrix rotationMatrix = Matrix.CreateRotationZ(fretLineRotationAngle);
-            notePos = Vector2.Transform(notePos - fretLineRect.Center.ToVector2(), rotationMatrix) + fretLineRect.Center.ToVector2();
+            notePos = Vector2.Transform(notePos - noteRect.Center.ToVector2(), rotationMatrix) + noteRect.Center.ToVector2();
 
             // Set the position of the note
             float xOffset = 0;
+            float yOffset = 2;
 
+            count++;
             switch (Lane)
             {
                 case 4:
-                    xOffset = -0.1f;
+                    if (count % 5 == 0)
+                    {
+                        xOffset = -0.2f;
+                    }
                     break;
                 case 5:
                     // Calculate offset for lane 1
+                    xOffset = -0.2f;
                     break;
                 case 6:
                     // Calculate offset for lane 2
+                    xOffset = -0.2f;
                     break;
                 case 7:
                     // Calculate offset for lane 3
+                    if (count % 20 == 0)
+                    {
+                        xOffset = -1.0000074f;
+                    }
                     break;
                 case 0:
                     // Calculate offset for lane 4
+                    xOffset = -0.2f;
                     break;
                 case 1:
                     // Calculate offset for lane 5
+                    xOffset = -0.0f;
                     break;
                 case 2:
                     // Calculate offset for lane 6
+                    xOffset = 0.0f;
                     break;
                 case 3:
                     // Calculate offset for lane 7
+                    xOffset = -0.0f;
                     break;
             }
 
             notePos.X += xOffset;
-            Position = new Rectangle((int)(notePos.X - note_width / 2), (int)(notePos.Y - note_height / 2) + 1, note_width, note_height);
+            notePos.Y += yOffset;
+            Position = new Rectangle((int)(notePos.X - note_width / 2), (int)(notePos.Y - note_height / 2), note_width, note_height);
         }
+
 
 
 

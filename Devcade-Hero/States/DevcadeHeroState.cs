@@ -401,7 +401,7 @@ namespace DevcadeGame.States
                 {
                     songTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     // SONG TIME
-                    Debug.WriteLine(songTime);
+                    // Debug.WriteLine(songTime);
 
                     if (songTime >= 4.6f && drum_stick_counter == 1)
                     {
@@ -651,7 +651,11 @@ namespace DevcadeGame.States
                 } // switch statement
 
                 // Fix position
-                fredline_rect.Y -= 500;
+                fredline_rect.Y -= 350;
+                if (color[i] == 7)
+                {
+                    fredline_rect.X -= 10;
+                }
 
                 // Make a note for each note and add it to the note list
                 Note note = new(texture, ticks[i], length[i], lane, _preferredBackBufferWidth, _preferredBackBufferHeight,
