@@ -118,6 +118,7 @@ namespace DevcadeGame.States
         private List<double> time_between_notes;
         private List<Note> notes;
         private bool songPlaying;
+        private bool songPlayed;
 
         // Timing of Notes
         private float songTime;
@@ -154,6 +155,7 @@ namespace DevcadeGame.States
             drum_stick_counter = 0;
             MenuState.inGame = true;
             songPlaying = false;
+            songPlayed = false;
 
             highway_offset = 10;
             highwayX = (_preferredBackBufferWidth - highway_width) / 2;
@@ -345,6 +347,12 @@ namespace DevcadeGame.States
             // Draw Fret Lines
             DrawFredLines(spriteBatch);
 
+            // Draw the fred board
+            spriteBatch.Draw(fred_board, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+
+            // Draw held freds when pressed down
+            DrawHeldFredLines(spriteBatch);
+
             // DRAW NOTES WHEN READY
             if (drum_stick_counter >= 1 && songPlaying)
             {
@@ -355,15 +363,7 @@ namespace DevcadeGame.States
                 }
             }
 
-            // Draw the fred board
-            spriteBatch.Draw(fred_board, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
-
-            // Draw held freds when pressed down
-            DrawHeldFredLines(spriteBatch);
-
-            // DRAW NOTES
-
-        }
+        } // Draw Method
 
 
         // GAME CONTROLS:
@@ -401,14 +401,26 @@ namespace DevcadeGame.States
                 {
                     songTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     // SONG TIME
-                    // Debug.WriteLine(songTime);
+                    Debug.WriteLine(songTime);
 
                     if (songTime >= 4.6f && drum_stick_counter == 1)
                     {
-                        songTime -= 4.6f;
                         drum_stick_counter++;
                         songPlaying = true;
-                        MediaPlayer.Play(song);
+                    }
+                    if (songTime >= 5.1f)
+                    {
+                        songTime -= 5.1f;
+                        if (!songPlayed)
+                        {
+                            MediaPlayer.Play(song);
+                            songPlayed = true;
+                        }
+                        else
+                        {
+                            MediaPlayer.Stop();
+                        }
+                        
                     }
                 }
 
