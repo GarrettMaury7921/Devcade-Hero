@@ -23,6 +23,8 @@ namespace DevcadeGame.GameManager
         public int Lane { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public double NoteTime { get; set; }
+        public float NoteSpeed { get; set; }
 
         // Attributes
         private Rectangle _position; // private field to store the position
@@ -34,7 +36,7 @@ namespace DevcadeGame.GameManager
         }
 
         public Note(Texture2D texture, float tick, float tick_length, int lane, int PreferredBackBufferWidth,
-            int PreferredBackBufferHeight, int note_width, int note_height)
+            int PreferredBackBufferHeight, int note_width, int note_height, double time_between_notes)
         {
             Texture = texture;
             Tick = tick;
@@ -42,27 +44,29 @@ namespace DevcadeGame.GameManager
             Lane = lane;
             Width = PreferredBackBufferWidth;
             Height = PreferredBackBufferHeight;
+            NoteTime = time_between_notes;
+            NoteSpeed = 3.999997f;
         }
 
         int count = 0;
         public void CalculatePosition(Rectangle noteRect, float fretLineRotationAngle, int note_width, int note_height)
         {
             // Calculate the position of the note, taking into account the fret line's position and rotation
-            Vector2 notePos = new Vector2(_position.X + (note_width / 2), noteRect.Center.Y);
+            Vector2 notePos = new(_position.X + (note_width / 2), noteRect.Center.Y);
             Matrix rotationMatrix = Matrix.CreateRotationZ(fretLineRotationAngle);
             notePos = Vector2.Transform(notePos - noteRect.Center.ToVector2(), rotationMatrix) + noteRect.Center.ToVector2();
 
             // Set the position of the note
             float xOffset = 0;
-            float yOffset = 2;
+            float yOffset = NoteSpeed;
 
             count++;
             switch (Lane)
             {
                 case 4:
-                    if (count % 5 == 0)
+                    if (count % 10 == 0)
                     {
-                        xOffset = -0.2f;
+                        xOffset = -3.2f;
                     }
                     break;
                 case 5:
@@ -77,7 +81,7 @@ namespace DevcadeGame.GameManager
                     // Calculate offset for lane 3
                     if (count % 20 == 0)
                     {
-                        xOffset = -1.0000074f;
+                        xOffset = -2.2f;
                     }
                     break;
                 case 0:
@@ -102,9 +106,5 @@ namespace DevcadeGame.GameManager
             notePos.Y += yOffset;
             Position = new Rectangle((int)(notePos.X - note_width / 2), (int)(notePos.Y - note_height / 2), note_width, note_height);
         }
-
-
-
-
     }
 }

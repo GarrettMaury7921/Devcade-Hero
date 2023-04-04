@@ -353,15 +353,20 @@ namespace DevcadeGame.States
             // Draw held freds when pressed down
             DrawHeldFredLines(spriteBatch);
 
-            // DRAW NOTES WHEN READY
-            if (drum_stick_counter >= 1 && songPlaying)
+            // DRAW NOTES WHEN READY AFTER DRUMSTICKS
+            if (songPlayed)
             {
-                foreach (Note note in notes)
+                // Filter the notes that are supposed to appear at or before the current song time
+                var visibleNotes = notes.Where(n => n.NoteTime - time_between_notes.First() <= songTime);
+
+                // Draw the visible notes
+                foreach (Note note in visibleNotes)
                 {
                     note.CalculatePosition(note.Position, note.fretLineRotationAngle, note_width, note_height);
                     spriteBatch.Draw(note.Texture, note.Position, Color.White);
                 }
-            }
+
+            } // drum stick if statement
 
         } // Draw Method
 
@@ -591,7 +596,7 @@ namespace DevcadeGame.States
                 Texture2D texture = null;
                 int lane = color[i];
                 float angle = 0f;
-                Rectangle fredline_rect = new Rectangle();
+                Rectangle fredline_rect = new();
 
                 // Associate a texture with the color
                 // AND FRET LINE, ROTATION ANGLE
@@ -659,7 +664,7 @@ namespace DevcadeGame.States
 
                 // Make a note for each note and add it to the note list
                 Note note = new(texture, ticks[i], length[i], lane, _preferredBackBufferWidth, _preferredBackBufferHeight,
-                    note_width, note_height)
+                    note_width, note_height, time_between_notes[i])
                 {
                     Position = fredline_rect,
                     fretLineRotationAngle = angle
