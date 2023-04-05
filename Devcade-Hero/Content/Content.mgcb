@@ -406,6 +406,36 @@
 /processorParam:Quality=Best
 /build:Songs/welcome_to_the_jungle_PCM.wav
 
+#begin Sound_Effects/bad_note1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/bad_note1.wav
+
+#begin Sound_Effects/bad_note2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/bad_note2.wav
+
+#begin Sound_Effects/bad_note3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/bad_note3.wav
+
+#begin Sound_Effects/bad_note4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/bad_note4.wav
+
+#begin Sound_Effects/bad_note5.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound_Effects/bad_note5.wav
+
 #begin Sound_Effects/drum_sticks.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

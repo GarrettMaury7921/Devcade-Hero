@@ -45,7 +45,7 @@ namespace DevcadeGame.GameManager
             Width = PreferredBackBufferWidth;
             Height = PreferredBackBufferHeight;
             NoteTime = time_between_notes;
-            NoteSpeed = 3.999997f;
+            NoteSpeed = 3.999969399f;
         }
 
         int count = 0;
@@ -66,7 +66,7 @@ namespace DevcadeGame.GameManager
                 case 4:
                     if (count % 10 == 0)
                     {
-                        xOffset = -3.2f;
+                        xOffset = -3.21f;
                     }
                     break;
                 case 5:

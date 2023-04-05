@@ -100,6 +100,16 @@ namespace DevcadeGame.States
         private int note_x;
         private readonly int note_count;
 
+        // Make Note Rectangle and Fred Note down Rectangles for hit box purposes
+        private Rectangle blue1_down_rect;
+        private Rectangle blue2_down_rect;
+        private Rectangle blue3_down_rect;
+        private Rectangle blue4_down_rect;
+        private Rectangle red_down_rect;
+        private Rectangle blue5_down_rect;
+        private Rectangle green_down_rect;
+        private Rectangle white_down_rect;
+
         private Model highway3D;
         private Texture2D highway_3Dtexture;
 
@@ -110,12 +120,12 @@ namespace DevcadeGame.States
         private float timer;
 
         // Note information
-        private List<int> bpms;
-        private List<int> bpm_time;
-        private List<int> note_ticks;
-        private List<int> note_color;
-        private List<int> note_length;
-        private List<double> time_between_notes;
+        private readonly List<int> bpms;
+        private readonly List<int> bpm_time;
+        private readonly List<int> note_ticks;
+        private readonly List<int> note_color;
+        private readonly List<int> note_length;
+        private readonly List<double> time_between_notes;
         private List<Note> notes;
         private bool songPlaying;
         private bool songPlayed;
@@ -127,6 +137,11 @@ namespace DevcadeGame.States
         private int drum_stick_counter;
         private SoundEffect notes_ripple;
         private SoundEffect drum_sticks;
+        private SoundEffect bad_note_hit;
+        private SoundEffect bad_note_hit2;
+        private SoundEffect bad_note_hit3;
+        private SoundEffect bad_note_hit4;
+        private SoundEffect bad_note_hit5;
 
         public void Initialize()
         {
@@ -189,6 +204,11 @@ namespace DevcadeGame.States
             MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged; // subscribe so no bug
             notes_ripple = _content.Load<SoundEffect>("Sound_Effects/notes_ripple_up");
             drum_sticks = _content.Load<SoundEffect>("Sound_Effects/drum_sticks");
+            bad_note_hit = _content.Load<SoundEffect>("Sound_Effects/bad_note1");
+            bad_note_hit2 = _content.Load<SoundEffect>("Sound_Effects/bad_note2");
+            bad_note_hit3 = _content.Load<SoundEffect>("Sound_Effects/bad_note3");
+            bad_note_hit4 = _content.Load<SoundEffect>("Sound_Effects/bad_note4");
+            bad_note_hit5 = _content.Load<SoundEffect>("Sound_Effects/bad_note5");
 
             // Fred Lines
             fred_line_width = 1;
@@ -295,8 +315,19 @@ namespace DevcadeGame.States
             note_length = chartTranslator.GetNoteLength();
             time_between_notes = chartTranslator.TimeBetweenNotes();
             note_count = chartTranslator.GetNoteCount();
+            
             // Make the notes so we can draw them later
             MakeNotes(note_ticks, note_color, note_length);
+
+            // Make the note rectangles
+            blue1_down_rect = new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height);
+            blue2_down_rect = new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height);
+            blue3_down_rect = new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height);
+            blue4_down_rect = new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height);
+            red_down_rect = new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height);
+            blue5_down_rect = new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height);
+            green_down_rect = new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height);
+            white_down_rect = new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height);
 
             // Get the background/video/song for the selected song
             // _state_name is the song name
@@ -351,7 +382,7 @@ namespace DevcadeGame.States
             spriteBatch.Draw(fred_board, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
 
             // Draw held freds when pressed down
-            DrawHeldFredLines(spriteBatch);
+            DrawHeldFredNotes(spriteBatch);
 
             // DRAW NOTES WHEN READY AFTER DRUMSTICKS
             if (songPlayed)
@@ -387,8 +418,12 @@ namespace DevcadeGame.States
 
             CheckP1Buttons(currentKeyboardState);
 
+            // Check if user is pressing the correct note while the texture is over it
+            NoteHitDetection();
+
             previousKeyboardState = currentKeyboardState;
 
+            // Game and song setup
             if (timer < 0.5)
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
@@ -413,19 +448,20 @@ namespace DevcadeGame.States
                         drum_stick_counter++;
                         songPlaying = true;
                     }
-                    if (songTime >= 5.1f)
+                    if (songTime >= 5.1f && drum_stick_counter == 2)
                     {
                         songTime -= 5.1f;
                         if (!songPlayed)
                         {
                             MediaPlayer.Play(song);
                             songPlayed = true;
-                        }
-                        else
-                        {
-                            MediaPlayer.Stop();
+                            drum_stick_counter++;
                         }
                         
+                    }
+                    if (songTime > MediaPlayer.Queue.ActiveSong.Duration.TotalSeconds)
+                    {
+                        MediaPlayer.Stop();
                     }
                 }
 
@@ -443,6 +479,7 @@ namespace DevcadeGame.States
         {
             MenuState.inGame = true;
         } // MediaPlayer_MediaStateChanged method
+        
         public void DrawFredLines(SpriteBatch spriteBatch)
         {
             // Left
@@ -474,41 +511,41 @@ namespace DevcadeGame.States
                 0f);
         }
 
-        public void DrawHeldFredLines(SpriteBatch spriteBatch)
+        public void DrawHeldFredNotes(SpriteBatch spriteBatch)
         {
             // Draw held freds when pressed down
             if (blue1down)
             {
-                spriteBatch.Draw(blue1down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+                spriteBatch.Draw(blue1down_pic, blue1_down_rect, Color.White);
             }
             if (blue2down)
             {
-                spriteBatch.Draw(blue2down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+                spriteBatch.Draw(blue2down_pic, blue2_down_rect, Color.White);
             }
             if (blue3down)
             {
-                spriteBatch.Draw(blue3down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+                spriteBatch.Draw(blue3down_pic, blue3_down_rect, Color.White);
             }
             if (blue4down)
             {
-                spriteBatch.Draw(blue4down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+                spriteBatch.Draw(blue4down_pic, blue4_down_rect, Color.White);
             }
 
             if (reddown)
             {
-                spriteBatch.Draw(reddown_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+                spriteBatch.Draw(reddown_pic, red_down_rect, Color.White);
             }
             if (blue5down)
             {
-                spriteBatch.Draw(blue5down_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+                spriteBatch.Draw(blue5down_pic, blue5_down_rect, Color.White);
             }
             if (greendown)
             {
-                spriteBatch.Draw(greendown_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+                spriteBatch.Draw(greendown_pic, green_down_rect, Color.White);
             }
             if (whitedown)
             {
-                spriteBatch.Draw(whitedown_pic, new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height), Color.White);
+                spriteBatch.Draw(whitedown_pic, white_down_rect, Color.White);
             }
         } // DrawHeldSpriteLines Method
 
@@ -586,6 +623,142 @@ namespace DevcadeGame.States
                 whitedown = false;
             }
         } // CheckP1Buttons Method
+        
+        public void NoteHitDetection()
+        {
+            // Go through each note
+            bool lane1 = false;
+            bool lane2 = false;
+            bool lane3 = false;
+            bool lane4 = false;
+            bool lane5 = false;
+            bool lane6 = false;
+            bool lane7 = false;
+            bool lane8 = false;
+
+            foreach (Note note in notes.ToList())
+            {
+
+                // Depending on what lane the note is in
+                switch (note.Lane)
+                {
+                    case 4:
+                        if (blue1down && note.Position.Intersects(blue1_down_rect))
+                        {
+                            Debug.WriteLine("Blue1 Hit!!");
+                            notes.Remove(note);
+                        }
+                        else if (blue1down && !note.Position.Intersects(blue1_down_rect))
+                        {
+                            Debug.WriteLine("Blue1 Missed!!");
+                            PlayBadNote();
+                        }
+                        lane1 = true;
+                        break;
+                    case 5:
+                        if (blue2down && note.Position.Intersects(blue2_down_rect))
+                        {
+                            Debug.WriteLine("Blue2 Hit!!");
+                            notes.Remove(note);
+                        }
+                        else if (blue2down && !note.Position.Intersects(blue2_down_rect))
+                        {
+                            Debug.WriteLine("Blue2 Missed!!");
+                            PlayBadNote();
+                        }
+                        lane2 = true;
+                        break;
+                    case 6:
+                        if (blue3down && note.Position.Intersects(blue3_down_rect))
+                        {
+                            Debug.WriteLine("Blue3 Hit!!");
+                            notes.Remove(note);
+                        }
+                        else if (blue3down && !note.Position.Intersects(blue3_down_rect))
+                        {
+                            Debug.WriteLine("Blue3 Missed!!");
+                            PlayBadNote();
+                        }
+                        lane3 = true;
+                        break;
+                    case 7:
+                        if (blue4down && note.Position.Intersects(blue4_down_rect))
+                        {
+                            Debug.WriteLine("Blue4 Hit!!");
+                            notes.Remove(note);
+                        }
+                        else if (blue4down && !note.Position.Intersects(blue4_down_rect))
+                        {
+                            Debug.WriteLine("Blue4 Missed!!");
+                            PlayBadNote();
+                        }
+                        lane4 = true;
+                        break;
+                    case 0:
+                        if (reddown && note.Position.Intersects(red_down_rect))
+                        {
+                            Debug.WriteLine("red Hit!!");
+                            notes.Remove(note);
+                        }
+                        else if (reddown && !note.Position.Intersects(red_down_rect))
+                        {
+                            Debug.WriteLine("red Missed!!");
+                            PlayBadNote();
+                        }
+                        lane5 = true;
+                        break;
+                    case 1:
+                        if (blue5down && note.Position.Intersects(blue5_down_rect))
+                        {
+                            Debug.WriteLine("Blue5 Hit!!");
+                            notes.Remove(note);
+                        }
+                        else if (blue5down && !note.Position.Intersects(blue5_down_rect))
+                        {
+                            Debug.WriteLine("Blue5 Missed!!");
+                            PlayBadNote();
+                        }
+                        lane6 = true;
+                        break;
+                    case 2:
+                        if (greendown && note.Position.Intersects(green_down_rect))
+                        {
+                            Debug.WriteLine("green Hit!!");
+                            notes.Remove(note);
+                        }
+                        else if (greendown && !note.Position.Intersects(green_down_rect))
+                        {
+                            Debug.WriteLine("green Missed!!");
+                            PlayBadNote();
+                        }
+                        lane7 = true;
+                        break;
+                    case 3:
+                        if (whitedown && note.Position.Intersects(white_down_rect))
+                        {
+                            Debug.WriteLine("white Hit!!");
+                            notes.Remove(note);
+                        }
+                        else if (whitedown && !note.Position.Intersects(white_down_rect))
+                        {
+                            Debug.WriteLine("white Missed!!");
+                            PlayBadNote();
+                        }
+                        lane8 = true;
+                        break;
+
+                } // switch statement
+
+            } // for each
+
+            if ((blue1down && !lane1) || (blue2down && !lane2) || (blue3down && !lane3) || (blue4down && !lane4) ||
+                (reddown && !lane5) || (blue5down && !lane6) || (greendown && !lane7) || (whitedown && !lane8))
+            {
+                Debug.WriteLine("Missed, NOTHING IN LANE!");
+                PlayBadNote();
+            }
+
+        } // note hit detection method
 
         public void MakeNotes(List<int> ticks, List<int> color, List<int> length)
         {
@@ -674,6 +847,34 @@ namespace DevcadeGame.States
             } // for loop
 
         } // Make Notes method
+
+        public void PlayBadNote()
+        {
+            Random random = new();
+            int value = random.Next(1, 6); // generates a random value between x and y-1 (inclusive)
+            switch (value)
+            {
+                case 1:
+                    bad_note_hit.Play();
+                    break;
+                case 2:
+                    bad_note_hit2.Play();
+                    break;
+                case 3:
+                    bad_note_hit3.Play();
+                    break;
+                case 4:
+                    bad_note_hit4.Play();
+                    break;
+                case 5:
+                    bad_note_hit5.Play();
+                    break;
+                default:
+                    bad_note_hit.Play();
+                    break;
+            } // switch statement
+
+        } // Play Bad Note Method
 
     } // Devcade Hero state class
 

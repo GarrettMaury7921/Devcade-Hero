@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using Devcade;
 using System.Linq;
-using System.Diagnostics;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
