@@ -70,15 +70,19 @@ namespace DevcadeGame
             _graphics.PreferredBackBufferHeight = 980;
             _graphics.ApplyChanges();
 #else
-			_graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-			_graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+			_graphics.PreferredBackBufferWidth = 420;
+            _graphics.PreferredBackBufferHeight = 980;
 			_graphics.ApplyChanges();
 #endif
-			#endregion
+            #endregion
 
-			base.Initialize();
+            base.Initialize();
 		}
-
+        /*
+           _graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+			_graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+			_graphics.ApplyChanges();
+        */
 
 
 		/// <summary>

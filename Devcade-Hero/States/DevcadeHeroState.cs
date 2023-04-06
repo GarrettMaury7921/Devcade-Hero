@@ -143,6 +143,11 @@ namespace DevcadeGame.States
         private SoundEffect bad_note_hit4;
         private SoundEffect bad_note_hit5;
 
+        // Note timing
+        private System.Timers.Timer buttonTimer;
+        bool canPressButton;
+
+
         public void Initialize()
         {
             #region
@@ -151,11 +156,17 @@ namespace DevcadeGame.States
             highway_height = 735;
             fred_board_height = 21;
 #else
-			highway_width = 922;
-            highway_height = 2000;
-            fred_board_height = 64;
+			highway_width = 310;
+            highway_height = 735;
+            fred_board_height = 21;
 #endif
             #endregion
+            /*
+            highway_width = 922;
+            highway_height = 2000;
+            fred_board_height = 64;
+            */
+
 
             // Attributes                                                                       // COMMENTS BELOW
             blue1down = false;
@@ -338,6 +349,13 @@ namespace DevcadeGame.States
 
             // Play the sound effect
             notes_ripple.Play();
+
+            // Note Timing
+            buttonTimer = new System.Timers.Timer
+            {
+                Interval = 500000
+            };
+            canPressButton = true;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)
@@ -439,7 +457,9 @@ namespace DevcadeGame.States
                 }
                 else
                 {
+                    // Increment the song time
                     songTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                     // SONG TIME
                     // Debug.WriteLine(songTime);
 
@@ -558,6 +578,11 @@ namespace DevcadeGame.States
             else if (previousKeyboardState.IsKeyDown(Keys.Z) || Input.GetButtonUp(1, Input.ArcadeButtons.B1))
             {
                 blue1down = false;
+
+                // Set "canPressButton" to true again
+                canPressButton = true;
+                // Stop the timer
+                buttonTimer.Stop();
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.X) || Input.GetButton(1, Input.ArcadeButtons.B2))
@@ -567,6 +592,9 @@ namespace DevcadeGame.States
             else if (previousKeyboardState.IsKeyDown(Keys.X) || Input.GetButtonUp(1, Input.ArcadeButtons.B2))
             {
                 blue2down = false;
+
+                canPressButton = true;
+                buttonTimer.Stop();
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.C) || Input.GetButton(1, Input.ArcadeButtons.B3))
@@ -576,6 +604,9 @@ namespace DevcadeGame.States
             else if (previousKeyboardState.IsKeyDown(Keys.C) || Input.GetButtonUp(1, Input.ArcadeButtons.B3))
             {
                 blue3down = false;
+
+                canPressButton = true;
+                buttonTimer.Stop();
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.V) || Input.GetButton(1, Input.ArcadeButtons.B4))
@@ -585,6 +616,9 @@ namespace DevcadeGame.States
             else if (previousKeyboardState.IsKeyDown(Keys.V) || Input.GetButtonUp(1, Input.ArcadeButtons.B4))
             {
                 blue4down = false;
+
+                canPressButton = true;
+                buttonTimer.Stop();
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Q) || Input.GetButton(1, Input.ArcadeButtons.A1))
@@ -594,6 +628,9 @@ namespace DevcadeGame.States
             else if (previousKeyboardState.IsKeyDown(Keys.Q) || Input.GetButtonUp(1, Input.ArcadeButtons.A1))
             {
                 reddown = false;
+
+                canPressButton = true;
+                buttonTimer.Stop();
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.W) || Input.GetButton(1, Input.ArcadeButtons.A2))
@@ -603,6 +640,9 @@ namespace DevcadeGame.States
             else if (previousKeyboardState.IsKeyDown(Keys.W) || Input.GetButtonUp(1, Input.ArcadeButtons.A2))
             {
                 blue5down = false;
+
+                canPressButton = true;
+                buttonTimer.Stop();
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.E) || Input.GetButton(1, Input.ArcadeButtons.A3))
@@ -612,6 +652,9 @@ namespace DevcadeGame.States
             else if (previousKeyboardState.IsKeyDown(Keys.E) || Input.GetButtonUp(1, Input.ArcadeButtons.A3))
             {
                 greendown = false;
+
+                canPressButton = true;
+                buttonTimer.Stop();
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.R) || Input.GetButton(1, Input.ArcadeButtons.A4))
@@ -621,6 +664,9 @@ namespace DevcadeGame.States
             else if (previousKeyboardState.IsKeyDown(Keys.R) || Input.GetButtonUp(1, Input.ArcadeButtons.A4))
             {
                 whitedown = false;
+
+                canPressButton = true;
+                buttonTimer.Stop();
             }
         } // CheckP1Buttons Method
         
@@ -638,111 +684,159 @@ namespace DevcadeGame.States
 
             foreach (Note note in notes.ToList())
             {
-
                 // Depending on what lane the note is in
                 switch (note.Lane)
                 {
                     case 4:
-                        if (blue1down && note.Position.Intersects(blue1_down_rect))
+                        if (blue1down && note.Position.Intersects(blue1_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("Blue1 Hit!!");
                             notes.Remove(note);
+
+                            // If the if statement condition is true, set "canPressButton" to false and start a new timer
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
-                        else if (blue1down && !note.Position.Intersects(blue1_down_rect))
+                        else if (blue1down && !note.Position.Intersects(blue1_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("Blue1 Missed!!");
                             PlayBadNote();
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
                         lane1 = true;
                         break;
                     case 5:
-                        if (blue2down && note.Position.Intersects(blue2_down_rect))
+                        if (blue2down && note.Position.Intersects(blue2_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("Blue2 Hit!!");
                             notes.Remove(note);
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
-                        else if (blue2down && !note.Position.Intersects(blue2_down_rect))
+                        else if (blue2down && !note.Position.Intersects(blue2_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("Blue2 Missed!!");
                             PlayBadNote();
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
                         lane2 = true;
                         break;
                     case 6:
-                        if (blue3down && note.Position.Intersects(blue3_down_rect))
+                        if (blue3down && note.Position.Intersects(blue3_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("Blue3 Hit!!");
                             notes.Remove(note);
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
-                        else if (blue3down && !note.Position.Intersects(blue3_down_rect))
+                        else if (blue3down && !note.Position.Intersects(blue3_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("Blue3 Missed!!");
                             PlayBadNote();
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
                         lane3 = true;
                         break;
                     case 7:
-                        if (blue4down && note.Position.Intersects(blue4_down_rect))
+                        if (blue4down && note.Position.Intersects(blue4_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("Blue4 Hit!!");
                             notes.Remove(note);
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
-                        else if (blue4down && !note.Position.Intersects(blue4_down_rect))
+                        else if (blue4down && !note.Position.Intersects(blue4_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("Blue4 Missed!!");
                             PlayBadNote();
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
                         lane4 = true;
                         break;
                     case 0:
-                        if (reddown && note.Position.Intersects(red_down_rect))
+                        if (reddown && note.Position.Intersects(red_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("red Hit!!");
                             notes.Remove(note);
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
-                        else if (reddown && !note.Position.Intersects(red_down_rect))
+                        else if (reddown && !note.Position.Intersects(red_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("red Missed!!");
                             PlayBadNote();
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
                         lane5 = true;
                         break;
                     case 1:
-                        if (blue5down && note.Position.Intersects(blue5_down_rect))
+                        if (blue5down && note.Position.Intersects(blue5_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("Blue5 Hit!!");
                             notes.Remove(note);
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
-                        else if (blue5down && !note.Position.Intersects(blue5_down_rect))
+                        else if (blue5down && !note.Position.Intersects(blue5_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("Blue5 Missed!!");
                             PlayBadNote();
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
                         lane6 = true;
                         break;
                     case 2:
-                        if (greendown && note.Position.Intersects(green_down_rect))
+                        if (greendown && note.Position.Intersects(green_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("green Hit!!");
                             notes.Remove(note);
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
-                        else if (greendown && !note.Position.Intersects(green_down_rect))
+                        else if (greendown && !note.Position.Intersects(green_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("green Missed!!");
                             PlayBadNote();
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
                         lane7 = true;
                         break;
                     case 3:
-                        if (whitedown && note.Position.Intersects(white_down_rect))
+                        if (whitedown && note.Position.Intersects(white_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("white Hit!!");
                             notes.Remove(note);
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
-                        else if (whitedown && !note.Position.Intersects(white_down_rect))
+                        else if (whitedown && !note.Position.Intersects(white_down_rect) && canPressButton)
                         {
                             Debug.WriteLine("white Missed!!");
                             PlayBadNote();
+
+                            canPressButton = false;
+                            buttonTimer.Start();
                         }
                         lane8 = true;
                         break;
@@ -751,11 +845,23 @@ namespace DevcadeGame.States
 
             } // for each
 
-            if ((blue1down && !lane1) || (blue2down && !lane2) || (blue3down && !lane3) || (blue4down && !lane4) ||
-                (reddown && !lane5) || (blue5down && !lane6) || (greendown && !lane7) || (whitedown && !lane8))
+            // ELAPSED EVENT HANDLER FOR THE TIMER
+            buttonTimer.Elapsed += (sender, e) => {
+                // Set "canPressButton" to true again
+                canPressButton = true;
+                // Stop the timer
+                buttonTimer.Stop();
+            };
+
+            if (((blue1down && !lane1) || (blue2down && !lane2) || (blue3down && !lane3) || (blue4down && !lane4) ||
+                (reddown && !lane5) || (blue5down && !lane6) || (greendown && !lane7) || (whitedown && !lane8)) && canPressButton)
             {
                 Debug.WriteLine("Missed, NOTHING IN LANE!");
                 PlayBadNote();
+
+                // If the if statement condition is true, set "canPressButton" to false and start a new timer
+                canPressButton = false;
+                buttonTimer.Start();
             }
 
         } // note hit detection method
