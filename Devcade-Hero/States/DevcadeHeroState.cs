@@ -690,7 +690,7 @@ namespace DevcadeGame.States
                     case 4:
                         if (blue1down && note.Position.Intersects(blue1_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("Blue1 Hit!!");
+                            //Debug.WriteLine("Blue1 Hit!!");
                             notes.Remove(note);
 
                             // If the if statement condition is true, set "canPressButton" to false and start a new timer
@@ -699,7 +699,7 @@ namespace DevcadeGame.States
                         }
                         else if (blue1down && !note.Position.Intersects(blue1_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("Blue1 Missed!!");
+                            //Debug.WriteLine("Blue1 Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -710,7 +710,7 @@ namespace DevcadeGame.States
                     case 5:
                         if (blue2down && note.Position.Intersects(blue2_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("Blue2 Hit!!");
+                            //Debug.WriteLine("Blue2 Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
@@ -718,7 +718,7 @@ namespace DevcadeGame.States
                         }
                         else if (blue2down && !note.Position.Intersects(blue2_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("Blue2 Missed!!");
+                            //Debug.WriteLine("Blue2 Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -729,7 +729,7 @@ namespace DevcadeGame.States
                     case 6:
                         if (blue3down && note.Position.Intersects(blue3_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("Blue3 Hit!!");
+                            //Debug.WriteLine("Blue3 Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
@@ -737,7 +737,7 @@ namespace DevcadeGame.States
                         }
                         else if (blue3down && !note.Position.Intersects(blue3_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("Blue3 Missed!!");
+                            //Debug.WriteLine("Blue3 Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -748,7 +748,7 @@ namespace DevcadeGame.States
                     case 7:
                         if (blue4down && note.Position.Intersects(blue4_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("Blue4 Hit!!");
+                            //Debug.WriteLine("Blue4 Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
@@ -756,7 +756,7 @@ namespace DevcadeGame.States
                         }
                         else if (blue4down && !note.Position.Intersects(blue4_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("Blue4 Missed!!");
+                            //Debug.WriteLine("Blue4 Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -767,7 +767,7 @@ namespace DevcadeGame.States
                     case 0:
                         if (reddown && note.Position.Intersects(red_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("red Hit!!");
+                            //Debug.WriteLine("red Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
@@ -775,7 +775,7 @@ namespace DevcadeGame.States
                         }
                         else if (reddown && !note.Position.Intersects(red_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("red Missed!!");
+                            //Debug.WriteLine("red Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -786,7 +786,7 @@ namespace DevcadeGame.States
                     case 1:
                         if (blue5down && note.Position.Intersects(blue5_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("Blue5 Hit!!");
+                            //Debug.WriteLine("Blue5 Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
@@ -794,7 +794,7 @@ namespace DevcadeGame.States
                         }
                         else if (blue5down && !note.Position.Intersects(blue5_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("Blue5 Missed!!");
+                            //Debug.WriteLine("Blue5 Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -805,7 +805,7 @@ namespace DevcadeGame.States
                     case 2:
                         if (greendown && note.Position.Intersects(green_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("green Hit!!");
+                            //Debug.WriteLine("green Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
@@ -813,7 +813,7 @@ namespace DevcadeGame.States
                         }
                         else if (greendown && !note.Position.Intersects(green_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("green Missed!!");
+                            //Debug.WriteLine("green Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -824,7 +824,7 @@ namespace DevcadeGame.States
                     case 3:
                         if (whitedown && note.Position.Intersects(white_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("white Hit!!");
+                            //Debug.WriteLine("white Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
@@ -832,7 +832,7 @@ namespace DevcadeGame.States
                         }
                         else if (whitedown && !note.Position.Intersects(white_down_rect) && canPressButton)
                         {
-                            Debug.WriteLine("white Missed!!");
+                            //Debug.WriteLine("white Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -842,6 +842,14 @@ namespace DevcadeGame.States
                         break;
 
                 } // switch statement
+
+                // Check if note is off screen when missed
+                if ((note.Position.Y > _preferredBackBufferHeight) && songPlayed)
+                {
+                    //Debug.WriteLine("NOTE OFF SCREEN!");
+                    notes.Remove(note);
+                    PlayBadNote();
+                }
 
             } // for each
 
@@ -856,7 +864,7 @@ namespace DevcadeGame.States
             if (((blue1down && !lane1) || (blue2down && !lane2) || (blue3down && !lane3) || (blue4down && !lane4) ||
                 (reddown && !lane5) || (blue5down && !lane6) || (greendown && !lane7) || (whitedown && !lane8)) && canPressButton)
             {
-                Debug.WriteLine("Missed, NOTHING IN LANE!");
+                //Debug.WriteLine("Missed, NOTHING IN LANE!");
                 PlayBadNote();
 
                 // If the if statement condition is true, set "canPressButton" to false and start a new timer
@@ -939,6 +947,10 @@ namespace DevcadeGame.States
                 if (color[i] == 7)
                 {
                     fredline_rect.X -= 10;
+                }
+                if (color[i] >= 0 && color[i] <= 3)
+                {
+                    fredline_rect.X -= 20;
                 }
 
                 // Make a note for each note and add it to the note list

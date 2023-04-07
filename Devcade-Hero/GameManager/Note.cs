@@ -64,41 +64,60 @@ namespace DevcadeGame.GameManager
             switch (Lane)
             {
                 case 4:
+                    // Calculate offset for lane 1
                     if (count % 10 == 0)
                     {
                         xOffset = -3.21f;
                     }
                     break;
                 case 5:
-                    // Calculate offset for lane 1
-                    xOffset = -0.2f;
+                    // Calculate offset for lane 2
+                    if (count % 10 == 0)
+                    {
+                        xOffset = -3.0000048f;
+                    }
                     break;
                 case 6:
-                    // Calculate offset for lane 2
-                    xOffset = -0.2f;
+                    // Calculate offset for lane 3
+                    if (count % 10 == 0)
+                    {
+                        xOffset = -3.000007f;
+                    }
                     break;
                 case 7:
-                    // Calculate offset for lane 3
+                    // Calculate offset for lane 4
                     if (count % 20 == 0)
                     {
                         xOffset = -2.2f;
                     }
                     break;
                 case 0:
-                    // Calculate offset for lane 4
-                    xOffset = -0.2f;
+                    // Calculate offset for lane 5
+                    if (count % 10 == 0)
+                    {
+                        xOffset = 1.7f;
+                    }
                     break;
                 case 1:
-                    // Calculate offset for lane 5
-                    xOffset = -0.0f;
+                    // Calculate offset for lane 6
+                    if (count % 10 == 0)
+                    {
+                        xOffset = 2.3f;
+                    }
                     break;
                 case 2:
-                    // Calculate offset for lane 6
-                    xOffset = 0.0f;
+                    // Calculate offset for lane 7
+                    if (count % 10 == 0)
+                    {
+                        xOffset = 3.001f;
+                    }
                     break;
                 case 3:
-                    // Calculate offset for lane 7
-                    xOffset = -0.0f;
+                    // Calculate offset for lane 8
+                    if (count % 10 == 0)
+                    {
+                        xOffset = 3.21f;
+                    }
                     break;
             }
 

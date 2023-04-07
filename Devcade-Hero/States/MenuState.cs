@@ -57,10 +57,10 @@ namespace DevcadeGame.States
         private bool keyPressed;
         private int currentButton;
         private int randomValue;
-        private float centerX;
-        private float centerY;
-        private int buttonWidth;
-        private int buttonHeight;
+        private readonly float centerX;
+        private readonly float centerY;
+        private readonly int buttonWidth;
+        private readonly int buttonHeight;
         public static bool inGame;
 
         // *************************************
@@ -420,7 +420,13 @@ namespace DevcadeGame.States
         {
             // Set difficulty
             SetDifficultyID(1);
-
+            
+            // Casual Mode
+            if (_gameID == 1)
+            {
+                ChangeMenuBackground(setlist_background);
+                _components = _setlist_components;
+            }
             SelectSound().Play();
         }
 
