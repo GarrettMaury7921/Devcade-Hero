@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using DevcadeGame.States;
-using DevcadeGame.Sounds;
+using DevcadeHero.States;
+using DevcadeHero.Sounds;
 using Devcade;
 using Kettu;
 
-namespace DevcadeGame
+namespace DevcadeHero
 {
 
     /* 

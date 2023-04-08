@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 
-namespace DevcadeGame.Controls
+namespace DevcadeHero.Controls
 {
     /* 
     Class Slider:

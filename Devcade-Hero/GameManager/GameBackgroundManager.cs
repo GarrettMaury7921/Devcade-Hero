@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
-namespace DevcadeGame.GameManager
+namespace DevcadeHero.GameManager
 {
     /* 
     Class GameBackgroundManager:

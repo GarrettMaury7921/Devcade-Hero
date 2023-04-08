@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
 
-namespace DevcadeGame
+namespace DevcadeHero
 {
     /* 
     Abstract Class Component:

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace DevcadeGame.GameManager
+namespace DevcadeHero.GameManager
 {
     // .chart file format for Devcade Scraper
     //  N 4 = blue1

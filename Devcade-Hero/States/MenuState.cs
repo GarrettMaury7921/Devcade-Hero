@@ -1,4 +1,4 @@
-﻿using DevcadeGame.Controls;
+﻿using DevcadeHero.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -13,7 +13,7 @@ using System.Linq;
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
 
-namespace DevcadeGame.States
+namespace DevcadeHero.States
 {
     /* 
     Class MenuState:

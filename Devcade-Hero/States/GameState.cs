@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
 
-namespace DevcadeGame.States
+namespace DevcadeHero.States
 {
     /* 
     Skeleton Class GameState:

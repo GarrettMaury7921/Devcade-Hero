@@ -9,7 +9,7 @@ using Devcade;
 using System;
 using Kettu;
 
-namespace DevcadeGame.States
+namespace DevcadeHero.States
 {
     /* 
     Class IntroState:

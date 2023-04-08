@@ -6,7 +6,7 @@ using System;
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
 
-namespace DevcadeGame.Controls
+namespace DevcadeHero.Controls
 {
     /* 
     Class Button:

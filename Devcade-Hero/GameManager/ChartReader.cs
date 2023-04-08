@@ -1,4 +1,4 @@
-﻿using DevcadeGame.States;
+﻿using DevcadeHero.States;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +6,7 @@ using System.IO;
 // CHART FILE SPECIFICATIONS
 // https://docs.google.com/document/d/1v2v0U-9HQ5qHeccpExDOLJ5CMPZZ3QytPmAG5WF0Kzs/edit#heading=h.uhxt6eceagq9
 
-namespace DevcadeGame.GameManager
+namespace DevcadeHero.GameManager
 {
     /* 
     Class ChartReader:
