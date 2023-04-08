@@ -7,6 +7,11 @@ This was created using C# and Monogame.
 ### Dependencies
 (To be added)
 
+### How to play on Windows:
+(To be added)
+
+### How to play on Linux:
+(To be added)
 
 ### Making Songs (.wav)
 OBS: System Audio with wav (Audio) container format
