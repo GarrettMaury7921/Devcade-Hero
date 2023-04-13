@@ -582,7 +582,11 @@ namespace DevcadeHero.States
             // Make keyboard state so cursor only moves once when pressed
             KeyboardState currentKeyboardState = Keyboard.GetState();
 
-            if (currentKeyboardState.GetPressedKeys().Length > 0 || IntroState.DevcadeButtonCheck() == true)
+            if (currentKeyboardState.GetPressedKeys().Length > 0 || IntroState.DevcadeButtonCheck() == true 
+                || Input.GetButton(1, Input.ArcadeButtons.StickUp) 
+                || Input.GetButton(2, Input.ArcadeButtons.StickUp)
+                || Input.GetButton(1, Input.ArcadeButtons.StickDown)
+                || Input.GetButton(2, Input.ArcadeButtons.StickDown))
             {
                 // Get number of elements so we can move the cursor up and down and know the limits
                 int numOfElements = _components.Count;
