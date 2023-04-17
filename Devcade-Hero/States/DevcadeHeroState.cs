@@ -9,6 +9,7 @@ using Devcade;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System.Linq;
+using System.Diagnostics;
 
 namespace DevcadeHero.States
 {
@@ -145,6 +146,10 @@ namespace DevcadeHero.States
         // Note timing
         private System.Timers.Timer buttonTimer;
         bool canPressButton;
+
+        // Score calculations
+        int noteHits;
+        int noteLateMiss;
 
 
         public void Initialize()
@@ -436,7 +441,8 @@ namespace DevcadeHero.States
             CheckP1Buttons(currentKeyboardState);
 
             // Check if user is pressing the correct note while the texture is over it
-            NoteHitDetection();
+            NoteHitDetection(blue1_down_rect, blue2_down_rect, blue3_down_rect, blue4_down_rect, red_down_rect,
+                blue5_down_rect, green_down_rect, white_down_rect);
 
             previousKeyboardState = currentKeyboardState;
 
@@ -669,7 +675,9 @@ namespace DevcadeHero.States
             }
         } // CheckP1Buttons Method
         
-        public void NoteHitDetection()
+        public void NoteHitDetection(Rectangle blue1_down_rect, Rectangle blue2_down_rect, Rectangle blue3_down_rect,
+            Rectangle blue4_down_rect, Rectangle red_down_rect, Rectangle blue5_down_rect, Rectangle green_down_rect,
+            Rectangle white_down_rect)
         {
             // Go through each note
             bool lane1 = false;
@@ -687,18 +695,26 @@ namespace DevcadeHero.States
                 switch (note.Lane)
                 {
                     case 4:
-                        if (blue1down && note.Position.Intersects(blue1_down_rect) && canPressButton)
+                        if (blue1down && note.Position.Intersects(new Rectangle(
+                            blue1_down_rect.X,
+                            blue1_down_rect.Y - 10,
+                            blue1_down_rect.Width, 
+                            blue1_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("Blue1 Hit!!");
+                            Debug.WriteLine("Blue1 Hit!!");
                             notes.Remove(note);
 
                             // If the if statement condition is true, set "canPressButton" to false and start a new timer
                             canPressButton = false;
                             buttonTimer.Start();
                         }
-                        else if (blue1down && !note.Position.Intersects(blue1_down_rect) && canPressButton)
+                        else if (blue1down && !note.Position.Intersects(new Rectangle(
+                            blue1_down_rect.X,
+                            blue1_down_rect.Y - 10,
+                            blue1_down_rect.Width,
+                            blue1_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("Blue1 Missed!!");
+                            Debug.WriteLine("Blue1 Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -707,17 +723,25 @@ namespace DevcadeHero.States
                         lane1 = true;
                         break;
                     case 5:
-                        if (blue2down && note.Position.Intersects(blue2_down_rect) && canPressButton)
+                        if (blue2down && note.Position.Intersects(new Rectangle(
+                            blue2_down_rect.X,
+                            blue2_down_rect.Y - 10,
+                            blue2_down_rect.Width,
+                            blue2_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("Blue2 Hit!!");
+                            Debug.WriteLine("Blue2 Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
                             buttonTimer.Start();
                         }
-                        else if (blue2down && !note.Position.Intersects(blue2_down_rect) && canPressButton)
+                        else if (blue2down && !note.Position.Intersects(new Rectangle(
+                            blue2_down_rect.X,
+                            blue2_down_rect.Y - 10,
+                            blue2_down_rect.Width,
+                            blue2_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("Blue2 Missed!!");
+                            Debug.WriteLine("Blue2 Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -726,17 +750,25 @@ namespace DevcadeHero.States
                         lane2 = true;
                         break;
                     case 6:
-                        if (blue3down && note.Position.Intersects(blue3_down_rect) && canPressButton)
+                        if (blue3down && note.Position.Intersects(new Rectangle(
+                            blue3_down_rect.X,
+                            blue3_down_rect.Y - 10,
+                            blue3_down_rect.Width,
+                            blue3_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("Blue3 Hit!!");
+                            Debug.WriteLine("Blue3 Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
                             buttonTimer.Start();
                         }
-                        else if (blue3down && !note.Position.Intersects(blue3_down_rect) && canPressButton)
+                        else if (blue3down && !note.Position.Intersects(new Rectangle(
+                            blue3_down_rect.X,
+                            blue3_down_rect.Y - 10,
+                            blue3_down_rect.Width,
+                            blue3_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("Blue3 Missed!!");
+                            Debug.WriteLine("Blue3 Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -745,17 +777,25 @@ namespace DevcadeHero.States
                         lane3 = true;
                         break;
                     case 7:
-                        if (blue4down && note.Position.Intersects(blue4_down_rect) && canPressButton)
+                        if (blue4down && note.Position.Intersects(new Rectangle(
+                            blue4_down_rect.X,
+                            blue4_down_rect.Y - 10,
+                            blue4_down_rect.Width,
+                            blue4_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("Blue4 Hit!!");
+                            Debug.WriteLine("Blue4 Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
                             buttonTimer.Start();
                         }
-                        else if (blue4down && !note.Position.Intersects(blue4_down_rect) && canPressButton)
+                        else if (blue4down && !note.Position.Intersects(new Rectangle(
+                            blue4_down_rect.X,
+                            blue4_down_rect.Y - 10,
+                            blue4_down_rect.Width,
+                            blue4_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("Blue4 Missed!!");
+                            Debug.WriteLine("Blue4 Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -764,17 +804,25 @@ namespace DevcadeHero.States
                         lane4 = true;
                         break;
                     case 0:
-                        if (reddown && note.Position.Intersects(red_down_rect) && canPressButton)
+                        if (reddown && note.Position.Intersects(new Rectangle(
+                            red_down_rect.X,
+                            red_down_rect.Y - 10,
+                            red_down_rect.Width,
+                            red_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("red Hit!!");
+                            Debug.WriteLine("red Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
                             buttonTimer.Start();
                         }
-                        else if (reddown && !note.Position.Intersects(red_down_rect) && canPressButton)
+                        else if (reddown && !note.Position.Intersects(new Rectangle(
+                            red_down_rect.X,
+                            red_down_rect.Y - 10,
+                            red_down_rect.Width,
+                            red_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("red Missed!!");
+                            Debug.WriteLine("red Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -783,17 +831,25 @@ namespace DevcadeHero.States
                         lane5 = true;
                         break;
                     case 1:
-                        if (blue5down && note.Position.Intersects(blue5_down_rect) && canPressButton)
+                        if (blue5down && note.Position.Intersects(new Rectangle(
+                            blue5_down_rect.X,
+                            blue5_down_rect.Y - 10,
+                            blue5_down_rect.Width,
+                            blue5_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("Blue5 Hit!!");
+                            Debug.WriteLine("Blue5 Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
                             buttonTimer.Start();
                         }
-                        else if (blue5down && !note.Position.Intersects(blue5_down_rect) && canPressButton)
+                        else if (blue5down && !note.Position.Intersects(new Rectangle(
+                            blue5_down_rect.X,
+                            blue5_down_rect.Y - 10,
+                            blue5_down_rect.Width,
+                            blue5_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("Blue5 Missed!!");
+                            Debug.WriteLine("Blue5 Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -802,17 +858,25 @@ namespace DevcadeHero.States
                         lane6 = true;
                         break;
                     case 2:
-                        if (greendown && note.Position.Intersects(green_down_rect) && canPressButton)
+                        if (greendown && note.Position.Intersects(new Rectangle(
+                            green_down_rect.X,
+                            green_down_rect.Y - 10,
+                            green_down_rect.Width,
+                            green_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("green Hit!!");
+                            Debug.WriteLine("green Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
                             buttonTimer.Start();
                         }
-                        else if (greendown && !note.Position.Intersects(green_down_rect) && canPressButton)
+                        else if (greendown && !note.Position.Intersects(new Rectangle(
+                            green_down_rect.X,
+                            green_down_rect.Y - 10,
+                            green_down_rect.Width,
+                            green_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("green Missed!!");
+                            Debug.WriteLine("green Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -821,17 +885,25 @@ namespace DevcadeHero.States
                         lane7 = true;
                         break;
                     case 3:
-                        if (whitedown && note.Position.Intersects(white_down_rect) && canPressButton)
+                        if (whitedown && note.Position.Intersects(new Rectangle(
+                            white_down_rect.X,
+                            white_down_rect.Y - 10,
+                            white_down_rect.Width,
+                            white_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("white Hit!!");
+                            Debug.WriteLine("white Hit!!");
                             notes.Remove(note);
 
                             canPressButton = false;
                             buttonTimer.Start();
                         }
-                        else if (whitedown && !note.Position.Intersects(white_down_rect) && canPressButton)
+                        else if (whitedown && !note.Position.Intersects(new Rectangle(
+                            white_down_rect.X,
+                            white_down_rect.Y - 10,
+                            white_down_rect.Width,
+                            white_down_rect.Height + 10)) && canPressButton)
                         {
-                            //Debug.WriteLine("white Missed!!");
+                            Debug.WriteLine("white Missed!!");
                             PlayBadNote();
 
                             canPressButton = false;
@@ -863,7 +935,7 @@ namespace DevcadeHero.States
             if (((blue1down && !lane1) || (blue2down && !lane2) || (blue3down && !lane3) || (blue4down && !lane4) ||
                 (reddown && !lane5) || (blue5down && !lane6) || (greendown && !lane7) || (whitedown && !lane8)) && canPressButton)
             {
-                //Debug.WriteLine("Missed, NOTHING IN LANE!");
+                Debug.WriteLine("Missed, NOTHING IN LANE!");
                 PlayBadNote();
 
                 // If the if statement condition is true, set "canPressButton" to false and start a new timer

@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using Devcade;
 using System.Linq;
+using System.Timers;
+using System.Diagnostics;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -62,6 +64,7 @@ namespace DevcadeHero.States
         private readonly int buttonWidth;
         private readonly int buttonHeight;
         public static bool inGame;
+        private int timer;
 
         // *************************************
         // ***** SETTER AND GETTER METHODS *****
@@ -101,7 +104,6 @@ namespace DevcadeHero.States
             buttonHeight = 60;
             centerX = (_preferredBackBufferWidth - buttonWidth) / 2;
             centerY = (_preferredBackBufferHeight - buttonHeight) / 2;
-
 
             // ***** LOAD ASSETS *****
             // Load another background for the set list
@@ -469,6 +471,9 @@ namespace DevcadeHero.States
 
         public override void Update(GameTime gameTime)
         {
+            timer += 1;
+            // Debug.WriteLine(timer);
+
             // Put the menu items on the screen
             foreach (var component in _components)
             {
@@ -582,11 +587,12 @@ namespace DevcadeHero.States
             // Make keyboard state so cursor only moves once when pressed
             KeyboardState currentKeyboardState = Keyboard.GetState();
 
-            if (currentKeyboardState.GetPressedKeys().Length > 0 || IntroState.DevcadeButtonCheck() == true 
+            if ((currentKeyboardState.GetPressedKeys().Length > 0 || IntroState.DevcadeButtonCheck() == true 
                 || Input.GetButton(1, Input.ArcadeButtons.StickUp) 
                 || Input.GetButton(2, Input.ArcadeButtons.StickUp)
                 || Input.GetButton(1, Input.ArcadeButtons.StickDown)
                 || Input.GetButton(2, Input.ArcadeButtons.StickDown))
+                && timer > 20)
             {
                 // Get number of elements so we can move the cursor up and down and know the limits
                 int numOfElements = _components.Count;
