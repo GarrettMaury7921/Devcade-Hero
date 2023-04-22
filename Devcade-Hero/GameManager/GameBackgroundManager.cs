@@ -19,6 +19,7 @@ namespace DevcadeHero.GameManager
         private readonly string song_name;
         private string videoName;
         private Song song;
+        public float delay;
 
         public GameBackgroundManager(string songName)
         {
@@ -31,6 +32,9 @@ namespace DevcadeHero.GameManager
             switch (songName)
             {
                 case "tester":
+                    videoName = null;
+                    break;
+                case "Kalimba (Ninja Tuna)":
                     videoName = null;
                     break;
                 default:
@@ -46,6 +50,12 @@ namespace DevcadeHero.GameManager
             {
                 case "tester":
                     song = content.Load<Song>("Songs/tester");
+                    delay = 0;
+                    break;
+
+                case "Kalimba (Ninja Tuna)":
+                    song = content.Load<Song>("Songs/Kalimba (Ninja Tuna)");
+                    delay = 1.7f;
                     break;
 
                 default:
@@ -61,6 +71,9 @@ namespace DevcadeHero.GameManager
             switch (songName)
             {
                 case "tester":
+                    background = content.Load<Texture2D>("Game_Assets/outside");
+                    break;
+                case "Kalimba (Ninja Tuna)":
                     background = content.Load<Texture2D>("Game_Assets/outside");
                     break;
                 // default is null

@@ -473,17 +473,26 @@ namespace DevcadeHero.States
                         drum_stick_counter++;
                         songPlaying = true;
                     }
+
                     if (songTime >= 5.1f && drum_stick_counter == 2)
                     {
                         songTime -= 5.1f;
                         if (!songPlayed)
                         {
                             MediaPlayer.Play(song);
-                            songPlayed = true;
                             drum_stick_counter++;
                         }
-                        
+
                     }
+                    // Implement the delay for the notes
+                    if (songTime > backgroundManager.delay && drum_stick_counter == 3)
+                    {
+                        songPlayed = true;
+                        songTime -= backgroundManager.delay;
+                        drum_stick_counter++;
+                    }
+
+                    // If the song is over
                     if (songTime > MediaPlayer.Queue.ActiveSong.Duration.TotalSeconds)
                     {
                         MediaPlayer.Stop();

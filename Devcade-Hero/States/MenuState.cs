@@ -235,6 +235,17 @@ namespace DevcadeHero.States
             };
             Setlist_BackButton.Click += SetListBackButton_Click;
 
+            var Kalimba = new Button(devcade_ButtonTexture, devcadeButtonFont)
+            {
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.14f)), (int)(centerY + (PreferredBackBufferHeight * -0.25f))),
+                Text = "Kalimba(NinjaTuna)",
+                // Make the text go to the left
+                textOffset = new Vector2(-20, 0),
+                PenColour = Color.Yellow,
+            };
+            Kalimba.Click += Kalimba_Click;
+
+
             // ***** ALL SLIDERS DEFINED BELOW *****
             // MUSIC VOLUME SLIDER
             var MusicVolumeSliderButton = new Button(buttonTexture, buttonFont)
@@ -305,6 +316,7 @@ namespace DevcadeHero.States
             _setlist_components = new List<Component>()
             {
                 Setlist_test,
+                Kalimba,
                 Setlist_BackButton,
             };
 
@@ -361,6 +373,22 @@ namespace DevcadeHero.States
 
             // Make the Devcade Hero State, the state name is the name of the song/chart file
             DevcadeHero_State = new DevcadeHeroState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "tester");
+
+            // Stop the media player
+            mediaPlayerKillSwitch = true;
+            MediaPlayer.Stop();
+
+            // Change State 
+            Game1.ChangeState(DevcadeHero_State);
+        }
+
+        private void Kalimba_Click(object sender, EventArgs e)
+        {
+            _components = _empty_components;
+            SelectSound().Play();
+
+            // Make the Devcade Hero State, the state name is the name of the song/chart file
+            DevcadeHero_State = new DevcadeHeroState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "Kalimba (Ninja Tuna)");
 
             // Stop the media player
             mediaPlayerKillSwitch = true;
