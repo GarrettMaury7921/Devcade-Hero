@@ -55,7 +55,7 @@ namespace DevcadeHero.GameManager
 
                 case "Kalimba (Ninja Tuna)":
                     song = content.Load<Song>("Songs/Kalimba (Ninja Tuna)");
-                    delay = 1.7f;
+                    delay = 2.1f;
                     break;
 
                 default:

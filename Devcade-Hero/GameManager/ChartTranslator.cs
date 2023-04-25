@@ -20,7 +20,8 @@ namespace DevcadeHero.GameManager
     {
         // Attributes
         private List<String> _notes;
-        private long default_bpm = 120; // default BPM value
+        private int current_bpm;
+        private int default_bpm = 120; // default BPM value
         private int _resolution = 192; // default resolution value
         private int tsValue;
         private List<int> _bpms;
@@ -30,6 +31,8 @@ namespace DevcadeHero.GameManager
         private List<int> _note_length;
 
         private int count;
+        private int bpm_checker;
+        private int last_tick;
         private List<double> _time_between_notes;
 
         public ChartTranslator(List<String> notes)
@@ -42,6 +45,9 @@ namespace DevcadeHero.GameManager
             _note_color = new List<int>();
             _note_length = new List<int>();
             _time_between_notes = new List<double>();
+            current_bpm = default_bpm;
+            last_tick = 0;
+            bpm_checker = 0;
 
             /*foreach (string _notes in notes)
             {
@@ -90,7 +96,9 @@ namespace DevcadeHero.GameManager
                     int firstValue = 0;
                     int lastValue = 0;
 
-                    string[] parts = _notes.Split(' ');
+                    string[] parts = _notes.Split(new char[] { ' ', '\n', '\r' }, 
+                        StringSplitOptions.RemoveEmptyEntries);
+
                     if (parts.Length >= 3)
                     {
                         int.TryParse(parts[0], out firstValue);
@@ -189,29 +197,48 @@ namespace DevcadeHero.GameManager
                     count++;
                     double note_time = 0;
                     double last_tick = 0;
-                    if(count == 1)
+
+                    if (count == 1)
                     {
-                        note_time = (_note_ticks.ElementAt(count - 1) - last_tick) / _resolution * 60.0 / default_bpm;
-                        last_tick = _note_ticks.ElementAt(count - 1);
+
+                        // Check if the bpm has changed
+                        //Debug.WriteLine(bpm_checker + " <= " + _bpm_time.Count + " && " + _bpm_time[bpm_checker] + " >= 0");
+                        if (bpm_checker <= _bpm_time.Count && _bpm_time[bpm_checker] >= 0)
+                        {
+                            current_bpm = _bpms[bpm_checker] / 1000;
+                            //Debug.WriteLine("REAL BPM " + current_bpm + "\n");
+                            bpm_checker++;
+                        }
                     }
                     else
                     {
-                        note_time = (_note_ticks.ElementAt(count - 1) - last_tick) / _resolution * 60.0 / default_bpm;
-                        last_tick = _note_ticks.ElementAt(count - 1);
+                        // Check if the bpm has changed
+                        //Debug.WriteLine("BPM CHECKER " + bpm_checker);
+                        //Debug.WriteLine(count + " bpm time : " + _bpm_time[bpm_checker]);
+                        //Debug.WriteLine(bpm_checker + " <= " + _bpm_time.Count + " && " + _note_ticks.ElementAt(count - 2) + " >= " + _bpm_time[bpm_checker]);
+                        if (bpm_checker <= _bpm_time.Count - 1 && _note_ticks.ElementAt(count - 2) >= _bpm_time[bpm_checker])
+                        {
+                            current_bpm = _bpms[bpm_checker] / 1000;
+                            //Debug.WriteLine("REAL BPM " + current_bpm + "\n");
+                            bpm_checker++;
+                        }
                     }
+
+
+                    note_time = (_note_ticks.ElementAt(count - 1) - last_tick) / _resolution * 60.0 / current_bpm;
+                    last_tick = _note_ticks.ElementAt(count - 1);
+
                     _time_between_notes.Add(note_time);
 
                 } // Note if statement
 
             } // for each statement
 
-            /*
             // DEBUGGING     
             foreach (double num in _time_between_notes)
             {
                 Debug.WriteLine(num);
             }
-            */
 
         } // Constructor
 
@@ -224,32 +251,26 @@ namespace DevcadeHero.GameManager
         {
             return _bpm_time;
         }
-
         public List<int> GetBPM()
         {
             return _bpms;
         }
-
         public List<int> GetNoteTickTime() 
         {
             return _note_ticks;
         }
-
         public List<int> GetNoteColor()
         {
             return _note_color;
         }
-
         public List<int> GetNoteLength()
         {
             return _note_length;
         }
-
         public List<double> TimeBetweenNotes()
         {
             return _time_between_notes;
         }
-
         public int GetNoteCount()
         {
             return GetNoteColor().Count;

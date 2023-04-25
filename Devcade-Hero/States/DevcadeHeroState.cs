@@ -706,9 +706,9 @@ namespace DevcadeHero.States
                     case 4:
                         if (blue1down && note.Position.Intersects(new Rectangle(
                             blue1_down_rect.X,
-                            blue1_down_rect.Y - 10,
+                            blue1_down_rect.Y - 12,
                             blue1_down_rect.Width, 
-                            blue1_down_rect.Height + 10)) && canPressButton)
+                            blue1_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("Blue1 Hit!!");
                             notes.Remove(note);
@@ -719,9 +719,9 @@ namespace DevcadeHero.States
                         }
                         else if (blue1down && !note.Position.Intersects(new Rectangle(
                             blue1_down_rect.X,
-                            blue1_down_rect.Y - 10,
+                            blue1_down_rect.Y - 12,
                             blue1_down_rect.Width,
-                            blue1_down_rect.Height + 10)) && canPressButton)
+                            blue1_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("Blue1 Missed!!");
                             PlayBadNote();
@@ -734,9 +734,9 @@ namespace DevcadeHero.States
                     case 5:
                         if (blue2down && note.Position.Intersects(new Rectangle(
                             blue2_down_rect.X,
-                            blue2_down_rect.Y - 10,
+                            blue2_down_rect.Y - 12,
                             blue2_down_rect.Width,
-                            blue2_down_rect.Height + 10)) && canPressButton)
+                            blue2_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("Blue2 Hit!!");
                             notes.Remove(note);
@@ -746,9 +746,9 @@ namespace DevcadeHero.States
                         }
                         else if (blue2down && !note.Position.Intersects(new Rectangle(
                             blue2_down_rect.X,
-                            blue2_down_rect.Y - 10,
+                            blue2_down_rect.Y - 12,
                             blue2_down_rect.Width,
-                            blue2_down_rect.Height + 10)) && canPressButton)
+                            blue2_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("Blue2 Missed!!");
                             PlayBadNote();
@@ -761,9 +761,9 @@ namespace DevcadeHero.States
                     case 6:
                         if (blue3down && note.Position.Intersects(new Rectangle(
                             blue3_down_rect.X,
-                            blue3_down_rect.Y - 10,
+                            blue3_down_rect.Y - 12,
                             blue3_down_rect.Width,
-                            blue3_down_rect.Height + 10)) && canPressButton)
+                            blue3_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("Blue3 Hit!!");
                             notes.Remove(note);
@@ -773,9 +773,9 @@ namespace DevcadeHero.States
                         }
                         else if (blue3down && !note.Position.Intersects(new Rectangle(
                             blue3_down_rect.X,
-                            blue3_down_rect.Y - 10,
+                            blue3_down_rect.Y - 12,
                             blue3_down_rect.Width,
-                            blue3_down_rect.Height + 10)) && canPressButton)
+                            blue3_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("Blue3 Missed!!");
                             PlayBadNote();
@@ -788,9 +788,9 @@ namespace DevcadeHero.States
                     case 7:
                         if (blue4down && note.Position.Intersects(new Rectangle(
                             blue4_down_rect.X,
-                            blue4_down_rect.Y - 10,
+                            blue4_down_rect.Y - 12,
                             blue4_down_rect.Width,
-                            blue4_down_rect.Height + 10)) && canPressButton)
+                            blue4_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("Blue4 Hit!!");
                             notes.Remove(note);
@@ -800,9 +800,9 @@ namespace DevcadeHero.States
                         }
                         else if (blue4down && !note.Position.Intersects(new Rectangle(
                             blue4_down_rect.X,
-                            blue4_down_rect.Y - 10,
+                            blue4_down_rect.Y - 12,
                             blue4_down_rect.Width,
-                            blue4_down_rect.Height + 10)) && canPressButton)
+                            blue4_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("Blue4 Missed!!");
                             PlayBadNote();
@@ -815,9 +815,9 @@ namespace DevcadeHero.States
                     case 0:
                         if (reddown && note.Position.Intersects(new Rectangle(
                             red_down_rect.X,
-                            red_down_rect.Y - 10,
+                            red_down_rect.Y - 12,
                             red_down_rect.Width,
-                            red_down_rect.Height + 10)) && canPressButton)
+                            red_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("red Hit!!");
                             notes.Remove(note);
@@ -827,9 +827,9 @@ namespace DevcadeHero.States
                         }
                         else if (reddown && !note.Position.Intersects(new Rectangle(
                             red_down_rect.X,
-                            red_down_rect.Y - 10,
+                            red_down_rect.Y - 12,
                             red_down_rect.Width,
-                            red_down_rect.Height + 10)) && canPressButton)
+                            red_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("red Missed!!");
                             PlayBadNote();
@@ -842,9 +842,9 @@ namespace DevcadeHero.States
                     case 1:
                         if (blue5down && note.Position.Intersects(new Rectangle(
                             blue5_down_rect.X,
-                            blue5_down_rect.Y - 10,
+                            blue5_down_rect.Y - 12,
                             blue5_down_rect.Width,
-                            blue5_down_rect.Height + 10)) && canPressButton)
+                            blue5_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("Blue5 Hit!!");
                             notes.Remove(note);
@@ -854,9 +854,9 @@ namespace DevcadeHero.States
                         }
                         else if (blue5down && !note.Position.Intersects(new Rectangle(
                             blue5_down_rect.X,
-                            blue5_down_rect.Y - 10,
+                            blue5_down_rect.Y - 12,
                             blue5_down_rect.Width,
-                            blue5_down_rect.Height + 10)) && canPressButton)
+                            blue5_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("Blue5 Missed!!");
                             PlayBadNote();
@@ -869,9 +869,9 @@ namespace DevcadeHero.States
                     case 2:
                         if (greendown && note.Position.Intersects(new Rectangle(
                             green_down_rect.X,
-                            green_down_rect.Y - 10,
+                            green_down_rect.Y - 12,
                             green_down_rect.Width,
-                            green_down_rect.Height + 10)) && canPressButton)
+                            green_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("green Hit!!");
                             notes.Remove(note);
@@ -881,9 +881,9 @@ namespace DevcadeHero.States
                         }
                         else if (greendown && !note.Position.Intersects(new Rectangle(
                             green_down_rect.X,
-                            green_down_rect.Y - 10,
+                            green_down_rect.Y - 12,
                             green_down_rect.Width,
-                            green_down_rect.Height + 10)) && canPressButton)
+                            green_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("green Missed!!");
                             PlayBadNote();
@@ -896,9 +896,9 @@ namespace DevcadeHero.States
                     case 3:
                         if (whitedown && note.Position.Intersects(new Rectangle(
                             white_down_rect.X,
-                            white_down_rect.Y - 10,
+                            white_down_rect.Y - 12,
                             white_down_rect.Width,
-                            white_down_rect.Height + 10)) && canPressButton)
+                            white_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("white Hit!!");
                             notes.Remove(note);
@@ -908,9 +908,9 @@ namespace DevcadeHero.States
                         }
                         else if (whitedown && !note.Position.Intersects(new Rectangle(
                             white_down_rect.X,
-                            white_down_rect.Y - 10,
+                            white_down_rect.Y - 12,
                             white_down_rect.Width,
-                            white_down_rect.Height + 10)) && canPressButton)
+                            white_down_rect.Height + 12)) && canPressButton)
                         {
                             Debug.WriteLine("white Missed!!");
                             PlayBadNote();
