@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using Devcade;
 using System.Linq;
-using System.Timers;
 using System.Diagnostics;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
@@ -511,6 +510,9 @@ namespace DevcadeHero.States
             // Menu Controls
             DoMenuControls();
 
+            // Check if coming back from DevcadeHeroState
+            FixMenu();
+
         }
 
         public override void PostUpdate(GameTime gameTime)
@@ -824,6 +826,17 @@ namespace DevcadeHero.States
             }
 
         } // Do Menu Controls
+
+        private void FixMenu()
+        {
+            if (_state_name.Equals("HeroToMenu"))
+            {
+                ChangeMenuBackground(main_menu_background);
+                _components = _main_menu_components;
+                _state_name = "MenuState";
+            }
+            
+        }
 
     } // Public class MenuState end
 

@@ -67,7 +67,7 @@ namespace DevcadeHero.States
         {
             // THERE ARE CURRENTLY 3 INTROS
             Random random = new();
-            randomValue = random.Next(1, 5); // generates a random value between x and y-1 (inclusive)
+            randomValue = random.Next(1, 2); // generates a random value between x and y-1 (inclusive)
             switch (randomValue)
             {
                 // SET ALL PARAMETERS FOR EACH INTRO
