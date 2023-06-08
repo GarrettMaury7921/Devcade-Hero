@@ -19,6 +19,8 @@ namespace DevcadeHero.GameManager
     public class ChartTranslator
     {
         // Attributes
+        private bool DEBUG = false;
+
         private List<String> _notes;
         private int current_bpm;
         private int default_bpm = 120; // default BPM value
@@ -229,7 +231,8 @@ namespace DevcadeHero.GameManager
                         //Debug.WriteLine(bpm_checker + " <= " + _bpm_time.Count + " && " + _note_ticks.ElementAt(count - 2) + " >= " + _bpm_time[bpm_checker]);
                         if (bpm_checker <= _bpm_time.Count - 1 && _note_ticks.ElementAt(count - 1) >= _bpm_time[bpm_checker])
                         {
-                            Debug.WriteLine(_bpms[bpm_checker] + " " + _bpms[bpm_checker - 1]);
+                            if (DEBUG)
+                                Debug.WriteLine(_bpms[bpm_checker] + " " + _bpms[bpm_checker - 1]);
                         }
                         if (bpm_checker <= _bpm_time.Count - 1 && _note_ticks.ElementAt(count - 1) >= _bpm_time[bpm_checker])
                         {
@@ -242,18 +245,21 @@ namespace DevcadeHero.GameManager
                                 {
                                     last_bpm_time = ((((last_tick) - 0) * 60.0) / current_bpm) / _resolution;
                                     _bpm_fractions += last_bpm_time;
-                                    Debug.WriteLine("\nLAST BPM TIME: (" + last_tick + " - 0) * 60.0) / " + current_bpm + ") / " + _resolution + " = " + last_bpm_time);
+                                    if (DEBUG)
+                                        Debug.WriteLine("\nLAST BPM TIME: (" + last_tick + " - 0) * 60.0) / " + current_bpm + ") / " + _resolution + " = " + last_bpm_time);
                                 }
                                 if (_bpm_fractions_checker > 0)
                                 {
                                     last_bpm_time = (((((last_tick) - _bpm_time[bpm_checker - 1]) * 60.0) / current_bpm) / _resolution) + _bpm_fractions;
-                                    Debug.WriteLine("\nLAST BPM TIME: (" + last_tick + " - " + _bpm_time[bpm_checker - 1] + ") * 60.0) / " + current_bpm + ") / " + _resolution +  " + " + _bpm_fractions + " = " + last_bpm_time);
+                                    if (DEBUG)
+                                        Debug.WriteLine("\nLAST BPM TIME: (" + last_tick + " - " + _bpm_time[bpm_checker - 1] + ") * 60.0) / " + current_bpm + ") / " + _resolution +  " + " + _bpm_fractions + " = " + last_bpm_time);
                                     _bpm_fractions = last_bpm_time;
                                 }
                                 _bpm_fractions_checker++;
 
                                 current_bpm = _bpms[bpm_checker] / 1000;
-                                Debug.WriteLine("REAL BPM " + current_bpm + "\n");
+                                if (DEBUG)
+                                    Debug.WriteLine("REAL BPM " + current_bpm + "\n");
 
                                 current_note_time = _time_between_notes[count - 2];
                             }
@@ -272,15 +278,6 @@ namespace DevcadeHero.GameManager
                     // (tickEnd - tickStart) / resolution * 60.0(seconds per minute) / bpm
                     // Then we are adding the last note time to find the time from the start of the song instead of from the last bpm event
                     note_time = ((((_note_ticks.ElementAt(count - 1) - last_tick) * 60.0) / current_bpm) / _resolution) + last_bpm_time;
-
-
-                    // Math Debug for the note time
-                    if(_time_between_notes.Any())
-                    {
-                        Debug.WriteLine("(((" + (_note_ticks.ElementAt(count - 1) + " - " + last_tick + ") * 60.0) / " + current_bpm + ") / " +
-                        _resolution + " + " + last_bpm_time + " = " + note_time));
-                    }
-                    
 
                     // Add to the list
                     _time_between_notes.Add(note_time);

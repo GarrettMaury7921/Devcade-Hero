@@ -495,11 +495,18 @@ namespace DevcadeHero.States
                     // If the song is over
                     if (songTime > MediaPlayer.Queue.ActiveSong.Duration.TotalSeconds)
                     {
+                        // Stop everything
                         MediaPlayer.Stop();
+                        
+                        // Reset all Variables
+                        Initialize();
 
+                        MediaPlayer.MediaStateChanged -= MediaPlayer_MediaStateChanged;
+                        MenuState.inGame = false;
+                        _graphicsDevice.Reset();
 
                         // Change back to menu for now
-                        MenuState menu_state = new MenuState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "HeroToMenu");
+                        MenuState menu_state = new(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "HeroToMenu");
                         // Go to the Menu State
                         Game1.ChangeState(menu_state);
                     }

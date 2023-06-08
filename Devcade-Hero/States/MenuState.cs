@@ -379,6 +379,9 @@ namespace DevcadeHero.States
 
             // Change State 
             Game1.ChangeState(DevcadeHero_State);
+
+            // Unsubscribe and reset the class when changing states
+            Unsubscribe();
         }
 
         private void Kalimba_Click(object sender, EventArgs e)
@@ -395,6 +398,9 @@ namespace DevcadeHero.States
 
             // Change State 
             Game1.ChangeState(DevcadeHero_State);
+            
+            // Unsubscribe and reset the class when changing states
+            Unsubscribe();
         }
 
         private void SetListBackButton_Click(object sender, EventArgs e)
@@ -566,6 +572,7 @@ namespace DevcadeHero.States
             if (inGame)
             {
                 // Do Nothing
+                Debug.WriteLine("We are in game!!!");
             }
             else
             {
@@ -831,11 +838,38 @@ namespace DevcadeHero.States
         {
             if (_state_name.Equals("HeroToMenu"))
             {
+                Debug.WriteLine("Changing Menu");
+
+                inGame = false;
+                playWelcomeToTheJungle = false;
+                MediaPlayer.Stop();
+                MediaPlayer.MediaStateChanged -= MediaPlayer_MediaStateChanged;
+                DevcadeHero_State = null;
+
                 ChangeMenuBackground(main_menu_background);
                 _components = _main_menu_components;
                 _state_name = "MenuState";
+                MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
+                MediaPlayer.Play(welcome_to_the_jungle); // Fixes a bug where it will go back to the main menu if playing a song for a second time
             }
             
+        }
+
+        // Unsubscribe to events and resets all variables when the game state is changed
+        private void Unsubscribe()
+        {
+            _components = _main_menu_components;
+            playWelcomeToTheJungle = false;
+            _gameID = -1;
+            _difficultyID = -1;
+            DevcadeHero_State = null;
+            mediaPlayerKillSwitch = false;
+            keyPressed = false;
+            currentButton = -1;
+            randomValue = -1;
+            inGame = false;
+            timer = 0;
+            MediaPlayer.MediaStateChanged -= MediaPlayer_MediaStateChanged;
         }
 
     } // Public class MenuState end
