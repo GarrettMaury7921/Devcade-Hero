@@ -10,6 +10,7 @@ using System;
 using Devcade;
 using System.Linq;
 using System.Diagnostics;
+using DevcadeHero.Sounds;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -842,7 +843,6 @@ namespace DevcadeHero.States
 
                 inGame = false;
                 playWelcomeToTheJungle = false;
-                MediaPlayer.Stop();
                 MediaPlayer.MediaStateChanged -= MediaPlayer_MediaStateChanged;
                 DevcadeHero_State = null;
 

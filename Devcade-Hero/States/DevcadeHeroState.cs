@@ -216,7 +216,6 @@ namespace DevcadeHero.States
             note_white = _content.Load<Texture2D>("Game_Assets/note_white");
 
             // Sound Assets
-            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged; // subscribe so no bug
             notes_ripple = _content.Load<SoundEffect>("Sound_Effects/notes_ripple_up");
             drum_sticks = _content.Load<SoundEffect>("Sound_Effects/drum_sticks");
             bad_note_hit = _content.Load<SoundEffect>("Sound_Effects/bad_note1");
@@ -316,6 +315,8 @@ namespace DevcadeHero.States
         {
             // Initialize all the variables and import in all the content
             Initialize();
+
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged; // subscribe so no bug
 
             // Put the chart into the ChartReader and then the translator
             chartReader = new ChartReader(_state_name);

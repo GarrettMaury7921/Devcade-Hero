@@ -47,8 +47,6 @@ namespace DevcadeHero
         public static void ChangeState(State state)
         {
             _nextState = state;
-            MediaPlayer.Stop();
-            MediaPlayer.IsMuted = false;
         }
 
 
