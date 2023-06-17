@@ -324,6 +324,52 @@ namespace DevcadeHero.GameManager
             return GetNoteColor().Count;
         }
 
+        public List<int> FindMultiNotes()
+        {
+            List<int> note_ticks = GetNoteTickTime();
+
+            // Multi note variable: 0 is a non multi note / 1 is a multi note
+            List<int> multi_note = new();
+
+            for (int i = 0; i < note_ticks.Count; i++)
+            {
+                int currentNote = note_ticks[i];
+                bool isMultiNote = false;
+
+                // Check if the current note is the same as the next note(s)
+                for (int j = i + 1; j < note_ticks.Count; j++)
+                {
+                    if (currentNote == note_ticks[j])
+                    {
+                        isMultiNote = true;
+                        break;
+                    }
+                }
+
+                if (isMultiNote)
+                {
+                    multi_note.Add(1);
+                }
+                else
+                {
+                    multi_note.Add(0);
+                }
+            }
+
+            // Print out 1s and 0s
+            if (DEBUG)
+            {
+                foreach (int i in multi_note)
+                {
+                    Debug.WriteLine(i);
+                }
+            }
+            
+
+            return multi_note;
+        }
+
+
     } // public class
 
 } // name space

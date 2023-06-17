@@ -127,6 +127,7 @@ namespace DevcadeHero.States
         private readonly List<int> note_length;
         private readonly List<double> time_between_notes;
         private List<Note> notes;
+        private List<int> multi_notes;
         private bool songPlaying;
         private bool songPlayed;
 
@@ -331,9 +332,10 @@ namespace DevcadeHero.States
             note_length = chartTranslator.GetNoteLength();
             time_between_notes = chartTranslator.TimeBetweenNotes();
             note_count = chartTranslator.GetNoteCount();
+            multi_notes = chartTranslator.FindMultiNotes();
             
             // Make the notes so we can draw them later
-            MakeNotes(note_ticks, note_color, note_length);
+            MakeNotes(note_ticks, note_color, note_length, multi_notes);
 
             // Make the note rectangles
             blue1_down_rect = new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height);
@@ -448,6 +450,8 @@ namespace DevcadeHero.States
             previousKeyboardState = currentKeyboardState;
 
             // Game and song setup
+            // Contains logic where sound effects are played at the beginning of the song
+            // The game also goes back to the main menu after a song
             if (timer < 0.5)
             {
                 timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 500;
@@ -721,9 +725,9 @@ namespace DevcadeHero.States
                     case 4:
                         if (blue1down && note.Position.Intersects(new Rectangle(
                             blue1_down_rect.X,
-                            blue1_down_rect.Y - 12,
+                            blue1_down_rect.Y - 8,
                             blue1_down_rect.Width, 
-                            blue1_down_rect.Height + 12)) && canPressButton)
+                            blue1_down_rect.Height + 8)) && canPressButton)
                         {
                             // If the if statement condition is true, set "canPressButton" to false and start a new timer
                             canPressButton = false;
@@ -734,9 +738,9 @@ namespace DevcadeHero.States
                         }
                         else if (blue1down && !note.Position.Intersects(new Rectangle(
                             blue1_down_rect.X,
-                            blue1_down_rect.Y - 12,
+                            blue1_down_rect.Y - 8,
                             blue1_down_rect.Width,
-                            blue1_down_rect.Height + 12)) && canPressButton)
+                            blue1_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -749,9 +753,9 @@ namespace DevcadeHero.States
                     case 5:
                         if (blue2down && note.Position.Intersects(new Rectangle(
                             blue2_down_rect.X,
-                            blue2_down_rect.Y - 12,
+                            blue2_down_rect.Y - 8,
                             blue2_down_rect.Width,
-                            blue2_down_rect.Height + 12)) && canPressButton)
+                            blue2_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -761,9 +765,9 @@ namespace DevcadeHero.States
                         }
                         else if (blue2down && !note.Position.Intersects(new Rectangle(
                             blue2_down_rect.X,
-                            blue2_down_rect.Y - 12,
+                            blue2_down_rect.Y - 8,
                             blue2_down_rect.Width,
-                            blue2_down_rect.Height + 12)) && canPressButton)
+                            blue2_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -776,9 +780,9 @@ namespace DevcadeHero.States
                     case 6:
                         if (blue3down && note.Position.Intersects(new Rectangle(
                             blue3_down_rect.X,
-                            blue3_down_rect.Y - 12,
+                            blue3_down_rect.Y - 8,
                             blue3_down_rect.Width,
-                            blue3_down_rect.Height + 12)) && canPressButton)
+                            blue3_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -788,9 +792,9 @@ namespace DevcadeHero.States
                         }
                         else if (blue3down && !note.Position.Intersects(new Rectangle(
                             blue3_down_rect.X,
-                            blue3_down_rect.Y - 12,
+                            blue3_down_rect.Y - 8,
                             blue3_down_rect.Width,
-                            blue3_down_rect.Height + 12)) && canPressButton)
+                            blue3_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -803,9 +807,9 @@ namespace DevcadeHero.States
                     case 7:
                         if (blue4down && note.Position.Intersects(new Rectangle(
                             blue4_down_rect.X,
-                            blue4_down_rect.Y - 12,
+                            blue4_down_rect.Y - 8,
                             blue4_down_rect.Width,
-                            blue4_down_rect.Height + 12)) && canPressButton)
+                            blue4_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -815,9 +819,9 @@ namespace DevcadeHero.States
                         }
                         else if (blue4down && !note.Position.Intersects(new Rectangle(
                             blue4_down_rect.X,
-                            blue4_down_rect.Y - 12,
+                            blue4_down_rect.Y - 8,
                             blue4_down_rect.Width,
-                            blue4_down_rect.Height + 12)) && canPressButton)
+                            blue4_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -830,9 +834,9 @@ namespace DevcadeHero.States
                     case 0:
                         if (reddown && note.Position.Intersects(new Rectangle(
                             red_down_rect.X,
-                            red_down_rect.Y - 12,
+                            red_down_rect.Y - 8,
                             red_down_rect.Width,
-                            red_down_rect.Height + 12)) && canPressButton)
+                            red_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -842,9 +846,9 @@ namespace DevcadeHero.States
                         }
                         else if (reddown && !note.Position.Intersects(new Rectangle(
                             red_down_rect.X,
-                            red_down_rect.Y - 12,
+                            red_down_rect.Y - 8,
                             red_down_rect.Width,
-                            red_down_rect.Height + 12)) && canPressButton)
+                            red_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -857,9 +861,9 @@ namespace DevcadeHero.States
                     case 1:
                         if (blue5down && note.Position.Intersects(new Rectangle(
                             blue5_down_rect.X,
-                            blue5_down_rect.Y - 12,
+                            blue5_down_rect.Y - 8,
                             blue5_down_rect.Width,
-                            blue5_down_rect.Height + 12)) && canPressButton)
+                            blue5_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -869,9 +873,9 @@ namespace DevcadeHero.States
                         }
                         else if (blue5down && !note.Position.Intersects(new Rectangle(
                             blue5_down_rect.X,
-                            blue5_down_rect.Y - 12,
+                            blue5_down_rect.Y - 8,
                             blue5_down_rect.Width,
-                            blue5_down_rect.Height + 12)) && canPressButton)
+                            blue5_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -884,9 +888,9 @@ namespace DevcadeHero.States
                     case 2:
                         if (greendown && note.Position.Intersects(new Rectangle(
                             green_down_rect.X,
-                            green_down_rect.Y - 12,
+                            green_down_rect.Y - 8,
                             green_down_rect.Width,
-                            green_down_rect.Height + 12)) && canPressButton)
+                            green_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -896,9 +900,9 @@ namespace DevcadeHero.States
                         }
                         else if (greendown && !note.Position.Intersects(new Rectangle(
                             green_down_rect.X,
-                            green_down_rect.Y - 12,
+                            green_down_rect.Y - 8,
                             green_down_rect.Width,
-                            green_down_rect.Height + 12)) && canPressButton)
+                            green_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -911,9 +915,9 @@ namespace DevcadeHero.States
                     case 3:
                         if (whitedown && note.Position.Intersects(new Rectangle(
                             white_down_rect.X,
-                            white_down_rect.Y - 12,
+                            white_down_rect.Y - 8,
                             white_down_rect.Width,
-                            white_down_rect.Height + 12)) && canPressButton)
+                            white_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -923,9 +927,9 @@ namespace DevcadeHero.States
                         }
                         else if (whitedown && !note.Position.Intersects(new Rectangle(
                             white_down_rect.X,
-                            white_down_rect.Y - 12,
+                            white_down_rect.Y - 8,
                             white_down_rect.Width,
-                            white_down_rect.Height + 12)) && canPressButton)
+                            white_down_rect.Height + 8)) && canPressButton)
                         {
                             canPressButton = false;
                             buttonTimer.Start();
@@ -970,8 +974,11 @@ namespace DevcadeHero.States
 
         } // note hit detection method
 
-        public void MakeNotes(List<int> ticks, List<int> color, List<int> length)
+        public void MakeNotes(List<int> ticks, List<int> color, List<int> length, List<int> multi_note)
         {
+            foreach(int tick in multi_note) {
+                Debug.WriteLine(tick);
+            }
             // Go through each note
             for (int i = 0; i < note_count; i++)
             {
@@ -980,6 +987,32 @@ namespace DevcadeHero.States
                 int lane = color[i];
                 float angle = 0f;
                 Rectangle fredline_rect = new();
+                bool isMulti = false;
+
+                // Figure out if it is a double note
+                if (multi_note[i] == 1)
+                {
+                    isMulti = true;
+
+                    // Check if there are more than 2 notes
+                    bool loop = true;
+                    int multiCount = 2;
+                    int x = 1;
+                    while (loop)
+                    {
+                        // Make sure the multi note does not go out of bounds
+                        if (i + x < multi_note.Count && multi_note[i + x] == 1)
+                        {
+                            x++;
+                            multiCount++;
+                        }
+                        else
+                        {
+                            loop = false;
+                        }
+                    }
+                    Debug.WriteLine("MULTI ON " + (i + 1) + " With " + multiCount + " Notes!");
+                }
 
                 // Associate a texture with the color
                 // AND FRET LINE, ROTATION ANGLE
@@ -1051,7 +1084,7 @@ namespace DevcadeHero.States
 
                 // Make a note for each note and add it to the note list
                 Note note = new(texture, ticks[i], length[i], lane, _preferredBackBufferWidth, _preferredBackBufferHeight,
-                    note_width, note_height, time_between_notes[i])
+                    note_width, note_height, time_between_notes[i], isMulti)
                 {
                     Position = fredline_rect,
                     fretLineRotationAngle = angle

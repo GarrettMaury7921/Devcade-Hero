@@ -25,6 +25,7 @@ namespace DevcadeHero.GameManager
         public int Height { get; set; }
         public double NoteTime { get; set; }
         public float NoteSpeed { get; set; }
+        public bool isMultiNote { get; set; }
 
         // Attributes
         private Rectangle _position; // private field to store the position
@@ -36,7 +37,7 @@ namespace DevcadeHero.GameManager
         }
 
         public Note(Texture2D texture, float tick, float tick_length, int lane, int PreferredBackBufferWidth,
-            int PreferredBackBufferHeight, int note_width, int note_height, double time_between_notes)
+            int PreferredBackBufferHeight, int note_width, int note_height, double time_between_notes, bool isMulti)
         {
             Texture = texture;
             Tick = tick;
@@ -46,6 +47,7 @@ namespace DevcadeHero.GameManager
             Height = PreferredBackBufferHeight;
             NoteTime = time_between_notes;
             NoteSpeed = 3.999969399f;
+            isMultiNote = isMulti;
         }
 
         int count = 0;

@@ -5,8 +5,6 @@ using DevcadeHero.States;
 using DevcadeHero.Sounds;
 using Devcade;
 using Kettu;
-using System.Xml.Linq;
-using Microsoft.Xna.Framework.Media;
 
 namespace DevcadeHero
 {

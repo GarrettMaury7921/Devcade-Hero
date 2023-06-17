@@ -65,6 +65,7 @@ namespace DevcadeHero.States
         private readonly int buttonHeight;
         public static bool inGame;
         private int timer;
+        private bool DEBUG;
 
         // *************************************
         // ***** SETTER AND GETTER METHODS *****
@@ -93,6 +94,7 @@ namespace DevcadeHero.States
             base(game, graphicsDevice, PreferredBackBufferWidth, PreferredBackBufferHeight, content, _state_name)
         {
             // Attributes
+            DEBUG = false;
             musicType = "music";
             soundEffectType = "effect";
             playWelcomeToTheJungle = false;
@@ -218,8 +220,9 @@ namespace DevcadeHero.States
             // Set list buttons
             var Setlist_test = new Button(devcade_ButtonTexture, devcadeButtonFont)
             {
+                // Refered to as "Tester" in most places in the code
                 Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.14f)), (int)(centerY + (PreferredBackBufferHeight * -0.35f))),
-                Text = "Test Song",
+                Text = "Sample Song",
                 // Make the text go to the left
                 textOffset = new Vector2(-50, 0),
                 PenColour = Color.Yellow,
@@ -573,7 +576,8 @@ namespace DevcadeHero.States
             if (inGame)
             {
                 // Do Nothing
-                Debug.WriteLine("We are in game!!!");
+                if (DEBUG)
+                    Debug.WriteLine("We are in game!!!");
             }
             else
             {
@@ -839,7 +843,8 @@ namespace DevcadeHero.States
         {
             if (_state_name.Equals("HeroToMenu"))
             {
-                Debug.WriteLine("Changing Menu");
+                if (DEBUG)
+                    Debug.WriteLine("Changing Menu");
 
                 inGame = false;
                 playWelcomeToTheJungle = false;
