@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System.Linq;
 using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace DevcadeHero.States
 {
@@ -146,11 +147,14 @@ namespace DevcadeHero.States
 
         // Note timing
         private System.Timers.Timer buttonTimer;
-        bool canPressButton;
+        private bool canPressButton;
 
         // Score calculations
-        int noteHits;
-        int noteLateMiss;
+        private int noteHits;
+        private int noteLateMiss;
+
+        // Debug flag
+        private readonly bool debug = false;
 
 
         public void Initialize()
@@ -420,6 +424,7 @@ namespace DevcadeHero.States
                 {
                     note.CalculatePosition(note.Position, note.fretLineRotationAngle, note_width, note_height);
                     spriteBatch.Draw(note.Texture, note.Position, Color.White);
+                    note.isVisible = true;
                 }
 
             } // drum stick if statement
@@ -719,234 +724,256 @@ namespace DevcadeHero.States
 
             foreach (Note note in notes.ToList())
             {
-                // Depending on what lane the note is in
-                switch (note.Lane)
+                // Is the note is even visible
+                if (note.isVisible)
                 {
-                    case 4:
-                        if (blue1down && note.Position.Intersects(new Rectangle(
-                            blue1_down_rect.X,
-                            blue1_down_rect.Y - 8,
-                            blue1_down_rect.Width, 
-                            blue1_down_rect.Height + 8)) && canPressButton)
+                    // Check whether the note is a double note or a single note
+                    if (note.isMultiNote)
+                    {
+
+                    }
+                    else
+                    {
+                        // Depending on what lane the note is in
+                        switch (note.Lane)
                         {
-                            // If the if statement condition is true, set "canPressButton" to false and start a new timer
-                            canPressButton = false;
-                            buttonTimer.Start();
+                            case 4:
+                                if (blue1down && note.Position.Intersects(new Rectangle(
+                                    blue1_down_rect.X,
+                                    blue1_down_rect.Y - 8,
+                                    blue1_down_rect.Width,
+                                    blue1_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    // If the if statement condition is true, set "canPressButton" to false and start a new timer
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("Blue1 Hit!!");
-                            notes.Remove(note);
-                        }
-                        else if (blue1down && !note.Position.Intersects(new Rectangle(
-                            blue1_down_rect.X,
-                            blue1_down_rect.Y - 8,
-                            blue1_down_rect.Width,
-                            blue1_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("Blue1 Hit!!");
+                                    notes.Remove(note);
+                                    note.isVisible = false;
+                                }
+                                else if (blue1down && !note.Position.Intersects(new Rectangle(
+                                    blue1_down_rect.X,
+                                    blue1_down_rect.Y - 8,
+                                    blue1_down_rect.Width,
+                                    blue1_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("Blue1 Missed!!");
-                            PlayBadNote();
-                        }
-                        lane1 = true;
-                        break;
-                    case 5:
-                        if (blue2down && note.Position.Intersects(new Rectangle(
-                            blue2_down_rect.X,
-                            blue2_down_rect.Y - 8,
-                            blue2_down_rect.Width,
-                            blue2_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("Blue1 Missed!!");
+                                    PlayBadNote();
+                                }
+                                lane1 = true;
+                                break;
+                            case 5:
+                                if (blue2down && note.Position.Intersects(new Rectangle(
+                                    blue2_down_rect.X,
+                                    blue2_down_rect.Y - 8,
+                                    blue2_down_rect.Width,
+                                    blue2_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("Blue2 Hit!!");
-                            notes.Remove(note);
-                        }
-                        else if (blue2down && !note.Position.Intersects(new Rectangle(
-                            blue2_down_rect.X,
-                            blue2_down_rect.Y - 8,
-                            blue2_down_rect.Width,
-                            blue2_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("Blue2 Hit!!");
+                                    notes.Remove(note);
+                                    note.isVisible = false;
+                                }
+                                else if (blue2down && !note.Position.Intersects(new Rectangle(
+                                    blue2_down_rect.X,
+                                    blue2_down_rect.Y - 8,
+                                    blue2_down_rect.Width,
+                                    blue2_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("Blue2 Missed!!");
-                            PlayBadNote();
-                        }
-                        lane2 = true;
-                        break;
-                    case 6:
-                        if (blue3down && note.Position.Intersects(new Rectangle(
-                            blue3_down_rect.X,
-                            blue3_down_rect.Y - 8,
-                            blue3_down_rect.Width,
-                            blue3_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("Blue2 Missed!!");
+                                    PlayBadNote();
+                                }
+                                lane2 = true;
+                                break;
+                            case 6:
+                                if (blue3down && note.Position.Intersects(new Rectangle(
+                                    blue3_down_rect.X,
+                                    blue3_down_rect.Y - 8,
+                                    blue3_down_rect.Width,
+                                    blue3_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("Blue3 Hit!!");
-                            notes.Remove(note);
-                        }
-                        else if (blue3down && !note.Position.Intersects(new Rectangle(
-                            blue3_down_rect.X,
-                            blue3_down_rect.Y - 8,
-                            blue3_down_rect.Width,
-                            blue3_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("Blue3 Hit!!");
+                                    notes.Remove(note);
+                                    note.isVisible = false;
+                                }
+                                else if (blue3down && !note.Position.Intersects(new Rectangle(
+                                    blue3_down_rect.X,
+                                    blue3_down_rect.Y - 8,
+                                    blue3_down_rect.Width,
+                                    blue3_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("Blue3 Missed!!");
-                            PlayBadNote();
-                        }
-                        lane3 = true;
-                        break;
-                    case 7:
-                        if (blue4down && note.Position.Intersects(new Rectangle(
-                            blue4_down_rect.X,
-                            blue4_down_rect.Y - 8,
-                            blue4_down_rect.Width,
-                            blue4_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("Blue3 Missed!!");
+                                    PlayBadNote();
+                                }
+                                lane3 = true;
+                                break;
+                            case 7:
+                                if (blue4down && note.Position.Intersects(new Rectangle(
+                                    blue4_down_rect.X,
+                                    blue4_down_rect.Y - 8,
+                                    blue4_down_rect.Width,
+                                    blue4_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("Blue4 Hit!!");
-                            notes.Remove(note);
-                        }
-                        else if (blue4down && !note.Position.Intersects(new Rectangle(
-                            blue4_down_rect.X,
-                            blue4_down_rect.Y - 8,
-                            blue4_down_rect.Width,
-                            blue4_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("Blue4 Hit!!");
+                                    notes.Remove(note);
+                                    note.isVisible = false;
+                                }
+                                else if (blue4down && !note.Position.Intersects(new Rectangle(
+                                    blue4_down_rect.X,
+                                    blue4_down_rect.Y - 8,
+                                    blue4_down_rect.Width,
+                                    blue4_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("Blue4 Missed!!");
-                            PlayBadNote();
-                        }
-                        lane4 = true;
-                        break;
-                    case 0:
-                        if (reddown && note.Position.Intersects(new Rectangle(
-                            red_down_rect.X,
-                            red_down_rect.Y - 8,
-                            red_down_rect.Width,
-                            red_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("Blue4 Missed!!");
+                                    PlayBadNote();
+                                }
+                                lane4 = true;
+                                break;
+                            case 0:
+                                if (reddown && note.Position.Intersects(new Rectangle(
+                                    red_down_rect.X,
+                                    red_down_rect.Y - 8,
+                                    red_down_rect.Width,
+                                    red_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("red Hit!!");
-                            notes.Remove(note);
-                        }
-                        else if (reddown && !note.Position.Intersects(new Rectangle(
-                            red_down_rect.X,
-                            red_down_rect.Y - 8,
-                            red_down_rect.Width,
-                            red_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("red Hit!!");
+                                    notes.Remove(note);
+                                    note.isVisible = false;
+                                }
+                                else if (reddown && !note.Position.Intersects(new Rectangle(
+                                    red_down_rect.X,
+                                    red_down_rect.Y - 8,
+                                    red_down_rect.Width,
+                                    red_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("red Missed!!");
-                            PlayBadNote();
-                        }
-                        lane5 = true;
-                        break;
-                    case 1:
-                        if (blue5down && note.Position.Intersects(new Rectangle(
-                            blue5_down_rect.X,
-                            blue5_down_rect.Y - 8,
-                            blue5_down_rect.Width,
-                            blue5_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("red Missed!!");
+                                    PlayBadNote();
+                                }
+                                lane5 = true;
+                                break;
+                            case 1:
+                                if (blue5down && note.Position.Intersects(new Rectangle(
+                                    blue5_down_rect.X,
+                                    blue5_down_rect.Y - 8,
+                                    blue5_down_rect.Width,
+                                    blue5_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("Blue5 Hit!!");
-                            notes.Remove(note);
-                        }
-                        else if (blue5down && !note.Position.Intersects(new Rectangle(
-                            blue5_down_rect.X,
-                            blue5_down_rect.Y - 8,
-                            blue5_down_rect.Width,
-                            blue5_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("Blue5 Hit!!");
+                                    notes.Remove(note);
+                                    note.isVisible = false;
+                                }
+                                else if (blue5down && !note.Position.Intersects(new Rectangle(
+                                    blue5_down_rect.X,
+                                    blue5_down_rect.Y - 8,
+                                    blue5_down_rect.Width,
+                                    blue5_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("Blue5 Missed!!");
-                            PlayBadNote();
-                        }
-                        lane6 = true;
-                        break;
-                    case 2:
-                        if (greendown && note.Position.Intersects(new Rectangle(
-                            green_down_rect.X,
-                            green_down_rect.Y - 8,
-                            green_down_rect.Width,
-                            green_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("Blue5 Missed!!");
+                                    PlayBadNote();
+                                }
+                                lane6 = true;
+                                break;
+                            case 2:
+                                if (greendown && note.Position.Intersects(new Rectangle(
+                                    green_down_rect.X,
+                                    green_down_rect.Y - 8,
+                                    green_down_rect.Width,
+                                    green_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("green Hit!!");
-                            notes.Remove(note);
-                        }
-                        else if (greendown && !note.Position.Intersects(new Rectangle(
-                            green_down_rect.X,
-                            green_down_rect.Y - 8,
-                            green_down_rect.Width,
-                            green_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("green Hit!!");
+                                    notes.Remove(note);
+                                    note.isVisible = false;
+                                }
+                                else if (greendown && !note.Position.Intersects(new Rectangle(
+                                    green_down_rect.X,
+                                    green_down_rect.Y - 8,
+                                    green_down_rect.Width,
+                                    green_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("green Missed!!");
-                            PlayBadNote();
-                        }
-                        lane7 = true;
-                        break;
-                    case 3:
-                        if (whitedown && note.Position.Intersects(new Rectangle(
-                            white_down_rect.X,
-                            white_down_rect.Y - 8,
-                            white_down_rect.Width,
-                            white_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("green Missed!!");
+                                    PlayBadNote();
+                                }
+                                lane7 = true;
+                                break;
+                            case 3:
+                                if (whitedown && note.Position.Intersects(new Rectangle(
+                                    white_down_rect.X,
+                                    white_down_rect.Y - 8,
+                                    white_down_rect.Width,
+                                    white_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("white Hit!!");
-                            notes.Remove(note);
-                        }
-                        else if (whitedown && !note.Position.Intersects(new Rectangle(
-                            white_down_rect.X,
-                            white_down_rect.Y - 8,
-                            white_down_rect.Width,
-                            white_down_rect.Height + 8)) && canPressButton)
-                        {
-                            canPressButton = false;
-                            buttonTimer.Start();
+                                    Debug.WriteLine("white Hit!!");
+                                    notes.Remove(note);
+                                    note.isVisible = false;
+                                }
+                                else if (whitedown && !note.Position.Intersects(new Rectangle(
+                                    white_down_rect.X,
+                                    white_down_rect.Y - 8,
+                                    white_down_rect.Width,
+                                    white_down_rect.Height + 8)) && canPressButton)
+                                {
+                                    canPressButton = false;
+                                    buttonTimer.Start();
 
-                            Debug.WriteLine("white Missed!!");
-                            PlayBadNote();
-                        }
-                        lane8 = true;
-                        break;
+                                    Debug.WriteLine("white Missed!!");
+                                    PlayBadNote();
+                                }
+                                lane8 = true;
+                                break;
 
-                } // switch statement
+                        } // switch statement   
+                    }
+                }
+                
 
                 // Check if note is off screen when missed
                 if ((note.Position.Y > _preferredBackBufferHeight) && songPlayed)
                 {
                     //Debug.WriteLine("NOTE OFF SCREEN!");
                     notes.Remove(note);
+                    note.isVisible = false;
                     PlayBadNote();
                 }
 
@@ -976,9 +1003,10 @@ namespace DevcadeHero.States
 
         public void MakeNotes(List<int> ticks, List<int> color, List<int> length, List<int> multi_note)
         {
-            foreach(int tick in multi_note) {
-                Debug.WriteLine(tick);
-            }
+            // Upper Variables
+            int multiCount = 0;
+            int multiCount2 = 0;
+
             // Go through each note
             for (int i = 0; i < note_count; i++)
             {
@@ -989,14 +1017,27 @@ namespace DevcadeHero.States
                 Rectangle fredline_rect = new();
                 bool isMulti = false;
 
+                // See if this is a multi note from the last one
+                if (multiCount2 >= 2)
+                {
+                    isMulti = true;
+                    multiCount2--;
+
+                    // Already one number above what it should be
+                    if (multiCount2 == 1)
+                    {
+                        multiCount2 = 0;
+                    }
+                }
+
                 // Figure out if it is a double note
                 if (multi_note[i] == 1)
                 {
                     isMulti = true;
 
                     // Check if there are more than 2 notes
+                    multiCount = 2;
                     bool loop = true;
-                    int multiCount = 2;
                     int x = 1;
                     while (loop)
                     {
@@ -1011,7 +1052,14 @@ namespace DevcadeHero.States
                             loop = false;
                         }
                     }
-                    Debug.WriteLine("MULTI ON " + (i + 1) + " With " + multiCount + " Notes!");
+
+                    multiCount2 = multiCount;
+
+                    // Get the next amount of notes to be multi depending on the multiCount
+                    if (debug)
+                    {
+                        Debug.WriteLine("MULTI ON " + (i + 1) + " With " + multiCount + " Notes! multiCount2: " + multiCount2);
+                    }
                 }
 
                 // Associate a texture with the color
@@ -1084,12 +1132,17 @@ namespace DevcadeHero.States
 
                 // Make a note for each note and add it to the note list
                 Note note = new(texture, ticks[i], length[i], lane, _preferredBackBufferWidth, _preferredBackBufferHeight,
-                    note_width, note_height, time_between_notes[i], isMulti)
+                    note_width, note_height, time_between_notes[i], isMulti, false)
                 {
                     Position = fredline_rect,
                     fretLineRotationAngle = angle
                 };
                 notes.Add(note);
+
+                if (note.isMultiNote && debug)
+                {
+                    Debug.WriteLine("NOTE " + (i + 1) + " IS MULTI");
+                }
 
             } // for loop
 
