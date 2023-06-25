@@ -155,6 +155,7 @@ namespace DevcadeHero.States
 
         // Debug flag
         private readonly bool debug = false;
+        private readonly bool debug_note_detection = true;
 
 
         public void Initialize()
@@ -340,6 +341,7 @@ namespace DevcadeHero.States
             
             // Make the notes so we can draw them later
             MakeNotes(note_ticks, note_color, note_length, multi_notes);
+            SetupMultiNoteDetection(notes.ToList());
 
             // Make the note rectangles
             blue1_down_rect = new Rectangle(fred_boardX, fred_boardY, fred_board_width, fred_board_height);
@@ -730,7 +732,9 @@ namespace DevcadeHero.States
                     // Check whether the note is a double note or a single note
                     if (note.isMultiNote)
                     {
+                        // Check if the player did the correct multi hit
 
+                        // Get rid of the notes that are x-1 amount of notes ahead of this note
                     }
                     else
                     {
@@ -1132,7 +1136,7 @@ namespace DevcadeHero.States
 
                 // Make a note for each note and add it to the note list
                 Note note = new(texture, ticks[i], length[i], lane, _preferredBackBufferWidth, _preferredBackBufferHeight,
-                    note_width, note_height, time_between_notes[i], isMulti, false)
+                    note_width, note_height, time_between_notes[i], isMulti, false, multiCount, null)
                 {
                     Position = fredline_rect,
                     fretLineRotationAngle = angle
@@ -1147,6 +1151,58 @@ namespace DevcadeHero.States
             } // for loop
 
         } // Make Notes method
+
+        public void SetupMultiNoteDetection(List<Note> notes)
+        {
+            for (int i = 0; i < notes.Count; i++)
+            {
+                Note note = notes[i];
+
+                if (note.isMultiNote)
+                {
+                    List<int> lanes = new List<int> { note.Lane };
+
+                    int remainingMulti = note.howManyMulti;
+
+                    for (int j = i + 1; j < notes.Count; j++)
+                    {
+                        Note nextNote = notes[j];
+
+                        if (nextNote.isMultiNote && nextNote.Tick == note.Tick && remainingMulti > 0)
+                        {
+                            lanes.Add(nextNote.Lane);
+                            remainingMulti--;
+                        }
+
+                        if (remainingMulti == 0)
+                            break;
+                    }
+
+                    note.multiNoteLanes = lanes.ToArray();
+                }
+            }
+
+            // DEBUGGING
+            if (debug_note_detection)
+            {
+                int x = 1;
+                foreach (Note note in notes)
+                {
+                    if (note.isMultiNote && note.multiNoteLanes != null)
+                    {
+                        Debug.WriteLine("NOTE: " + x);
+                        foreach (int element in note.multiNoteLanes)
+                        {
+                            Debug.WriteLine("DEBUGGING SETUPNOTE DETECTION: " + element);
+                        }
+                    }
+                    x++;
+                }
+            }
+        }
+
+
+
 
         public void PlayBadNote()
         {
