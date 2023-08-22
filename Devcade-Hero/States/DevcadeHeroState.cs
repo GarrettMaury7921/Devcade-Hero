@@ -780,12 +780,10 @@ namespace DevcadeHero.States
 
                             // Check if all required lanes are pressed
                             bool allLanesPressed = true;
-
+                            bool isPressed = false;
                             int x = 1;
                             foreach (int element in note.multiNoteLanes)
                             {
-                                bool isPressed = false;
-
                                 // Check the corresponding button depending on the lane
                                 switch (element)
                                 {
@@ -1022,9 +1020,8 @@ namespace DevcadeHero.States
                                         }
                                         lane4 = true;
                                         break;
-                                }
+                                } // switch element
 
-                                // If any required lane is not pressed, set allLanesPressed to false
                                 if (isPressed)
                                 {
                                     // Add the lane to the set of pressed lanes
@@ -1033,7 +1030,8 @@ namespace DevcadeHero.States
 
                                 // Keeping count of how many elements we have gone through
                                 x++;
-                            }
+
+                            } // foreach
 
                             // Check if all required lanes are pressed
                             foreach (int requiredLane in note.multiNoteLanes)
@@ -1046,10 +1044,24 @@ namespace DevcadeHero.States
                             }
 
                             // Check if all required lanes are pressed and no other lanes are pressed
-                            if (allLanesPressed && pressedLanes.Count == note.multiNoteLanes.Count())
+                            if (x >= 2 && allLanesPressed && pressedLanes.Count == note.multiNoteLanes.Count())
                             {
                                 // All lanes were pressed correctly
+                                Debug.WriteLine(allLanesPressed + ": " + pressedLanes.Count + ", " + note.multiNoteLanes.Count());
                                 Debug.WriteLine("MULTI-NOTE HITTTTTTT!!!!!!!!!!!!!!!!!!!");
+
+                                // Remove the next note
+                                List<Note> notes2 = new();
+                                notes2 = notes;
+
+                                int currentIndex = notes2.IndexOf(note);
+                                Debug.WriteLine(currentIndex);
+
+                                if (currentIndex >= 0 && currentIndex < notes.Count - 1)
+                                {
+                                    Note nextNote = notes[currentIndex + 1];
+                                    notes.Remove(nextNote);
+                                }
                             }
                             else
                             {
@@ -1061,7 +1073,7 @@ namespace DevcadeHero.States
                             }
                         }
 
-                    } // multi note if statement
+                    } // multi note hit detection
 
                     // SINGLE NOTES - HIT DETECTION
                     else
