@@ -790,6 +790,7 @@ namespace DevcadeHero.States
                             // Initialize a list to track notes to be removed
                             List<Note> notesToRemove = new();
 
+
                             foreach (int element in note.multiNoteLanes)
                             {
                                 // Check the corresponding button depending on the lane
@@ -806,9 +807,17 @@ namespace DevcadeHero.States
                                             canPressButton = false;
                                             buttonTimer.Start();
 
-                                            notes.Remove(note);
-                                            note.isVisible = false;
-
+                                            if (x == 1)
+                                            {
+                                                notes.Remove(note);
+                                                note.isVisible = false;
+                                            }
+                                            else
+                                            {
+                                                Note nextNote = notes[x - 1];
+                                                notes.Remove(nextNote);
+                                                nextNote.isVisible = false;
+                                            }
                                             Debug.WriteLine("red Hit!!");
                                         }
                                         else if (reddown && !note.Position.Intersects(new Rectangle(
@@ -835,10 +844,17 @@ namespace DevcadeHero.States
                                             isPressed = true;
                                             canPressButton = false;
                                             buttonTimer.Start();
-
-                                            notes.Remove(note);
-                                            note.isVisible = false;
-
+                                            if (x == 1)
+                                            {
+                                                notes.Remove(note);
+                                                note.isVisible = false;
+                                            }
+                                            else
+                                            {
+                                                Note nextNote = notes[x - 1];
+                                                notes.Remove(nextNote);
+                                                nextNote.isVisible = false;
+                                            }
                                             Debug.WriteLine("Blue5 Hit!!");
                                         }
                                         else if (blue5down && !note.Position.Intersects(new Rectangle(
@@ -865,10 +881,17 @@ namespace DevcadeHero.States
                                             isPressed = true;
                                             canPressButton = false;
                                             buttonTimer.Start();
-
-                                            notes.Remove(note);
-                                            note.isVisible = false;
-
+                                            if (x == 1)
+                                            {
+                                                notes.Remove(note);
+                                                note.isVisible = false;
+                                            }
+                                            else
+                                            {
+                                                Note nextNote = notes[x - 1];
+                                                notes.Remove(nextNote);
+                                                nextNote.isVisible = false;
+                                            }
                                             Debug.WriteLine("green Hit!!");
                                         }
                                         else if (greendown && !note.Position.Intersects(new Rectangle(
@@ -895,10 +918,17 @@ namespace DevcadeHero.States
                                             isPressed = true;
                                             canPressButton = false;
                                             buttonTimer.Start();
-
-                                            notes.Remove(note);
-                                            note.isVisible = false;
-
+                                            if (x == 1)
+                                            {
+                                                notes.Remove(note);
+                                                note.isVisible = false;
+                                            }
+                                            else
+                                            {
+                                                Note nextNote = notes[x - 1];
+                                                notes.Remove(nextNote);
+                                                nextNote.isVisible = false;
+                                            }
                                             Debug.WriteLine("white Hit!!");
                                         }
                                         else if (whitedown && !note.Position.Intersects(new Rectangle(
@@ -926,10 +956,17 @@ namespace DevcadeHero.States
                                             // If the if statement condition is true, set "canPressButton" to false and start a new timer
                                             canPressButton = false;
                                             buttonTimer.Start();
-
-                                            notes.Remove(note);
-                                            note.isVisible = false;
-
+                                            if (x == 1)
+                                            {
+                                                notes.Remove(note);
+                                                note.isVisible = false;
+                                            }
+                                            else
+                                            {
+                                                Note nextNote = notes[x - 1];
+                                                notes.Remove(nextNote);
+                                                nextNote.isVisible = false;
+                                            }
                                             Debug.WriteLine("Blue1 Hit!!");
                                         }
                                         else if (blue1down && !note.Position.Intersects(new Rectangle(
@@ -956,10 +993,17 @@ namespace DevcadeHero.States
                                             isPressed = true;
                                             canPressButton = false;
                                             buttonTimer.Start();
-
-                                            notes.Remove(note);
-                                            note.isVisible = false;
-
+                                            if (x == 1)
+                                            {
+                                                notes.Remove(note);
+                                                note.isVisible = false;
+                                            }
+                                            else
+                                            {
+                                                Note nextNote = notes[x - 1];
+                                                notes.Remove(nextNote);
+                                                nextNote.isVisible = false;
+                                            }
                                             Debug.WriteLine("Blue2 Hit!!");
                                         }
                                         else if (blue2down && !note.Position.Intersects(new Rectangle(
@@ -986,10 +1030,17 @@ namespace DevcadeHero.States
                                             isPressed = true;
                                             canPressButton = false;
                                             buttonTimer.Start();
-
-                                            notes.Remove(note);
-                                            note.isVisible = false;
-
+                                            if (x == 1)
+                                            {
+                                                notes.Remove(note);
+                                                note.isVisible = false;
+                                            }
+                                            else
+                                            {
+                                                Note nextNote = notes[x - 1];
+                                                notes.Remove(nextNote);
+                                                nextNote.isVisible = false;
+                                            }
                                             Debug.WriteLine("Blue3 Hit!!");
                                         }
                                         else if (blue3down && !note.Position.Intersects(new Rectangle(
@@ -1016,9 +1067,17 @@ namespace DevcadeHero.States
                                             isPressed = true;
                                             canPressButton = false;
                                             buttonTimer.Start();
-
-                                            notes.Remove(note);
-                                            note.isVisible = false;
+                                            if (x == 1)
+                                            {
+                                                notes.Remove(note);
+                                                note.isVisible = false;
+                                            }
+                                            else
+                                            {
+                                                Note nextNote = notes[x - 1];
+                                                notes.Remove(nextNote);
+                                                nextNote.isVisible = false;
+                                            }
                                             Debug.WriteLine("Blue4 Hit!!");
                                         }
                                         else if (blue4down && !note.Position.Intersects(new Rectangle(
@@ -1041,7 +1100,6 @@ namespace DevcadeHero.States
                                 {
                                     // Add the lane to the set of pressed lanes
                                     pressedLanes.Add(element);
-                                    isPressed = false;
                                 }
 
                                 // Keeping count of how many elements we have gone through
@@ -1059,14 +1117,15 @@ namespace DevcadeHero.States
                                 }
                             }
 
-                            // Check if all required lanes are pressed and no extra lanes are pressed
+                            // Check if all required lanes are pressed and no other lanes are pressed
                             if (x >= 2 && allLanesPressed && pressedLanes.Count == note.multiNoteLanes.Count())
                             {
+                                // Remove all of the notes
                                 // Mark all the notes in the multi-note for removal
                                 foreach (int element in note.multiNoteLanes)
                                 {
                                     // Find the note associated with the element and mark it for removal
-                                    Note noteToRemove = notes.Find(n => n.multiNoteLanes.Contains(element));
+                                    Note noteToRemove = notes.Find(n => note.multiNoteLanes.Contains(element));
                                     if (noteToRemove != null)
                                     {
                                         notesToRemove.Add(noteToRemove);
@@ -1077,6 +1136,7 @@ namespace DevcadeHero.States
                                 Debug.WriteLine(allLanesPressed + ": " + pressedLanes.Count + ", " + note.multiNoteLanes.Count());
                                 Debug.WriteLine("MULTI-NOTE HITTTTTTT!!!!!!!!!!!!!!!!!!!");
                             }
+
                             else if (!allLanesPressed || pressedLanes.Count != note.multiNoteLanes.Count())
                             {
                                 Debug.WriteLine(allLanesPressed + ": " + pressedLanes.Count + ", " + note.multiNoteLanes.Count());
