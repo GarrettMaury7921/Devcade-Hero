@@ -775,13 +775,21 @@ namespace DevcadeHero.States
                                             blue4_down_rect.Width,
                                             blue4_down_rect.Height + 8)) && canPressButton))
                         {
+                            // ATTRIBUTES
+
                             // Initialize a set to track pressed lanes
-                            HashSet<int> pressedLanes = new HashSet<int>();
+                            HashSet<int> pressedLanes = new();
 
                             // Check if all required lanes are pressed
                             bool allLanesPressed = true;
                             bool isPressed = false;
+
+                            // x is how many notes we have gone through in the multi note
                             int x = 1;
+
+                            // Initialize a list to track notes to be removed
+                            List<Note> notesToRemove = new();
+
                             foreach (int element in note.multiNoteLanes)
                             {
                                 // Check the corresponding button depending on the lane
@@ -798,15 +806,16 @@ namespace DevcadeHero.States
                                             canPressButton = false;
                                             buttonTimer.Start();
 
-                                            Debug.WriteLine("red Hit!!");
                                             notes.Remove(note);
                                             note.isVisible = false;
+
+                                            Debug.WriteLine("red Hit!!");
                                         }
                                         else if (reddown && !note.Position.Intersects(new Rectangle(
                                             red_down_rect.X,
                                             red_down_rect.Y - 8,
                                             red_down_rect.Width,
-                                            red_down_rect.Height + 8)) && canPressButton)
+                                            red_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
                                         {
                                             canPressButton = false;
                                             buttonTimer.Start();
@@ -827,15 +836,16 @@ namespace DevcadeHero.States
                                             canPressButton = false;
                                             buttonTimer.Start();
 
-                                            Debug.WriteLine("Blue5 Hit!!");
                                             notes.Remove(note);
                                             note.isVisible = false;
+
+                                            Debug.WriteLine("Blue5 Hit!!");
                                         }
                                         else if (blue5down && !note.Position.Intersects(new Rectangle(
                                             blue5_down_rect.X,
                                             blue5_down_rect.Y - 8,
                                             blue5_down_rect.Width,
-                                            blue5_down_rect.Height + 8)) && canPressButton)
+                                            blue5_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
                                         {
                                             canPressButton = false;
                                             buttonTimer.Start();
@@ -856,15 +866,16 @@ namespace DevcadeHero.States
                                             canPressButton = false;
                                             buttonTimer.Start();
 
-                                            Debug.WriteLine("green Hit!!");
                                             notes.Remove(note);
                                             note.isVisible = false;
+
+                                            Debug.WriteLine("green Hit!!");
                                         }
                                         else if (greendown && !note.Position.Intersects(new Rectangle(
                                             green_down_rect.X,
                                             green_down_rect.Y - 8,
                                             green_down_rect.Width,
-                                            green_down_rect.Height + 8)) && canPressButton)
+                                            green_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
                                         {
                                             canPressButton = false;
                                             buttonTimer.Start();
@@ -885,15 +896,16 @@ namespace DevcadeHero.States
                                             canPressButton = false;
                                             buttonTimer.Start();
 
-                                            Debug.WriteLine("white Hit!!");
                                             notes.Remove(note);
                                             note.isVisible = false;
+
+                                            Debug.WriteLine("white Hit!!");
                                         }
                                         else if (whitedown && !note.Position.Intersects(new Rectangle(
                                             white_down_rect.X,
                                             white_down_rect.Y - 8,
                                             white_down_rect.Width,
-                                            white_down_rect.Height + 8)) && canPressButton)
+                                            white_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
                                         {
                                             canPressButton = false;
                                             buttonTimer.Start();
@@ -915,15 +927,16 @@ namespace DevcadeHero.States
                                             canPressButton = false;
                                             buttonTimer.Start();
 
-                                            Debug.WriteLine("Blue1 Hit!!");
                                             notes.Remove(note);
                                             note.isVisible = false;
+
+                                            Debug.WriteLine("Blue1 Hit!!");
                                         }
                                         else if (blue1down && !note.Position.Intersects(new Rectangle(
                                             blue1_down_rect.X,
                                             blue1_down_rect.Y - 8,
                                             blue1_down_rect.Width,
-                                            blue1_down_rect.Height + 8)) && canPressButton)
+                                            blue1_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
                                         {
                                             canPressButton = false;
                                             buttonTimer.Start();
@@ -944,15 +957,16 @@ namespace DevcadeHero.States
                                             canPressButton = false;
                                             buttonTimer.Start();
 
-                                            Debug.WriteLine("Blue2 Hit!!");
                                             notes.Remove(note);
                                             note.isVisible = false;
+
+                                            Debug.WriteLine("Blue2 Hit!!");
                                         }
                                         else if (blue2down && !note.Position.Intersects(new Rectangle(
                                             blue2_down_rect.X,
                                             blue2_down_rect.Y - 8,
                                             blue2_down_rect.Width,
-                                            blue2_down_rect.Height + 8)) && canPressButton)
+                                            blue2_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
                                         {
                                             canPressButton = false;
                                             buttonTimer.Start();
@@ -973,15 +987,16 @@ namespace DevcadeHero.States
                                             canPressButton = false;
                                             buttonTimer.Start();
 
-                                            Debug.WriteLine("Blue3 Hit!!");
                                             notes.Remove(note);
                                             note.isVisible = false;
+
+                                            Debug.WriteLine("Blue3 Hit!!");
                                         }
                                         else if (blue3down && !note.Position.Intersects(new Rectangle(
                                             blue3_down_rect.X,
                                             blue3_down_rect.Y - 8,
                                             blue3_down_rect.Width,
-                                            blue3_down_rect.Height + 8)) && canPressButton)
+                                            blue3_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
                                         {
                                             canPressButton = false;
                                             buttonTimer.Start();
@@ -1002,15 +1017,15 @@ namespace DevcadeHero.States
                                             canPressButton = false;
                                             buttonTimer.Start();
 
-                                            Debug.WriteLine("Blue4 Hit!!");
                                             notes.Remove(note);
                                             note.isVisible = false;
+                                            Debug.WriteLine("Blue4 Hit!!");
                                         }
                                         else if (blue4down && !note.Position.Intersects(new Rectangle(
                                             blue4_down_rect.X,
                                             blue4_down_rect.Y - 8,
                                             blue4_down_rect.Width,
-                                            blue4_down_rect.Height + 8)) && canPressButton)
+                                            blue4_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
                                         {
                                             canPressButton = false;
                                             buttonTimer.Start();
@@ -1026,6 +1041,7 @@ namespace DevcadeHero.States
                                 {
                                     // Add the lane to the set of pressed lanes
                                     pressedLanes.Add(element);
+                                    isPressed = false;
                                 }
 
                                 // Keeping count of how many elements we have gone through
@@ -1043,33 +1059,34 @@ namespace DevcadeHero.States
                                 }
                             }
 
-                            // Check if all required lanes are pressed and no other lanes are pressed
+                            // Check if all required lanes are pressed and no extra lanes are pressed
                             if (x >= 2 && allLanesPressed && pressedLanes.Count == note.multiNoteLanes.Count())
                             {
+                                // Mark all the notes in the multi-note for removal
+                                foreach (int element in note.multiNoteLanes)
+                                {
+                                    // Find the note associated with the element and mark it for removal
+                                    Note noteToRemove = notes.Find(n => n.multiNoteLanes.Contains(element));
+                                    if (noteToRemove != null)
+                                    {
+                                        notesToRemove.Add(noteToRemove);
+                                    }
+                                }
+
                                 // All lanes were pressed correctly
                                 Debug.WriteLine(allLanesPressed + ": " + pressedLanes.Count + ", " + note.multiNoteLanes.Count());
                                 Debug.WriteLine("MULTI-NOTE HITTTTTTT!!!!!!!!!!!!!!!!!!!");
-
-                                // Remove the next note
-                                List<Note> notes2 = new();
-                                notes2 = notes;
-
-                                int currentIndex = notes2.IndexOf(note);
-                                Debug.WriteLine(currentIndex);
-
-                                if (currentIndex >= 0 && currentIndex < notes.Count - 1)
-                                {
-                                    Note nextNote = notes[currentIndex + 1];
-                                    notes.Remove(nextNote);
-                                }
                             }
-                            else
+                            else if (!allLanesPressed || pressedLanes.Count != note.multiNoteLanes.Count())
                             {
                                 Debug.WriteLine(allLanesPressed + ": " + pressedLanes.Count + ", " + note.multiNoteLanes.Count());
+                            }
 
-                                // Some lanes were not pressed correctly
-                                Debug.WriteLine("Multi-note Missed!!");
-                                PlayBadNote();
+                            // After the loop, remove the notes marked for removal
+                            foreach (var noteToRemove in notesToRemove)
+                            {
+                                notes.Remove(noteToRemove);
+                                noteToRemove.isVisible = false;
                             }
                         }
 
