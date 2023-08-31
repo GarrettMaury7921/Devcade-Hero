@@ -338,7 +338,7 @@ namespace DevcadeHero.States
             time_between_notes = chartTranslator.TimeBetweenNotes();
             note_count = chartTranslator.GetNoteCount();
             multi_notes = chartTranslator.FindMultiNotes();
-            
+
             // Make the notes so we can draw them later
             MakeNotes(note_ticks, note_color, note_length, multi_notes);
             SetupMultiNoteDetection(notes.ToList());
@@ -509,7 +509,7 @@ namespace DevcadeHero.States
                     {
                         // Stop everything
                         MediaPlayer.Stop();
-                        
+
                         // Reset all Variables
                         Initialize();
 
@@ -539,7 +539,7 @@ namespace DevcadeHero.States
         {
             MenuState.inGame = true;
         } // MediaPlayer_MediaStateChanged method
-        
+
         public void DrawFredLines(SpriteBatch spriteBatch)
         {
             // Left
@@ -709,7 +709,7 @@ namespace DevcadeHero.States
                 buttonTimer.Stop();
             }
         } // CheckP1Buttons Method
-        
+
         public void NoteHitDetection(Rectangle blue1_down_rect, Rectangle blue2_down_rect, Rectangle blue3_down_rect,
             Rectangle blue4_down_rect, Rectangle red_down_rect, Rectangle blue5_down_rect, Rectangle green_down_rect,
             Rectangle white_down_rect)
@@ -733,6 +733,27 @@ namespace DevcadeHero.States
                     // Check whether the note is a double note or a single note
                     if (note.isMultiNote && note.multiNoteLanes != null)
                     {
+
+                        // Keep track of the button states
+                        Dictionary<int, bool> buttonStates = new()
+                        {
+                            { 0, reddown },
+                            { 1, blue5down },
+                            { 2, greendown },
+                            { 3, whitedown },
+                            { 4, blue1down },
+                            { 5, blue2down },
+                            { 6, blue3down },
+                            { 7, blue4down }
+                        };
+
+                        /*
+                        foreach (var kvp in buttonStates)
+                        {
+                            Debug.WriteLine($"Button {kvp.Key}: {kvp.Value}");
+                        }
+                        */
+
                         // If there is collision of the multi note
                         if ((note.Position.Intersects(new Rectangle(
                                             red_down_rect.X,
@@ -775,380 +796,45 @@ namespace DevcadeHero.States
                                             blue4_down_rect.Width,
                                             blue4_down_rect.Height + 8)) && canPressButton))
                         {
-                            // ATTRIBUTES
+                            // If there is a collision with the multi-note
+                            bool allButtonsPressed = true;
 
-                            // Initialize a set to track pressed lanes
-                            HashSet<int> pressedLanes = new();
-
-                            // Check if all required lanes are pressed
-                            bool allLanesPressed = true;
-                            bool isPressed = false;
-
-                            // x is how many notes we have gone through in the multi note
-                            int x = 1;
-
-                            // Initialize a list to track notes to be removed
-                            List<Note> notesToRemove = new();
-
-
-                            foreach (int element in note.multiNoteLanes)
-                            {
-                                // Check the corresponding button depending on the lane
-                                switch (element)
-                                {
-                                    case 0:
-                                        if (reddown && note.Position.Intersects(new Rectangle(
-                                            red_down_rect.X,
-                                            red_down_rect.Y - 8,
-                                            red_down_rect.Width,
-                                            red_down_rect.Height + 8)) && canPressButton)
-                                        {
-                                            isPressed = true;
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-
-                                            if (x == 1)
-                                            {
-                                                notes.Remove(note);
-                                                note.isVisible = false;
-                                            }
-                                            else
-                                            {
-                                                Note nextNote = notes[x - 1];
-                                                notes.Remove(nextNote);
-                                                nextNote.isVisible = false;
-                                            }
-                                            Debug.WriteLine("red Hit!!");
-                                        }
-                                        else if (reddown && !note.Position.Intersects(new Rectangle(
-                                            red_down_rect.X,
-                                            red_down_rect.Y - 8,
-                                            red_down_rect.Width,
-                                            red_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
-                                        {
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-
-                                            Debug.WriteLine("red Missed!!");
-                                            PlayBadNote();
-                                        }
-                                        lane5 = true;
-                                        break;
-                                    case 1:
-                                        if (blue5down && note.Position.Intersects(new Rectangle(
-                                            blue5_down_rect.X,
-                                            blue5_down_rect.Y - 8,
-                                            blue5_down_rect.Width,
-                                            blue5_down_rect.Height + 8)) && canPressButton)
-                                        {
-                                            isPressed = true;
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-                                            if (x == 1)
-                                            {
-                                                notes.Remove(note);
-                                                note.isVisible = false;
-                                            }
-                                            else
-                                            {
-                                                Note nextNote = notes[x - 1];
-                                                notes.Remove(nextNote);
-                                                nextNote.isVisible = false;
-                                            }
-                                            Debug.WriteLine("Blue5 Hit!!");
-                                        }
-                                        else if (blue5down && !note.Position.Intersects(new Rectangle(
-                                            blue5_down_rect.X,
-                                            blue5_down_rect.Y - 8,
-                                            blue5_down_rect.Width,
-                                            blue5_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
-                                        {
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-
-                                            Debug.WriteLine("Blue5 Missed!!");
-                                            PlayBadNote();
-                                        }
-                                        lane6 = true;
-                                        break;
-                                    case 2:
-                                        if (greendown && note.Position.Intersects(new Rectangle(
-                                            green_down_rect.X,
-                                            green_down_rect.Y - 8,
-                                            green_down_rect.Width,
-                                            green_down_rect.Height + 8)) && canPressButton)
-                                        {
-                                            isPressed = true;
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-                                            if (x == 1)
-                                            {
-                                                notes.Remove(note);
-                                                note.isVisible = false;
-                                            }
-                                            else
-                                            {
-                                                Note nextNote = notes[x - 1];
-                                                notes.Remove(nextNote);
-                                                nextNote.isVisible = false;
-                                            }
-                                            Debug.WriteLine("green Hit!!");
-                                        }
-                                        else if (greendown && !note.Position.Intersects(new Rectangle(
-                                            green_down_rect.X,
-                                            green_down_rect.Y - 8,
-                                            green_down_rect.Width,
-                                            green_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
-                                        {
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-
-                                            Debug.WriteLine("green Missed!!");
-                                            PlayBadNote();
-                                        }
-                                        lane7 = true;
-                                        break;
-                                    case 3:
-                                        if (whitedown && note.Position.Intersects(new Rectangle(
-                                            white_down_rect.X,
-                                            white_down_rect.Y - 8,
-                                            white_down_rect.Width,
-                                            white_down_rect.Height + 8)) && canPressButton)
-                                        {
-                                            isPressed = true;
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-                                            if (x == 1)
-                                            {
-                                                notes.Remove(note);
-                                                note.isVisible = false;
-                                            }
-                                            else
-                                            {
-                                                Note nextNote = notes[x - 1];
-                                                notes.Remove(nextNote);
-                                                nextNote.isVisible = false;
-                                            }
-                                            Debug.WriteLine("white Hit!!");
-                                        }
-                                        else if (whitedown && !note.Position.Intersects(new Rectangle(
-                                            white_down_rect.X,
-                                            white_down_rect.Y - 8,
-                                            white_down_rect.Width,
-                                            white_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
-                                        {
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-
-                                            Debug.WriteLine("white Missed!!");
-                                            PlayBadNote();
-                                        }
-                                        lane8 = true;
-                                        break;
-                                    case 4:
-                                        if (blue1down && note.Position.Intersects(new Rectangle(
-                                            blue1_down_rect.X,
-                                            blue1_down_rect.Y - 8,
-                                            blue1_down_rect.Width,
-                                            blue1_down_rect.Height + 8)) && canPressButton)
-                                        {
-                                            isPressed = true;
-                                            // If the if statement condition is true, set "canPressButton" to false and start a new timer
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-                                            if (x == 1)
-                                            {
-                                                notes.Remove(note);
-                                                note.isVisible = false;
-                                            }
-                                            else
-                                            {
-                                                Note nextNote = notes[x - 1];
-                                                notes.Remove(nextNote);
-                                                nextNote.isVisible = false;
-                                            }
-                                            Debug.WriteLine("Blue1 Hit!!");
-                                        }
-                                        else if (blue1down && !note.Position.Intersects(new Rectangle(
-                                            blue1_down_rect.X,
-                                            blue1_down_rect.Y - 8,
-                                            blue1_down_rect.Width,
-                                            blue1_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
-                                        {
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-
-                                            Debug.WriteLine("Blue1 Missed!!");
-                                            PlayBadNote();
-                                        }
-                                        lane1 = true;
-                                        break;
-                                    case 5:
-                                        if (blue2down && note.Position.Intersects(new Rectangle(
-                                            blue2_down_rect.X,
-                                            blue2_down_rect.Y - 8,
-                                            blue2_down_rect.Width,
-                                            blue2_down_rect.Height + 8)) && canPressButton)
-                                        {
-                                            isPressed = true;
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-                                            if (x == 1)
-                                            {
-                                                notes.Remove(note);
-                                                note.isVisible = false;
-                                            }
-                                            else
-                                            {
-                                                Note nextNote = notes[x - 1];
-                                                notes.Remove(nextNote);
-                                                nextNote.isVisible = false;
-                                            }
-                                            Debug.WriteLine("Blue2 Hit!!");
-                                        }
-                                        else if (blue2down && !note.Position.Intersects(new Rectangle(
-                                            blue2_down_rect.X,
-                                            blue2_down_rect.Y - 8,
-                                            blue2_down_rect.Width,
-                                            blue2_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
-                                        {
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-
-                                            Debug.WriteLine("Blue2 Missed!!");
-                                            PlayBadNote();
-                                        }
-                                        lane2 = true;
-                                        break;
-                                    case 6:
-                                        if (blue3down && note.Position.Intersects(new Rectangle(
-                                            blue3_down_rect.X,
-                                            blue3_down_rect.Y - 8,
-                                            blue3_down_rect.Width,
-                                            blue3_down_rect.Height + 8)) && canPressButton)
-                                        {
-                                            isPressed = true;
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-                                            if (x == 1)
-                                            {
-                                                notes.Remove(note);
-                                                note.isVisible = false;
-                                            }
-                                            else
-                                            {
-                                                Note nextNote = notes[x - 1];
-                                                notes.Remove(nextNote);
-                                                nextNote.isVisible = false;
-                                            }
-                                            Debug.WriteLine("Blue3 Hit!!");
-                                        }
-                                        else if (blue3down && !note.Position.Intersects(new Rectangle(
-                                            blue3_down_rect.X,
-                                            blue3_down_rect.Y - 8,
-                                            blue3_down_rect.Width,
-                                            blue3_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
-                                        {
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-
-                                            Debug.WriteLine("Blue3 Missed!!");
-                                            PlayBadNote();
-                                        }
-                                        lane3 = true;
-                                        break;
-                                    case 7:
-                                        if (blue4down && note.Position.Intersects(new Rectangle(
-                                            blue4_down_rect.X,
-                                            blue4_down_rect.Y - 8,
-                                            blue4_down_rect.Width,
-                                            blue4_down_rect.Height + 8)) && canPressButton)
-                                        {
-                                            isPressed = true;
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-                                            if (x == 1)
-                                            {
-                                                notes.Remove(note);
-                                                note.isVisible = false;
-                                            }
-                                            else
-                                            {
-                                                Note nextNote = notes[x - 1];
-                                                notes.Remove(nextNote);
-                                                nextNote.isVisible = false;
-                                            }
-                                            Debug.WriteLine("Blue4 Hit!!");
-                                        }
-                                        else if (blue4down && !note.Position.Intersects(new Rectangle(
-                                            blue4_down_rect.X,
-                                            blue4_down_rect.Y - 8,
-                                            blue4_down_rect.Width,
-                                            blue4_down_rect.Height + 8)) && canPressButton && note.Position.Y >= _preferredBackBufferHeight)
-                                        {
-                                            canPressButton = false;
-                                            buttonTimer.Start();
-
-                                            Debug.WriteLine("Blue4 Missed!!");
-                                            PlayBadNote();
-                                        }
-                                        lane4 = true;
-                                        break;
-                                } // switch element
-
-                                if (isPressed)
-                                {
-                                    // Add the lane to the set of pressed lanes
-                                    pressedLanes.Add(element);
-                                }
-
-                                // Keeping count of how many elements we have gone through
-                                x++;
-
-                            } // foreach
-
-                            // Check if all required lanes are pressed
                             foreach (int requiredLane in note.multiNoteLanes)
                             {
-                                if (!pressedLanes.Contains(requiredLane))
+                                if (!buttonStates.ContainsKey(requiredLane) || !buttonStates[requiredLane])
                                 {
-                                    allLanesPressed = false;
+                                    // If any of the required buttons is not pressed, set allButtonsPressed to false
+                                    allButtonsPressed = false;
                                     break;
                                 }
                             }
 
-                            // Check if all required lanes are pressed and no other lanes are pressed
-                            if (x >= 2 && allLanesPressed && pressedLanes.Count == note.multiNoteLanes.Count())
+                            // If they hit the multi note
+                            if (allButtonsPressed)
                             {
-                                // Remove all of the notes
-                                // Mark all the notes in the multi-note for removal
-                                foreach (int element in note.multiNoteLanes)
+                                Debug.WriteLine("MULTI-NOTE HITTTTTTT!!!!!!!!!!!!!!!!!!!");
+
+                                // Collect notes associated with the multi-note
+                                List<Note> notesToRemove = new List<Note>();
+
+                                foreach (int requiredLane in note.multiNoteLanes)
                                 {
-                                    // Find the note associated with the element and mark it for removal
-                                    Note noteToRemove = notes.Find(n => note.multiNoteLanes.Contains(element));
+                                    Note noteToRemove = notes.Find(n => n.isMultiNote && n.multiNoteLanes.Contains(requiredLane));
                                     if (noteToRemove != null)
                                     {
                                         notesToRemove.Add(noteToRemove);
                                     }
                                 }
 
-                                // All lanes were pressed correctly
-                                Debug.WriteLine(allLanesPressed + ": " + pressedLanes.Count + ", " + note.multiNoteLanes.Count());
-                                Debug.WriteLine("MULTI-NOTE HITTTTTTT!!!!!!!!!!!!!!!!!!!");
+                                // Remove the collected notes
+                                foreach (Note noteToRemove in notesToRemove)
+                                {
+                                    notes.Remove(noteToRemove);
+                                    noteToRemove.isVisible = false;
+                                }
                             }
 
-                            else if (!allLanesPressed || pressedLanes.Count != note.multiNoteLanes.Count())
-                            {
-                                Debug.WriteLine(allLanesPressed + ": " + pressedLanes.Count + ", " + note.multiNoteLanes.Count());
-                            }
-
-                            // After the loop, remove the notes marked for removal
-                            foreach (var noteToRemove in notesToRemove)
-                            {
-                                notes.Remove(noteToRemove);
-                                noteToRemove.isVisible = false;
-                            }
-                        }
+                        } // if it intersects
 
                     } // multi note hit detection
 
@@ -1386,8 +1072,9 @@ namespace DevcadeHero.States
 
                         } // switch statement   
                     }
-                }
-                
+
+                } // if the note is visible
+
 
                 // Check if note is off screen when missed
                 if ((note.Position.Y > _preferredBackBufferHeight) && songPlayed)
@@ -1536,7 +1223,7 @@ namespace DevcadeHero.States
                         angle = fred_line_left_rotationAngle4;
                         fredline_rect = fred_line_left_rectangle4;
                         break;
-                    default: 
+                    default:
                         break;
                 } // switch statement
 
