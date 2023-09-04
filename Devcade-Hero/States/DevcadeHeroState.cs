@@ -147,7 +147,9 @@ namespace DevcadeHero.States
 
         // Note timing
         private System.Timers.Timer buttonTimer;
+        private System.Timers.Timer multiButtonTimer;
         private bool canPressButton;
+        private bool multiCanPressButton;
 
         // Score calculations
         private int noteHits;
@@ -368,7 +370,12 @@ namespace DevcadeHero.States
             {
                 Interval = 500000
             };
+            multiButtonTimer = new System.Timers.Timer
+            {
+                Interval = 500000
+            };
             canPressButton = true;
+            multiCanPressButton = true;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D main_menu)
@@ -747,12 +754,12 @@ namespace DevcadeHero.States
                             { 7, blue4down }
                         };
 
-                        /*
-                        foreach (var kvp in buttonStates)
+                        
+                        /*foreach (var kvp in buttonStates)
                         {
                             Debug.WriteLine($"Button {kvp.Key}: {kvp.Value}");
-                        }
-                        */
+                        }*/
+                        
 
                         // If there is collision of the multi note
                         if ((note.Position.Intersects(new Rectangle(
@@ -816,14 +823,26 @@ namespace DevcadeHero.States
 
                                 // Collect notes associated with the multi-note
                                 List<Note> notesToRemove = new List<Note>();
+                                int count = 0;
 
+                                // Find how many buttons need to be pressed
                                 foreach (int requiredLane in note.multiNoteLanes)
                                 {
-                                    Note noteToRemove = notes.Find(n => n.isMultiNote && n.multiNoteLanes.Contains(requiredLane));
-                                    if (noteToRemove != null)
-                                    {
-                                        notesToRemove.Add(noteToRemove);
+                                    count++;
+                                }
+
+                                for (int i = 0; i < count; i++)
+                                {
+                                    // Add this note, then add the others
+                                    if (i == 0) {
+                                        notesToRemove.Add(note);
                                     }
+                                    else
+                                    {
+                                        Note nextNote = notes[i];
+                                        notesToRemove.Add(nextNote);
+                                    }
+
                                 }
 
                                 // Remove the collected notes
@@ -832,6 +851,13 @@ namespace DevcadeHero.States
                                     notes.Remove(noteToRemove);
                                     noteToRemove.isVisible = false;
                                 }
+
+                                canPressButton = false;
+                                buttonTimer.Start();
+
+                                // Start the multi hit timer to stop the 'missed, nothing in lane'
+                                multiCanPressButton = false;
+                                multiButtonTimer.Start();
                             }
 
                         } // if it intersects
@@ -839,7 +865,7 @@ namespace DevcadeHero.States
                     } // multi note hit detection
 
                     // SINGLE NOTES - HIT DETECTION
-                    else
+                    else if (!note.isMultiNote && note.multiNoteLanes == null)
                     {
                         // Depending on what lane the note is in
                         switch (note.Lane)
@@ -1095,8 +1121,16 @@ namespace DevcadeHero.States
                 buttonTimer.Stop();
             };
 
+            // ELAPSED EVENT HANDLER FOR THE MULTI TIMER
+            multiButtonTimer.Elapsed += (sender, e) => {
+                // Set "canPressButton" to true again
+                multiCanPressButton = true;
+                // Stop the timer
+                multiButtonTimer.Stop();
+            };
+
             if (((blue1down && !lane1) || (blue2down && !lane2) || (blue3down && !lane3) || (blue4down && !lane4) ||
-                (reddown && !lane5) || (blue5down && !lane6) || (greendown && !lane7) || (whitedown && !lane8)) && canPressButton)
+                (reddown && !lane5) || (blue5down && !lane6) || (greendown && !lane7) || (whitedown && !lane8)) && canPressButton && multiCanPressButton)
             {
                 // If the if statement condition is true, set "canPressButton" to false and start a new timer
                 canPressButton = false;

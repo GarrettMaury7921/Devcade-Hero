@@ -74,7 +74,7 @@ namespace DevcadeHero.GameManager
                     background = content.Load<Texture2D>("Game_Assets/outside");
                     break;
                 case "Kalimba (Ninja Tuna)":
-                    background = content.Load<Texture2D>("Game_Assets/outside");
+                    background = content.Load<Texture2D>("Game_Assets/ninja_tuna");
                     break;
                 // default is null
                 default:
