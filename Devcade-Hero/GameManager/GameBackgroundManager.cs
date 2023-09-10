@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using System;
+using System.Diagnostics;
 
 namespace DevcadeHero.GameManager
 {
@@ -31,12 +33,14 @@ namespace DevcadeHero.GameManager
             // Find the correct background video
             switch (songName)
             {
-                case "tester":
+                case "Linux_Startup_Song":
                     videoName = null;
                     break;
+
                 case "Kalimba (Ninja Tuna)":
                     videoName = null;
                     break;
+
                 default:
                     videoName = null;
                     break;
@@ -46,11 +50,14 @@ namespace DevcadeHero.GameManager
         public Song SongChooser(ContentManager content, string songName)
         {
             // Find the correct song
+
+            // Delay: 1.52 seconds subtracted from first note
+
             switch (songName)
             {
-                case "tester":
-                    song = content.Load<Song>("Songs/tester");
-                    delay = 0;
+                case "Linux_Startup_Song":
+                    song = content.Load<Song>("Songs/Linux_Startup_Song");
+                    delay = 2.23f;
                     break;
 
                 case "Kalimba (Ninja Tuna)":
@@ -58,8 +65,10 @@ namespace DevcadeHero.GameManager
                     delay = 2.1f;
                     break;
 
+                // default is not supported
                 default:
-                    song = null;
+                    Debug.WriteLine("A SONG WAS NOT FOUND FOR THE SELECTED SONG!!!");
+                    Environment.Exit(0);
                     break;
             }
 
@@ -70,15 +79,18 @@ namespace DevcadeHero.GameManager
             // Select a background for whatever song there is
             switch (songName)
             {
-                case "tester":
-                    background = content.Load<Texture2D>("Game_Assets/outside");
+                case "Linux_Startup_Song":
+                    background = content.Load<Texture2D>("Game_Assets/linux_desktop");
                     break;
+
                 case "Kalimba (Ninja Tuna)":
                     background = content.Load<Texture2D>("Game_Assets/ninja_tuna");
                     break;
-                // default is null
+
+                // default is not supported
                 default:
-                    background = null;
+                    Debug.WriteLine("A BACKGROUND WAS NOT FOUND FOR THE SELECTED SONG!!!");
+                    Environment.Exit(0);
                     break;
             }
 

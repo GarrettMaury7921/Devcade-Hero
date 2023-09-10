@@ -10,7 +10,6 @@ using System;
 using Devcade;
 using System.Linq;
 using System.Diagnostics;
-using DevcadeHero.Sounds;
 // HEAVILY MODIFIED VERSION OF Oyyou's MonoGame_Tutorials #13. All credit goes to Oyyou for the original code.
 // https://github.com/Oyyou/MonoGame_Tutorials/tree/master/MonoGame_Tutorials/Tutorial013
 
@@ -138,109 +137,140 @@ namespace DevcadeHero.States
             var sliderTexture = _content.Load<Texture2D>("Menu_Assets/slider");
             var sliderThumbTexture = _content.Load<Texture2D>("Menu_Assets/slider_ball");
 
+            // Determine the Text offset for the types of screens
+            float widthOffset = 0.0f;
+            int backTextOffset = -50;
+            float setlistWidthOffset = 0.14f;
+            float widthOffset_slider2 = 0.44f;
+            int soundEffectTextOffset = 44;
+            int scale = 1;
+
+            // Debug
+            if (PreferredBackBufferHeight < 2560)
+            {
+                widthOffset = 0.27f;
+            }
+
+            // Arcade Machine
+            else if (PreferredBackBufferHeight >= 2560)
+            {
+                widthOffset = 0f;
+                backTextOffset = -110;
+                widthOffset_slider2 = 0.15f;
+                setlistWidthOffset = -0.12f;
+                soundEffectTextOffset = 60;
+                scale = 2;
+                buttonFont = _content.Load<SpriteFont>("Fonts/2560Font");
+                devcadeButtonFont = _content.Load<SpriteFont>("Fonts/2560SetList_Font");
+            }
+
             // ***** ALL STARTING BUTTONS ARE DEFINED BELOW *****
             // These are all the things that the user can select in the menu
             // Each button has an on-click event
-            var careerGameButton = new Button(buttonTexture, buttonFont)
+            var careerGameButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.25f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.25f))),
                 Text = "           Career Mode",
             };
             careerGameButton.Click += CareerButton_Click;
 
-            var casualGameButton = new Button(buttonTexture, buttonFont)
+            var casualGameButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.32f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.32f))),
                 Text = "           Casual Mode",
             };
             casualGameButton.Click += CasualButton_Click;
 
-            var settingsButton = new Button(buttonTexture, buttonFont)
+            var settingsButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
                 Text = "         Settings",
             };
             settingsButton.Click += SettingsButton_Click;
 
-            var quitGameButton = new Button(buttonTexture, buttonFont)
+            var quitGameButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.46f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.46f))),
                 Text = "         Quit",
             };
             quitGameButton.Click += QuitGameButton_Click;
 
-            var BackButton = new Button(buttonTexture, buttonFont)
+            var BackButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.46f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.46f))),
                 Text = "         Back",
             };
             BackButton.Click += BackButton_Click;
 
             // Player Buttons
-            var SinglePlayerButton = new Button(buttonTexture, buttonFont)
+            var SinglePlayerButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.32f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.32f))),
                 Text = "         Single Player",
             };
             SinglePlayerButton.Click += SinglePlayerButton_Click;
 
-            var MultiPlayerButton = new Button(buttonTexture, buttonFont)
+            var MultiPlayerButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
                 Text = "         Multi Player",
             };
             MultiPlayerButton.Click += MultiPlayerButton_Click;
 
             // Difficulty Buttons
-            var ExpertButton = new Button(buttonTexture, buttonFont)
+            var ExpertButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
                 Text = "         Expert",
             };
             ExpertButton.Click += ExpertButton_Click;
-            var HardButton = new Button(buttonTexture, buttonFont)
+
+            var HardButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.32f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.32f))),
                 Text = "         Hard",
             };
             HardButton.Click += HardButton_Click;
-            var MediumButton = new Button(buttonTexture, buttonFont)
+
+            var MediumButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.25f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.25f))),
                 Text = "         Medium",
             };
             MediumButton.Click += MediumButton_Click;
-            var EasyButton = new Button(buttonTexture, buttonFont)
+
+            var EasyButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.18f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.18f))),
                 Text = "         Easy",
             };
             EasyButton.Click += EasyButton_Click;
 
             // Set list buttons
-            var Setlist_test = new Button(devcade_ButtonTexture, devcadeButtonFont)
+            var Linux_Startup_Song = new Button(devcade_ButtonTexture, devcadeButtonFont, scale)
             {
                 // Refered to as "Tester" in most places in the code
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.14f)), (int)(centerY + (PreferredBackBufferHeight * -0.35f))),
-                Text = "Sample Song",
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * setlistWidthOffset)), (int)(centerY + (PreferredBackBufferHeight * -0.35f))),
+                Text = "Linux Startup Song",
                 // Make the text go to the left
-                textOffset = new Vector2(-50, 0),
+                textOffset = new Vector2(-19, 0),
                 PenColour = Color.Yellow,
             };
-            Setlist_test.Click += Setlist_TestButton_Click;
-            var Setlist_BackButton = new Button(devcade_ButtonTexture, devcadeButtonFont)
+            Linux_Startup_Song.Click += Setlist_Linux_Startup_Song_Click;
+
+            var Setlist_BackButton = new Button(devcade_ButtonTexture, devcadeButtonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.14f)), (int)(centerY + (PreferredBackBufferHeight * 0.46f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * setlistWidthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.46f))),
                 Text = "Back",
                 // Make the text go to the left
-                textOffset = new Vector2(-50, 0),
+                textOffset = new Vector2(backTextOffset, 0),
                 PenColour = Color.Yellow,
             };
             Setlist_BackButton.Click += SetListBackButton_Click;
 
-            var Kalimba = new Button(devcade_ButtonTexture, devcadeButtonFont)
+            var Kalimba = new Button(devcade_ButtonTexture, devcadeButtonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.14f)), (int)(centerY + (PreferredBackBufferHeight * -0.25f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * setlistWidthOffset)), (int)(centerY + (PreferredBackBufferHeight * -0.25f))),
                 Text = "Kalimba(NinjaTuna)",
                 // Make the text go to the left
                 textOffset = new Vector2(-20, 0),
@@ -251,9 +281,9 @@ namespace DevcadeHero.States
 
             // ***** ALL SLIDERS DEFINED BELOW *****
             // MUSIC VOLUME SLIDER
-            var MusicVolumeSliderButton = new Button(buttonTexture, buttonFont)
+            var MusicVolumeSliderButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.27f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.27f))),
                 // Setting the text to the correct place above the slider
                 textOffset = new Vector2(40, -40),
                 Text = "Music",
@@ -261,22 +291,22 @@ namespace DevcadeHero.States
             MusicVolumeSliderButton.Click += MusicVolumeSliderButton_Click;
             var MusicVolumeSlider = new Slider(sliderTexture, sliderThumbTexture, musicType)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.44f)), (int)(centerY + (PreferredBackBufferHeight * 0.295f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset_slider2)), (int)(centerY + (PreferredBackBufferHeight * 0.295f))),
                 BarColor = Color.White,
             };
 
             // SOUND EFFECT SLIDER
-            var EffectVolumeSliderButton = new Button(buttonTexture, buttonFont)
+            var EffectVolumeSliderButton = new Button(buttonTexture, buttonFont, scale)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.27f)), (int)(centerY + (PreferredBackBufferHeight * 0.34f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.34f))),
                 // Setting the text to the correct place above the slider
-                textOffset = new Vector2(44, -40),
+                textOffset = new Vector2(soundEffectTextOffset, -40),
                 Text = "Sound Effects",
             };
             EffectVolumeSliderButton.Click += EffectVolumeSliderButton_Click;
             var EffectVolumeSlider = new Slider(sliderTexture, sliderThumbTexture, soundEffectType)
             {
-                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * 0.44f)), (int)(centerY + (PreferredBackBufferHeight * 0.365f))),
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset_slider2)), (int)(centerY + (PreferredBackBufferHeight * 0.365f))),
                 BarColor = Color.White,
             };
 
@@ -318,7 +348,7 @@ namespace DevcadeHero.States
             };
             _setlist_components = new List<Component>()
             {
-                Setlist_test,
+                Linux_Startup_Song,
                 Kalimba,
                 Setlist_BackButton,
             };
@@ -369,13 +399,13 @@ namespace DevcadeHero.States
             BackSound().Play();
         }
 
-        private void Setlist_TestButton_Click(object sender, EventArgs e)
+        private void Setlist_Linux_Startup_Song_Click(object sender, EventArgs e)
         {
             _components = _empty_components;
             SelectSound().Play();
 
             // Make the Devcade Hero State, the state name is the name of the song/chart file
-            DevcadeHero_State = new DevcadeHeroState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "tester");
+            DevcadeHero_State = new DevcadeHeroState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "Linux_Startup_Song");
 
             // Stop the media player
             mediaPlayerKillSwitch = true;

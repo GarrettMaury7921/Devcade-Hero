@@ -5,6 +5,7 @@ using DevcadeHero.States;
 using DevcadeHero.Sounds;
 using Devcade;
 using Kettu;
+using System.Diagnostics;
 
 namespace DevcadeHero
 {
@@ -66,8 +67,8 @@ namespace DevcadeHero
             // Debug 420x980
             #region
 #if DEBUG
-            _graphics.PreferredBackBufferWidth = 420;
-            _graphics.PreferredBackBufferHeight = 980;
+            _graphics.PreferredBackBufferWidth = 1080;
+            _graphics.PreferredBackBufferHeight = 2560;
             _graphics.ApplyChanges();
 #else
 			_graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;

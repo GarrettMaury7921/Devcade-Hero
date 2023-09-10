@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System.Linq;
 using System.Diagnostics;
-using JetBrains.Annotations;
 
 namespace DevcadeHero.States
 {
@@ -164,19 +163,19 @@ namespace DevcadeHero.States
         {
             #region
 #if DEBUG
-            highway_width = 310;
-            highway_height = 735;
-            fred_board_height = 21;
-#else
-			highway_width = 310;
-            highway_height = 735;
-            fred_board_height = 21;
-#endif
-            #endregion
-            /*
             highway_width = 922;
             highway_height = 2000;
             fred_board_height = 64;
+#else
+			highway_width = 922;
+            highway_height = 2000;
+            fred_board_height = 64;
+#endif
+            #endregion
+            /*
+            highway_width = 310;
+            highway_height = 735;
+            fred_board_height = 21;
             */
 
 
@@ -270,11 +269,55 @@ namespace DevcadeHero.States
             note_y = 450;
             notes = new List<Note>();
 
+            // MODIFYING ASSETS FOR BIGGER SCREEN
+            // Arcade Machine
+            if (_preferredBackBufferHeight >= 2560)
+            {
+                // Fred Board parameters
+                fred_board_offset = -55;
+                fred_board_width = highway_width + 0;
+                fred_boardX = highwayX - 0;
+                fred_boardY = highwayY + highway_height + fred_board_offset;
+
+                // Fred Lines
+                fred_line_width *= 3;
+                fred_line_height *= 3;
+                fred_line_offsetX *= 3;
+                fred_line_offsetY *= 3;
+
+                // FRED LINE LEFT (X, Y, Rotations)
+                fred_lineX = fred_boardX + fred_line_offsetX;
+                fred_lineY = fred_boardY - (fred_line_height / 2) + fred_line_offsetY;
+                fred_line_left_rotationAngle = MathHelper.ToRadians(6);                     // rotate x degrees
+                fred_line_left_rotationAngle2 = MathHelper.ToRadians(5);                    // rotate x degrees
+                fred_line_left_rotationAngle3 = MathHelper.ToRadians(4);                    // rotate x degrees
+                fred_line_left_rotationAngle4 = MathHelper.ToRadians(2);                    // rotate x degrees
+                fred_line_right_rotationAngle = MathHelper.ToRadians(-1.5f);                // rotate x degrees
+                fred_line_right_rotationAngle2 = MathHelper.ToRadians(-4);                  // rotate x degrees
+                fred_line_right_rotationAngle3 = MathHelper.ToRadians(-5);                  // rotate x degrees
+                fred_line_right_rotationAngle4 = MathHelper.ToRadians(-6);                  // rotate x degrees
+                fred_line_rotationOrigin = new Vector2(fred_line.Width / 2, fred_line.Height / 2); // center of the texture
+
+                fred_line_left_rectangle = new Rectangle(fred_lineX - 13, fred_lineY, fred_line_width, fred_line_height);
+                fred_line_left_rectangle2 = new Rectangle(fred_lineX + 78, fred_lineY, fred_line_width, fred_line_height);
+                fred_line_left_rectangle3 = new Rectangle(fred_lineX + 170, fred_lineY, fred_line_width, fred_line_height);
+                fred_line_left_rectangle4 = new Rectangle(fred_lineX + 254, fred_lineY, fred_line_width, fred_line_height);
+
+                fred_line_right_rectangle = new Rectangle(fred_lineX + 348, fred_lineY, fred_line_width, fred_line_height);
+                fred_line_right_rectangle2 = new Rectangle(fred_lineX + 423, fred_lineY, fred_line_width, fred_line_height);
+                fred_line_right_rectangle3 = new Rectangle(fred_lineX + 518, fred_lineY, fred_line_width, fred_line_height);
+                fred_line_right_rectangle4 = new Rectangle(fred_lineX + 612, fred_lineY, fred_line_width, fred_line_height);
+
+                note_width *= 3;
+                note_height *= 3;
+                note_x = 100;
+                note_y = 450;
+            }
+
             // 3D Highway
             highway3D = _content.Load<Model>("Models/highway_obj");
             highway_3Dtexture = _content.Load<Texture2D>("Models/highway");
             projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _graphicsDevice.Viewport.AspectRatio, 0.0001f, 100000.0f);
-
 
             // Get the texture data
             Color[] data = new Color[highway_3Dtexture.Width * highway_3Dtexture.Height];
@@ -730,142 +773,22 @@ namespace DevcadeHero.States
             bool lane6 = false;
             bool lane7 = false;
             bool lane8 = false;
+            int amountOfNotes = 0;
 
             foreach (Note note in notes.ToList())
             {
+                // Check for skipping notes because of multi notes
+                if (amountOfNotes > 0)
+                {
+                    amountOfNotes--;
+                    continue;
+                }
+                
                 // Is the note is even visible
                 if (note.isVisible)
                 {
-
-                    // Check whether the note is a double note or a single note
-                    if (note.isMultiNote && note.multiNoteLanes != null)
-                    {
-
-                        // Keep track of the button states
-                        Dictionary<int, bool> buttonStates = new()
-                        {
-                            { 0, reddown },
-                            { 1, blue5down },
-                            { 2, greendown },
-                            { 3, whitedown },
-                            { 4, blue1down },
-                            { 5, blue2down },
-                            { 6, blue3down },
-                            { 7, blue4down }
-                        };
-
-                        
-                        /*foreach (var kvp in buttonStates)
-                        {
-                            Debug.WriteLine($"Button {kvp.Key}: {kvp.Value}");
-                        }*/
-                        
-
-                        // If there is collision of the multi note
-                        if ((note.Position.Intersects(new Rectangle(
-                                            red_down_rect.X,
-                                            red_down_rect.Y - 8,
-                                            red_down_rect.Width,
-                                            red_down_rect.Height + 8)) && canPressButton)
-                           || (note.Position.Intersects(new Rectangle(
-                                            blue5_down_rect.X,
-                                            blue5_down_rect.Y - 8,
-                                            blue5_down_rect.Width,
-                                            blue5_down_rect.Height + 8)) && canPressButton)
-                           || (note.Position.Intersects(new Rectangle(
-                                            green_down_rect.X,
-                                            green_down_rect.Y - 8,
-                                            green_down_rect.Width,
-                                            green_down_rect.Height + 8)) && canPressButton)
-                           || (note.Position.Intersects(new Rectangle(
-                                            white_down_rect.X,
-                                            white_down_rect.Y - 8,
-                                            white_down_rect.Width,
-                                            white_down_rect.Height + 8)) && canPressButton)
-                           || (note.Position.Intersects(new Rectangle(
-                                            blue1_down_rect.X,
-                                            blue1_down_rect.Y - 8,
-                                            blue1_down_rect.Width,
-                                            blue1_down_rect.Height + 8)) && canPressButton)
-                           || (note.Position.Intersects(new Rectangle(
-                                            blue2_down_rect.X,
-                                            blue2_down_rect.Y - 8,
-                                            blue2_down_rect.Width,
-                                            blue2_down_rect.Height + 8)) && canPressButton)
-                           || (note.Position.Intersects(new Rectangle(
-                                            blue3_down_rect.X,
-                                            blue3_down_rect.Y - 8,
-                                            blue3_down_rect.Width,
-                                            blue3_down_rect.Height + 8)) && canPressButton)
-                           || (note.Position.Intersects(new Rectangle(
-                                            blue4_down_rect.X,
-                                            blue4_down_rect.Y - 8,
-                                            blue4_down_rect.Width,
-                                            blue4_down_rect.Height + 8)) && canPressButton))
-                        {
-                            // If there is a collision with the multi-note
-                            bool allButtonsPressed = true;
-
-                            foreach (int requiredLane in note.multiNoteLanes)
-                            {
-                                if (!buttonStates.ContainsKey(requiredLane) || !buttonStates[requiredLane])
-                                {
-                                    // If any of the required buttons is not pressed, set allButtonsPressed to false
-                                    allButtonsPressed = false;
-                                    break;
-                                }
-                            }
-
-                            // If they hit the multi note
-                            if (allButtonsPressed)
-                            {
-                                Debug.WriteLine("MULTI-NOTE HITTTTTTT!!!!!!!!!!!!!!!!!!!");
-
-                                // Collect notes associated with the multi-note
-                                List<Note> notesToRemove = new List<Note>();
-                                int count = 0;
-
-                                // Find how many buttons need to be pressed
-                                foreach (int requiredLane in note.multiNoteLanes)
-                                {
-                                    count++;
-                                }
-
-                                for (int i = 0; i < count; i++)
-                                {
-                                    // Add this note, then add the others
-                                    if (i == 0) {
-                                        notesToRemove.Add(note);
-                                    }
-                                    else
-                                    {
-                                        Note nextNote = notes[i];
-                                        notesToRemove.Add(nextNote);
-                                    }
-
-                                }
-
-                                // Remove the collected notes
-                                foreach (Note noteToRemove in notesToRemove)
-                                {
-                                    notes.Remove(noteToRemove);
-                                    noteToRemove.isVisible = false;
-                                }
-
-                                canPressButton = false;
-                                buttonTimer.Start();
-
-                                // Start the multi hit timer to stop the 'missed, nothing in lane'
-                                multiCanPressButton = false;
-                                multiButtonTimer.Start();
-                            }
-
-                        } // if it intersects
-
-                    } // multi note hit detection
-
                     // SINGLE NOTES - HIT DETECTION
-                    else if (!note.isMultiNote && note.multiNoteLanes == null)
+                    if (!note.isMultiNote && note.multiNoteLanes == null)
                     {
                         // Depending on what lane the note is in
                         switch (note.Lane)
@@ -1097,7 +1020,138 @@ namespace DevcadeHero.States
                                 break;
 
                         } // switch statement   
-                    }
+
+                    } // if statement
+
+                    // Check whether the note is a double note or a single note
+                    else if (note.isMultiNote && note.multiNoteLanes != null)
+                    {
+
+                        // Keep track of the button states
+                        Dictionary<int, bool> buttonStates = new()
+                        {
+                            { 0, reddown },
+                            { 1, blue5down },
+                            { 2, greendown },
+                            { 3, whitedown },
+                            { 4, blue1down },
+                            { 5, blue2down },
+                            { 6, blue3down },
+                            { 7, blue4down }
+                        };
+
+                        
+                        /*foreach (var kvp in buttonStates)
+                        {
+                            Debug.WriteLine($"Button {kvp.Key}: {kvp.Value}");
+                        }*/
+                        
+
+                        // If there is collision of the multi note
+                        if ((note.Position.Intersects(new Rectangle(
+                                            red_down_rect.X,
+                                            red_down_rect.Y - 8,
+                                            red_down_rect.Width,
+                                            red_down_rect.Height + 8)) && canPressButton)
+                           || (note.Position.Intersects(new Rectangle(
+                                            blue5_down_rect.X,
+                                            blue5_down_rect.Y - 8,
+                                            blue5_down_rect.Width,
+                                            blue5_down_rect.Height + 8)) && canPressButton)
+                           || (note.Position.Intersects(new Rectangle(
+                                            green_down_rect.X,
+                                            green_down_rect.Y - 8,
+                                            green_down_rect.Width,
+                                            green_down_rect.Height + 8)) && canPressButton)
+                           || (note.Position.Intersects(new Rectangle(
+                                            white_down_rect.X,
+                                            white_down_rect.Y - 8,
+                                            white_down_rect.Width,
+                                            white_down_rect.Height + 8)) && canPressButton)
+                           || (note.Position.Intersects(new Rectangle(
+                                            blue1_down_rect.X,
+                                            blue1_down_rect.Y - 8,
+                                            blue1_down_rect.Width,
+                                            blue1_down_rect.Height + 8)) && canPressButton)
+                           || (note.Position.Intersects(new Rectangle(
+                                            blue2_down_rect.X,
+                                            blue2_down_rect.Y - 8,
+                                            blue2_down_rect.Width,
+                                            blue2_down_rect.Height + 8)) && canPressButton)
+                           || (note.Position.Intersects(new Rectangle(
+                                            blue3_down_rect.X,
+                                            blue3_down_rect.Y - 8,
+                                            blue3_down_rect.Width,
+                                            blue3_down_rect.Height + 8)) && canPressButton)
+                           || (note.Position.Intersects(new Rectangle(
+                                            blue4_down_rect.X,
+                                            blue4_down_rect.Y - 8,
+                                            blue4_down_rect.Width,
+                                            blue4_down_rect.Height + 8)) && canPressButton))
+                        {
+                            // If there is a collision with the multi-note
+                            bool allButtonsPressed = true;
+
+                            foreach (int requiredLane in note.multiNoteLanes)
+                            {
+                                if (!buttonStates.ContainsKey(requiredLane) || !buttonStates[requiredLane])
+                                {
+                                    // If any of the required buttons is not pressed, set allButtonsPressed to false
+                                    allButtonsPressed = false;
+                                    break;
+                                }
+                            }
+
+                            // If they hit the multi note
+                            if (allButtonsPressed)
+                            {
+                                Debug.WriteLine("MULTI-NOTE HITTTTTTT!!!!!!!!!!!!!!!!!!!");
+
+                                // Collect notes associated with the multi-note
+                                List<Note> notesToRemove = new List<Note>();
+                                int count = 0;
+
+                                // Find how many buttons need to be pressed
+                                foreach (int requiredLane in note.multiNoteLanes)
+                                {
+                                    count++;
+                                }
+
+                                for (int i = 0; i < count; i++)
+                                {
+                                    // Add this note, then add the others
+                                    if (i == 0) {
+                                        notesToRemove.Add(note);
+                                    }
+                                    else
+                                    {
+                                        Note nextNote = notes[i];
+                                        notesToRemove.Add(nextNote);
+                                    }
+                                }
+
+                                // Remove the collected notes
+                                foreach (Note noteToRemove in notesToRemove)
+                                {
+                                    notes.Remove(noteToRemove);
+                                    noteToRemove.isVisible = false;
+                                }
+
+                                canPressButton = false;
+                                buttonTimer.Start();
+
+                                // Start the multi hit timer to stop the 'missed, nothing in lane'
+                                multiCanPressButton = false;
+                                multiButtonTimer.Start();
+
+                                // Amount of times to skip in the loop
+                                amountOfNotes = note.howManyMulti;
+                                
+                            }
+
+                        } // if it intersects
+
+                    } // multi note hit detection
 
                 } // if the note is visible
 
@@ -1272,6 +1326,28 @@ namespace DevcadeHero.States
                     fredline_rect.X -= 20;
                 }
 
+                // Fix Position for Arcade Machine
+                if (_preferredBackBufferHeight >= 2560)
+                {
+                    fredline_rect.Y -= 700;
+                    if (color[i] == 4)
+                    {
+                        fredline_rect.X -= 5;
+                    }
+                    if (color[i] == 5)
+                    {
+                        fredline_rect.X -= 5;
+                    }
+                    if (color[i] == 6)
+                    {
+                        fredline_rect.X -= 13;
+                    }
+                    if (color[i] == 7)
+                    {
+                        fredline_rect.X -= 17;
+                    }
+                }
+
                 // Make a note for each note and add it to the note list
                 Note note = new(texture, ticks[i], length[i], lane, _preferredBackBufferWidth, _preferredBackBufferHeight,
                     note_width, note_height, time_between_notes[i], isMulti, false, multiCount, null)
@@ -1339,7 +1415,6 @@ namespace DevcadeHero.States
                 }
             }
         }
-
 
         public void PlayBadNote()
         {

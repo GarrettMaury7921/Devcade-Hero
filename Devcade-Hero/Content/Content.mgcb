@@ -13,6 +13,20 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Fonts/2560Font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/2560Font.spritefont
+
+#begin Fonts/2560SetList_Font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/2560SetList_Font.spritefont
+
 #begin Fonts/Font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -122,6 +136,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Game_Assets/greendown.png
+
+#begin Game_Assets/linux_desktop.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Game_Assets/linux_desktop.jpg
 
 #begin Game_Assets/ninja_tuna.jpg
 /importer:TextureImporter
@@ -388,6 +414,12 @@
 /processorParam:Quality=Best
 /build:Songs/Kalimba (Ninja Tuna).wav
 
+#begin Songs/Linux_Startup_Song.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Songs/Linux_Startup_Song.wav
+
 #begin Songs/megamind_after_jungle.wav
 /importer:WavImporter
 /processor:SongProcessor
@@ -405,12 +437,6 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Songs/presentation_intro_music.wav
-
-#begin Songs/tester.wav
-/importer:WavImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Songs/tester.wav
 
 #begin Songs/welcome_to_the_jungle_PCM.wav
 /importer:WavImporter
