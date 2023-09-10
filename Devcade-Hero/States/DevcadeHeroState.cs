@@ -163,9 +163,9 @@ namespace DevcadeHero.States
         {
             #region
 #if DEBUG
-            highway_width = 922;
-            highway_height = 2000;
-            fred_board_height = 64;
+            highway_width = 310;
+            highway_height = 735;
+            fred_board_height = 21;
 #else
 			highway_width = 922;
             highway_height = 2000;
@@ -803,8 +803,10 @@ namespace DevcadeHero.States
                                     // If the if statement condition is true, set "canPressButton" to false and start a new timer
                                     canPressButton = false;
                                     buttonTimer.Start();
-
-                                    Debug.WriteLine("Blue1 Hit!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("Blue1 Hit!!");
+                                    }
                                     notes.Remove(note);
                                     note.isVisible = false;
                                 }
@@ -817,7 +819,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("Blue1 Missed!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("Blue1 Missed!!");
+                                    }
                                     PlayBadNote();
                                 }
                                 lane1 = true;
@@ -832,7 +837,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("Blue2 Hit!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("Blue2 Hit!!");
+                                    }
                                     notes.Remove(note);
                                     note.isVisible = false;
                                 }
@@ -845,7 +853,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("Blue2 Missed!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("Blue2 Missed!!");
+                                    }
                                     PlayBadNote();
                                 }
                                 lane2 = true;
@@ -860,7 +871,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("Blue3 Hit!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("Blue3 Hit!!");
+                                    }
                                     notes.Remove(note);
                                     note.isVisible = false;
                                 }
@@ -873,7 +887,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("Blue3 Missed!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("Blue3 Missed!!");
+                                    }
                                     PlayBadNote();
                                 }
                                 lane3 = true;
@@ -888,7 +905,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("Blue4 Hit!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("Blue4 Hit!!");
+                                    }
                                     notes.Remove(note);
                                     note.isVisible = false;
                                 }
@@ -901,7 +921,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("Blue4 Missed!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("Blue4 Missed!!");
+                                    }
                                     PlayBadNote();
                                 }
                                 lane4 = true;
@@ -916,7 +939,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("red Hit!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("red Hit!!");
+                                    }
                                     notes.Remove(note);
                                     note.isVisible = false;
                                 }
@@ -929,7 +955,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("red Missed!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("red Missed!!");
+                                    }
                                     PlayBadNote();
                                 }
                                 lane5 = true;
@@ -944,7 +973,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("Blue5 Hit!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("Blue5 Hit!!");
+                                    }
                                     notes.Remove(note);
                                     note.isVisible = false;
                                 }
@@ -957,7 +989,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("Blue5 Missed!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("Blue5 Missed!!");
+                                    }
                                     PlayBadNote();
                                 }
                                 lane6 = true;
@@ -972,7 +1007,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("green Hit!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("green Hit!!");
+                                    }
                                     notes.Remove(note);
                                     note.isVisible = false;
                                 }
@@ -985,7 +1023,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("green Missed!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("green Missed!!");
+                                    }
                                     PlayBadNote();
                                 }
                                 lane7 = true;
@@ -1000,7 +1041,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("white Hit!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("white Hit!!");
+                                    }
                                     notes.Remove(note);
                                     note.isVisible = false;
                                 }
@@ -1013,7 +1057,10 @@ namespace DevcadeHero.States
                                     canPressButton = false;
                                     buttonTimer.Start();
 
-                                    Debug.WriteLine("white Missed!!");
+                                    if (debug_note_detection)
+                                    {
+                                        Debug.WriteLine("white Missed!!");
+                                    }
                                     PlayBadNote();
                                 }
                                 lane8 = true;

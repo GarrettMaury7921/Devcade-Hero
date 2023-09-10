@@ -213,7 +213,7 @@ namespace DevcadeHero.States
             var MultiPlayerButton = new Button(buttonTexture, buttonFont, scale)
             {
                 Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
-                Text = "         Multi Player",
+                Text = "                  Multi Player (WIP)",
             };
             MultiPlayerButton.Click += MultiPlayerButton_Click;
 
@@ -221,21 +221,21 @@ namespace DevcadeHero.States
             var ExpertButton = new Button(buttonTexture, buttonFont, scale)
             {
                 Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.39f))),
-                Text = "         Expert",
+                Text = "           Expert (Soon)",
             };
             ExpertButton.Click += ExpertButton_Click;
 
             var HardButton = new Button(buttonTexture, buttonFont, scale)
             {
                 Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.32f))),
-                Text = "         Hard",
+                Text = "         Hard (Soon)",
             };
             HardButton.Click += HardButton_Click;
 
             var MediumButton = new Button(buttonTexture, buttonFont, scale)
             {
                 Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.25f))),
-                Text = "         Medium",
+                Text = "             Medium (Soon)",
             };
             MediumButton.Click += MediumButton_Click;
 
