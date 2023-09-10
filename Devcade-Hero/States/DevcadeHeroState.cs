@@ -1332,19 +1332,19 @@ namespace DevcadeHero.States
                     fredline_rect.Y -= 700;
                     if (color[i] == 4)
                     {
-                        fredline_rect.X -= 5;
+                        fredline_rect.X += 5;
                     }
                     if (color[i] == 5)
                     {
-                        fredline_rect.X -= 5;
+                        fredline_rect.X -= 8;
                     }
                     if (color[i] == 6)
                     {
-                        fredline_rect.X -= 13;
+                        fredline_rect.X -= 10;
                     }
                     if (color[i] == 7)
                     {
-                        fredline_rect.X -= 17;
+                        fredline_rect.X -= 19;
                     }
                 }
 

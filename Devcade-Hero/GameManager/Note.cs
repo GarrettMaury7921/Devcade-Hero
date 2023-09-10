@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace DevcadeHero.GameManager
 {
@@ -150,30 +151,52 @@ namespace DevcadeHero.GameManager
                 {
                     case 4:
                         // Calculate offset for lane 1
-                        if (count % 5 == 0)
+                        xOffset = -1f;
+                        if (count % 10 == 0)
                         {
-                            xOffset = -5.000000959999f;
+                            xOffset = -2f;
+                        }
+                        if (count % 22 == 0)
+                        {
+                            xOffset = -2f;
                         }
                         break;
                     case 5:
                         // Calculate offset for lane 2
+                        xOffset = -0.1f;
+                        if (count % 2 == 0)
+                        {
+                            xOffset = -1f;
+                        }
                         if (count % 5 == 0)
                         {
-                            xOffset = -4.4f;
+                            xOffset = 0f;
+                        }
+                        if (count % 8 == 0)
+                        {
+                            xOffset = 0f;
+                        }
+                        if (count % 10 == 0)
+                        {
+                            xOffset = -2f;
                         }
                         break;
                     case 6:
                         // Calculate offset for lane 3
+                        if (count % 2 == 0)
+                        {
+                            xOffset = -1f;
+                        }
                         if (count % 5 == 0)
                         {
-                            xOffset = -3.9f;
+                            xOffset = -2f;
                         }
                         break;
                     case 7:
                         // Calculate offset for lane 4
-                        if (count % 10 == 0)
+                        if (count % 5 == 0)
                         {
-                            xOffset = -4.1f;
+                            xOffset = -2f;
                         }
                         break;
                     case 0:

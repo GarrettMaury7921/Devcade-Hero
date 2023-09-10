@@ -170,7 +170,7 @@ namespace DevcadeHero.States
             var careerGameButton = new Button(buttonTexture, buttonFont, scale)
             {
                 Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * widthOffset)), (int)(centerY + (PreferredBackBufferHeight * 0.25f))),
-                Text = "           Career Mode",
+                Text = "           Career (Soon)",
             };
             careerGameButton.Click += CareerButton_Click;
 
