@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System.Linq;
 using System.Diagnostics;
-using JetBrains.Annotations;
 
 namespace DevcadeHero.States
 {
@@ -338,7 +337,7 @@ namespace DevcadeHero.States
             time_between_notes = chartTranslator.TimeBetweenNotes();
             note_count = chartTranslator.GetNoteCount();
             multi_notes = chartTranslator.FindMultiNotes();
-            
+
             // Make the notes so we can draw them later
             MakeNotes(note_ticks, note_color, note_length, multi_notes);
             SetupMultiNoteDetection(notes.ToList());
@@ -509,7 +508,7 @@ namespace DevcadeHero.States
                     {
                         // Stop everything
                         MediaPlayer.Stop();
-                        
+
                         // Reset all Variables
                         Initialize();
 
@@ -539,7 +538,7 @@ namespace DevcadeHero.States
         {
             MenuState.inGame = true;
         } // MediaPlayer_MediaStateChanged method
-        
+
         public void DrawFredLines(SpriteBatch spriteBatch)
         {
             // Left
@@ -709,7 +708,7 @@ namespace DevcadeHero.States
                 buttonTimer.Stop();
             }
         } // CheckP1Buttons Method
-        
+
         public void NoteHitDetection(Rectangle blue1_down_rect, Rectangle blue2_down_rect, Rectangle blue3_down_rect,
             Rectangle blue4_down_rect, Rectangle red_down_rect, Rectangle blue5_down_rect, Rectangle green_down_rect,
             Rectangle white_down_rect)
@@ -1387,7 +1386,7 @@ namespace DevcadeHero.States
                         } // switch statement   
                     }
                 }
-                
+
 
                 // Check if note is off screen when missed
                 if ((note.Position.Y > _preferredBackBufferHeight) && songPlayed)
@@ -1536,7 +1535,7 @@ namespace DevcadeHero.States
                         angle = fred_line_left_rotationAngle4;
                         fredline_rect = fred_line_left_rectangle4;
                         break;
-                    default: 
+                    default:
                         break;
                 } // switch statement
 
