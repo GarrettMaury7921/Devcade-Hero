@@ -396,6 +396,12 @@
 /processorParam:TextureFormat=Color
 /build:Models/highway.png
 
+#begin Songs/clean_your_dishes.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Songs/clean_your_dishes.wav
+
 #begin Songs/gh3_intro.wav
 /importer:WavImporter
 /processor:SongProcessor

@@ -5,7 +5,6 @@ using DevcadeHero.States;
 using DevcadeHero.Sounds;
 using Devcade;
 using Kettu;
-using System.Diagnostics;
 
 namespace DevcadeHero
 {
@@ -36,7 +35,13 @@ namespace DevcadeHero
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            #region
+#if DEBUG
             IsMouseVisible = true;
+#else
+			IsMouseVisible = false;
+#endif
+            #endregion
         }
 
         /// <summary>

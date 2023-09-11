@@ -278,6 +278,16 @@ namespace DevcadeHero.States
             };
             Kalimba.Click += Kalimba_Click;
 
+            var dishes = new Button(devcade_ButtonTexture, devcadeButtonFont, scale)
+            {
+                Position = new Vector2((int)(centerX + (PreferredBackBufferWidth * setlistWidthOffset)), (int)(centerY + (PreferredBackBufferHeight * -0.15f))),
+                Text = "Clean Your Dishes",
+                // Make the text go to the left
+                textOffset = new Vector2(-20, 0),
+                PenColour = Color.Yellow,
+            };
+            dishes.Click += Dishes_Click;
+
 
             // ***** ALL SLIDERS DEFINED BELOW *****
             // MUSIC VOLUME SLIDER
@@ -350,6 +360,7 @@ namespace DevcadeHero.States
             {
                 Linux_Startup_Song,
                 Kalimba,
+                dishes,
                 Setlist_BackButton,
             };
 
@@ -433,6 +444,25 @@ namespace DevcadeHero.States
             // Change State 
             Game1.ChangeState(DevcadeHero_State);
             
+            // Unsubscribe and reset the class when changing states
+            Unsubscribe();
+        }
+
+        private void Dishes_Click(object sender, EventArgs e)
+        {
+            _components = _empty_components;
+            SelectSound().Play();
+
+            // Make the Devcade Hero State, the state name is the name of the song/chart file
+            DevcadeHero_State = new DevcadeHeroState(_game, _graphicsDevice, _preferredBackBufferWidth, _preferredBackBufferHeight, _content, "wash_your_dishes");
+
+            // Stop the media player
+            mediaPlayerKillSwitch = true;
+            MediaPlayer.Stop();
+
+            // Change State 
+            Game1.ChangeState(DevcadeHero_State);
+
             // Unsubscribe and reset the class when changing states
             Unsubscribe();
         }
@@ -659,12 +689,7 @@ namespace DevcadeHero.States
             // Make keyboard state so cursor only moves once when pressed
             KeyboardState currentKeyboardState = Keyboard.GetState();
 
-            if ((currentKeyboardState.GetPressedKeys().Length > 0 || IntroState.DevcadeButtonCheck() == true 
-                || Input.GetButton(1, Input.ArcadeButtons.StickUp) 
-                || Input.GetButton(2, Input.ArcadeButtons.StickUp)
-                || Input.GetButton(1, Input.ArcadeButtons.StickDown)
-                || Input.GetButton(2, Input.ArcadeButtons.StickDown))
-                && timer > 20)
+            if (currentKeyboardState.GetPressedKeys().Length > 0 || DevcadeButtonCheck())
             {
                 // Get number of elements so we can move the cursor up and down and know the limits
                 int numOfElements = _components.Count;
@@ -698,7 +723,7 @@ namespace DevcadeHero.States
                         {
                             // Make the slider a different color when we are selecting it
                             int count2 = 0;
-                            foreach(var component2 in _components)
+                            foreach (var component2 in _components)
                             {
                                 if (component2 is Button btn2 && count2 == currentButton - 2)
                                 {
@@ -706,7 +731,7 @@ namespace DevcadeHero.States
                                     btn2._isSlider = true;
                                     sliderDownSound.Play();
                                 }
-                                
+
                                 count2++;
                             } // for each
 
@@ -717,6 +742,7 @@ namespace DevcadeHero.States
 
                     keyPressed = true;
                 }
+
                 if ((currentKeyboardState.IsKeyDown(Keys.Down) || Input.GetButton(1, Input.ArcadeButtons.StickDown)
                     || Input.GetButton(2, Input.ArcadeButtons.StickDown)) && !keyPressed && currentButton < numOfElements)
                 {
@@ -888,6 +914,29 @@ namespace DevcadeHero.States
                 MediaPlayer.Play(welcome_to_the_jungle); // Fixes a bug where it will go back to the main menu if playing a song for a second time
             }
             
+        }
+
+        // Checks For Devcade Buttons
+        public static bool DevcadeButtonCheck()
+        {
+            if (Input.GetButtonDown(1, Input.ArcadeButtons.StickUp) || Input.GetButtonDown(2, Input.ArcadeButtons.StickUp)
+                || Input.GetButtonDown(1, Input.ArcadeButtons.StickDown) || Input.GetButtonDown(2, Input.ArcadeButtons.StickDown)
+                || Input.GetButton(1, Input.ArcadeButtons.StickLeft) || Input.GetButton(2, Input.ArcadeButtons.StickLeft)
+                || Input.GetButton(1, Input.ArcadeButtons.StickRight) || Input.GetButton(2, Input.ArcadeButtons.StickRight) ||
+                Input.GetButtonDown(1, Input.ArcadeButtons.A1) || Input.GetButtonDown(1, Input.ArcadeButtons.A2)
+                || Input.GetButtonDown(1, Input.ArcadeButtons.A3) || Input.GetButtonDown(1, Input.ArcadeButtons.A4)
+                || Input.GetButtonDown(1, Input.ArcadeButtons.B1) || Input.GetButtonDown(1, Input.ArcadeButtons.B2)
+                || Input.GetButtonDown(1, Input.ArcadeButtons.B3) || Input.GetButtonDown(1, Input.ArcadeButtons.B4)
+                || Input.GetButtonDown(1, Input.ArcadeButtons.Menu) || Input.GetButtonDown(2, Input.ArcadeButtons.A1)
+                || Input.GetButtonDown(2, Input.ArcadeButtons.A2)
+                || Input.GetButtonDown(2, Input.ArcadeButtons.A3) || Input.GetButtonDown(2, Input.ArcadeButtons.A4)
+                || Input.GetButtonDown(2, Input.ArcadeButtons.B1) || Input.GetButtonDown(2, Input.ArcadeButtons.B2)
+                || Input.GetButtonDown(2, Input.ArcadeButtons.B3) || Input.GetButtonDown(2, Input.ArcadeButtons.B4)
+                || Input.GetButtonDown(2, Input.ArcadeButtons.Menu))
+            {
+                return true;
+            }
+            return false;
         }
 
         // Unsubscribe to events and resets all variables when the game state is changed

@@ -41,6 +41,10 @@ namespace DevcadeHero.GameManager
                     videoName = null;
                     break;
 
+                case "Wash Your Dishes":
+                    videoName = null;
+                    break;
+
                 default:
                     videoName = null;
                     break;
@@ -65,6 +69,11 @@ namespace DevcadeHero.GameManager
                     delay = 2.1f;
                     break;
 
+                case "wash_your_dishes":
+                    song = content.Load<Song>("Songs/clean_your_dishes");
+                    delay = 0.35f;
+                    break;
+
                 // default is not supported
                 default:
                     Debug.WriteLine("A SONG WAS NOT FOUND FOR THE SELECTED SONG!!!");
@@ -87,10 +96,9 @@ namespace DevcadeHero.GameManager
                     background = content.Load<Texture2D>("Game_Assets/ninja_tuna");
                     break;
 
-                // default is not supported
+                // default is supported
                 default:
-                    Debug.WriteLine("A BACKGROUND WAS NOT FOUND FOR THE SELECTED SONG!!!");
-                    Environment.Exit(0);
+                    background = content.Load<Texture2D>("Game_Assets/outside");
                     break;
             }
 
