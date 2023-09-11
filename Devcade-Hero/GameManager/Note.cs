@@ -55,6 +55,12 @@ namespace DevcadeHero.GameManager
             howManyMulti = multiCount;
             isVisible = visible;
             multiNoteLanes = multi_lanes;
+
+            // For the bigger screen
+            if (PreferredBackBufferHeight >= 2560)
+            {
+                NoteSpeed = 11.2f;
+            }
         }
 
         int count = 0;
@@ -70,69 +76,163 @@ namespace DevcadeHero.GameManager
             float yOffset = NoteSpeed;
 
             count++;
-            switch (Lane)
-            {
-                case 4:
-                    // Calculate offset for lane 1
-                    if (count % 10 == 0)
-                    {
-                        xOffset = -3.21f;
-                    }
-                    break;
-                case 5:
-                    // Calculate offset for lane 2
-                    if (count % 10 == 0)
-                    {
-                        xOffset = -3.0000048f;
-                    }
-                    break;
-                case 6:
-                    // Calculate offset for lane 3
-                    if (count % 10 == 0)
-                    {
-                        xOffset = -3.000007f;
-                    }
-                    break;
-                case 7:
-                    // Calculate offset for lane 4
-                    if (count % 20 == 0)
-                    {
-                        xOffset = -2.2f;
-                    }
-                    break;
-                case 0:
-                    // Calculate offset for lane 5
-                    if (count % 10 == 0)
-                    {
-                        xOffset = 1.7f;
-                    }
-                    break;
-                case 1:
-                    // Calculate offset for lane 6
-                    if (count % 10 == 0)
-                    {
-                        xOffset = 2.3f;
-                    }
-                    break;
-                case 2:
-                    // Calculate offset for lane 7
-                    if (count % 10 == 0)
-                    {
-                        xOffset = 3.001f;
-                    }
-                    break;
-                case 3:
-                    // Calculate offset for lane 8
-                    if (count % 10 == 0)
-                    {
-                        xOffset = 3.21f;
-                    }
-                    break;
-            }
 
-            notePos.X += xOffset;
-            notePos.Y += yOffset;
-            Position = new Rectangle((int)(notePos.X - note_width / 2), (int)(notePos.Y - note_height / 2), note_width, note_height);
+            if (Height < 2560)
+            {
+                switch (Lane)
+                {
+                    case 4:
+                        // Calculate offset for lane 1
+                        if (count % 10 == 0)
+                        {
+                            xOffset = -3.21f;
+                        }
+                        break;
+                    case 5:
+                        // Calculate offset for lane 2
+                        if (count % 10 == 0)
+                        {
+                            xOffset = -3.0000048f;
+                        }
+                        break;
+                    case 6:
+                        // Calculate offset for lane 3
+                        if (count % 10 == 0)
+                        {
+                            xOffset = -3.000007f;
+                        }
+                        break;
+                    case 7:
+                        // Calculate offset for lane 4
+                        if (count % 20 == 0)
+                        {
+                            xOffset = -2.2f;
+                        }
+                        break;
+                    case 0:
+                        // Calculate offset for lane 5
+                        if (count % 10 == 0)
+                        {
+                            xOffset = 1.7f;
+                        }
+                        break;
+                    case 1:
+                        // Calculate offset for lane 6
+                        if (count % 10 == 0)
+                        {
+                            xOffset = 2.3f;
+                        }
+                        break;
+                    case 2:
+                        // Calculate offset for lane 7
+                        if (count % 10 == 0)
+                        {
+                            xOffset = 3.001f;
+                        }
+                        break;
+                    case 3:
+                        // Calculate offset for lane 8
+                        if (count % 10 == 0)
+                        {
+                            xOffset = 3.21f;
+                        }
+                        break;
+                }
+
+                notePos.X += xOffset;
+                notePos.Y += yOffset;
+                Position = new Rectangle((int)(notePos.X - note_width / 2), (int)(notePos.Y - note_height / 2), note_width, note_height);
+            } // Height If Statement
+
+            else if (Height >= 2560)
+            {
+                switch (Lane)
+                {
+                    case 4:
+                        // Calculate offset for lane 1
+                        xOffset = -1f;
+                        if (count % 10 == 0)
+                        {
+                            xOffset = -2f;
+                        }
+                        if (count % 22 == 0)
+                        {
+                            xOffset = -2f;
+                        }
+                        break;
+                    case 5:
+                        // Calculate offset for lane 2
+                        xOffset = -0.1f;
+                        if (count % 2 == 0)
+                        {
+                            xOffset = -1f;
+                        }
+                        if (count % 5 == 0)
+                        {
+                            xOffset = 0f;
+                        }
+                        if (count % 8 == 0)
+                        {
+                            xOffset = 0f;
+                        }
+                        if (count % 10 == 0)
+                        {
+                            xOffset = -2f;
+                        }
+                        break;
+                    case 6:
+                        // Calculate offset for lane 3
+                        if (count % 2 == 0)
+                        {
+                            xOffset = -1f;
+                        }
+                        if (count % 5 == 0)
+                        {
+                            xOffset = -2f;
+                        }
+                        break;
+                    case 7:
+                        // Calculate offset for lane 4
+                        if (count % 5 == 0)
+                        {
+                            xOffset = -2f;
+                        }
+                        break;
+                    case 0:
+                        // Calculate offset for lane 5
+                        if (count % 10 == 0)
+                        {
+                            xOffset = 1.7f;
+                        }
+                        break;
+                    case 1:
+                        // Calculate offset for lane 6
+                        if (count % 10 == 0)
+                        {
+                            xOffset = 2.3f;
+                        }
+                        break;
+                    case 2:
+                        // Calculate offset for lane 7
+                        if (count % 10 == 0)
+                        {
+                            xOffset = 3.001f;
+                        }
+                        break;
+                    case 3:
+                        // Calculate offset for lane 8
+                        if (count % 10 == 0)
+                        {
+                            xOffset = 3.21f;
+                        }
+                        break;
+                }
+
+                notePos.X += xOffset;
+                notePos.Y += yOffset;
+                Position = new Rectangle((int)(notePos.X - note_width / 2), (int)(notePos.Y - note_height / 2), note_width, note_height);
+            } // Height Arcade Machine If Statement
+            
         }
     }
 }

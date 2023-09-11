@@ -34,12 +34,13 @@ namespace DevcadeHero.Controls
         public bool _isSlider { get; set; }
         // Set the default text offset to zero
         public Vector2 textOffset { get; set; } = Vector2.Zero;
+        public int _scale { get; set; }
 
         public Rectangle Rectangle
         {
             get
             {
-                return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
+                return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width * _scale, _texture.Height * _scale);
             }
         }
 
@@ -47,11 +48,12 @@ namespace DevcadeHero.Controls
         #endregion
 
         #region Methods
-        public Button(Texture2D texture, SpriteFont font)
+        public Button(Texture2D texture, SpriteFont font, int scale)
         {
             _texture = texture;
             _font = font;
             PenColour = Color.White;
+            _scale = scale;
         }
 
         public void EnterButtonHit()
