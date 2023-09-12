@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System.Linq;
 using System.Diagnostics;
+using Furball.Engine.Engine.Graphics.Video;
+using Kettu;
 
 namespace DevcadeHero.States
 {
@@ -158,6 +160,13 @@ namespace DevcadeHero.States
         private readonly bool debug = false;
         private readonly bool debug_note_detection = false;
 
+        // Video Decoder Stuffs
+        public static VideoDecoder VideoDecoder;
+        private readonly SpriteBatch _spriteBatch;
+        public Texture2D VideoTexture;
+        private double videoScaler;
+        private double gameTimeSoFar;
+        private bool timeGot;
 
         public void Initialize()
         {
@@ -358,7 +367,8 @@ namespace DevcadeHero.States
             world = Matrix.CreateTranslation(Vector3.Zero);
             _graphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
-
+            // For the video timer
+            timeGot = false;
         } // Initialize Method
 
         public DevcadeHeroState(Game1 game, GraphicsDevice graphicsDevice, int PreferredBackBufferWidth, int PreferredBackBufferHeight, ContentManager content, string _state_name) :
@@ -404,6 +414,17 @@ namespace DevcadeHero.States
             background = backgroundManager.BackgroundChooser(_content, _state_name);
             song = backgroundManager.SongChooser(_content, _state_name);
             videoName = backgroundManager.VideoChooser(_state_name);
+            videoScaler = backgroundManager.VideoScaler(_state_name);
+
+            // INITIALIZE VIDEO DECODER STUFFS
+            if (videoName != null)
+            {
+                VideoDecoder = new VideoDecoder(4);
+                _spriteBatch = new SpriteBatch(graphicsDevice);
+                Game1._graphics.ApplyChanges();
+                VideoDecoder.Load(videoName, HardwareDecoderType.Any);
+                VideoTexture = new Texture2D(graphicsDevice, VideoDecoder.Width, VideoDecoder.Height, false, SurfaceFormat.Color);
+            }
 
             // Play the sound effect
             notes_ripple.Play();
@@ -433,6 +454,25 @@ namespace DevcadeHero.States
                 spriteBatch.Draw(background, new Rectangle(0, 0, _preferredBackBufferWidth, _preferredBackBufferHeight),
                 new Rectangle(0, 0, 1080, 2560), Color.White);
                 spriteBatch.End();
+            }
+
+            if (videoName != null && songPlaying)
+            {
+
+                // DRAW THE VIDEO frame by frame
+                _graphicsDevice.Clear(Color.CornflowerBlue);
+
+                byte[] frame = VideoDecoder.GetFrame((int)gameTime.TotalGameTime.TotalMilliseconds - (int)gameTimeSoFar);
+                Debug.WriteLine((int)gameTime.TotalGameTime.TotalMilliseconds - (int)gameTimeSoFar);
+
+                if (frame != null)
+                {
+                    VideoTexture.SetData(0, new Rectangle(0, 0, VideoTexture.Width, VideoTexture.Height), frame, 0, frame.Length);
+                }
+                _spriteBatch.Begin();
+                // I increase the scale so it fits in the picture (slight offset to the left)
+                _spriteBatch.Draw(VideoTexture, Vector2.Zero, null, Color.White, 0, Vector2.Zero, new Vector2((float)(((float)_graphicsDevice.Viewport.Height / VideoTexture.Height) + videoScaler)), SpriteEffects.None, 0);
+                _spriteBatch.End();
             }
 
             // 3D Highway
@@ -546,17 +586,29 @@ namespace DevcadeHero.States
                         }
 
                     }
+
                     // Implement the delay for the notes
                     if (songTime > backgroundManager.delay && drum_stick_counter == 3)
                     {
                         songPlayed = true;
                         songTime -= backgroundManager.delay;
+                        if (!timeGot)
+                        {
+                            gameTimeSoFar = gameTime.TotalGameTime.TotalMilliseconds - ((backgroundManager.delay + 1.52) * 1000);
+                            timeGot = true;
+                        }
                         drum_stick_counter++;
                     }
 
                     // If the song is over
                     if (songTime > MediaPlayer.Queue.ActiveSong.Duration.TotalSeconds)
                     {
+                        // Stop the video if there is one playing
+                        if (videoName != null)
+                        {
+                            OnExiting();
+                        }
+
                         // Stop everything
                         MediaPlayer.Stop();
 
@@ -576,6 +628,15 @@ namespace DevcadeHero.States
                 } // else
 
             } // else
+
+            // Exit the video if it is playing
+            if ((Keyboard.GetState().IsKeyDown(Keys.Escape) ||
+                (Input.GetButton(1, Input.ArcadeButtons.Menu) &&
+                Input.GetButton(2, Input.ArcadeButtons.Menu))) &&
+                videoName != null)
+            {
+                OnExiting();
+            }
 
         } // Update method
 
@@ -1152,7 +1213,10 @@ namespace DevcadeHero.States
                             // If they hit the multi note
                             if (allButtonsPressed)
                             {
-                                Debug.WriteLine("MULTI-NOTE HITTTTTTT!!!!!!!!!!!!!!!!!!!");
+                                if (debug_note_detection)
+                                {
+                                    Debug.WriteLine("MULTI-NOTE HITTTTTTT!!!!!!!!!!!!!!!!!!!");
+                                }
 
                                 // Collect notes associated with the multi-note
                                 List<Note> notesToRemove = new List<Note>();
@@ -1239,7 +1303,10 @@ namespace DevcadeHero.States
 
                 buttonTimer.Start();
 
-                Debug.WriteLine("Missed, NOTHING IN LANE!");
+                if (debug_note_detection)
+                {
+                    Debug.WriteLine("Missed, NOTHING IN LANE!");
+                }
                 PlayBadNote();
             }
 
@@ -1491,6 +1558,13 @@ namespace DevcadeHero.States
             } // switch statement
 
         } // Play Bad Note Method
+
+        protected static void OnExiting()
+        {
+            // Dispose of the video decoder since a video should be playing
+            DevcadeHeroState.VideoDecoder.Dispose();
+            Logger.StopLogging();
+        } // Close the video when it ends
 
     } // Devcade Hero state class
 

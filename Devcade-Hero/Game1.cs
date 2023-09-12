@@ -122,7 +122,7 @@ namespace DevcadeHero
 				Input.GetButton(2, Input.ArcadeButtons.Menu)))
 			{
 				Exit();
-			}
+            }
 
             // Update the state if it is updated
             if (_nextState != null)

@@ -22,6 +22,7 @@ namespace DevcadeHero.GameManager
         private string videoName;
         private Song song;
         public float delay;
+        private double videoScale;
 
         public GameBackgroundManager(string songName)
         {
@@ -41,8 +42,8 @@ namespace DevcadeHero.GameManager
                     videoName = null;
                     break;
 
-                case "Wash Your Dishes":
-                    videoName = null;
+                case "wash_your_dishes":
+                    videoName = "clean_your_dishes.mp4";
                     break;
 
                 default:
@@ -51,6 +52,29 @@ namespace DevcadeHero.GameManager
             }
             return videoName;
         } // VideoChooser Method
+        public double VideoScaler(string songName)
+        {
+            // Find the correct background video
+            switch (songName)
+            {
+                case "Linux_Startup_Song":
+                    videoScale = 0;
+                    break;
+
+                case "Kalimba (Ninja Tuna)":
+                    videoScale = 0;
+                    break;
+
+                case "wash_your_dishes":
+                    videoScale = 0.006;
+                    break;
+
+                default:
+                    videoScale = 0;
+                    break;
+            }
+            return videoScale;
+        } // VideoScaler Method
         public Song SongChooser(ContentManager content, string songName)
         {
             // Find the correct song
